@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ChevronDown, ChevronUp, AlertCircle, Trophy, Target, Swords, Star, Shuffle } from 'lucide-react';
+import { ChevronDown, ChevronUp, AlertCircle, Target, Swords, Star, Shuffle } from 'lucide-react';
 
 const Section = ({ icon: Icon, title, color = 'text-fifa-gold', children, defaultOpen = true }) => {
   const [open, setOpen] = useState(defaultOpen);
@@ -51,23 +51,6 @@ export default function RulesPage() {
           48개국이 참가하는 2026 대회는 4팀씩 12개 조로 진행되며, 각 조 상위 2팀과 3위팀 중 상위 8팀이 32강(녹아웃 스테이지)에 진출합니다.
         </p>
       </div>
-
-      {/* 기본 승점 */}
-      <Section icon={Trophy} title="기본 승점 제도" color="text-fifa-gold">
-        <div className="grid grid-cols-3 gap-3 pt-1">
-          {[
-            { result: '승리', pts: '3점', color: 'bg-green-900/30 border-green-700/50 text-green-400' },
-            { result: '무승부', pts: '1점', color: 'bg-yellow-900/30 border-yellow-700/50 text-yellow-400' },
-            { result: '패배', pts: '0점', color: 'bg-red-900/20 border-red-700/30 text-red-400' },
-          ].map(({ result, pts, color }) => (
-            <div key={result} className={`rounded-lg border px-3 py-4 text-center ${color}`}>
-              <p className="text-2xl font-black">{pts}</p>
-              <p className="text-xs mt-1 opacity-80">{result}</p>
-            </div>
-          ))}
-        </div>
-        <p className="text-xs mt-2">각 조는 4팀이 홈앤어웨이 없이 풀리그(6경기) 방식으로 진행됩니다.</p>
-      </Section>
 
       {/* 순위 결정 방식 */}
       <Section icon={Target} title="조별 순위 결정 기준 (동점 시 아래 순서 적용)" color="text-blue-400">

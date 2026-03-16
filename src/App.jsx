@@ -8,6 +8,7 @@ import ThirdPlaceTable from './components/ThirdPlaceTable.jsx';
 import DrawSimulator from './components/DrawSimulator.jsx';
 import ShareButtons from './components/ShareButtons.jsx';
 import RulesPage from './components/RulesPage.jsx';
+import ScenarioPage from './components/ScenarioPage.jsx';
 
 // ── 탭 정의 ─────────────────────────────────────────────
 const TABS = [
@@ -58,6 +59,12 @@ export default function App() {
   const [activeTab, setActiveTab] = useState('groups');
   const [menuOpen, setMenuOpen] = useState(false);
   const [resetting, setResetting] = useState(false);
+  const [scenarioGroupKey, setScenarioGroupKey] = useState(null);
+
+  const navigateToScenario = (groupKey) => {
+    setScenarioGroupKey(groupKey);
+    setActiveTab('scenarios');
+  };
 
   // 3위팀 목록
   const allGroupStandings = Object.fromEntries(
@@ -212,15 +219,13 @@ export default function App() {
             {/* 조별리그 탭 */}
             {activeTab === 'groups' && (
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-                {Object.entries(groups).map(([key, { standings, matches }]) => (
+                {Object.entries(groups).map(([key, { standings }]) => (
                   <GroupTable
                     key={key}
                     groupKey={key}
                     standings={standings}
-                    matches={matches}
-                    onScoreChange={(matchId, field, value) =>
-                      handleScoreChange(key, matchId, field, value)
-                    }
+                    onGroupClick={navigateToScenario}
+                    onTeamClick={(teamId, groupKey) => navigateToScenario(groupKey)}
                   />
                 ))}
               </div>
@@ -253,11 +258,12 @@ export default function App() {
 
             {/* 경우의 수 탭 */}
             {activeTab === 'scenarios' && (
-              <div className="flex flex-col items-center justify-center py-24 text-fifa-muted gap-4">
-                <GitBranch size={48} className="opacity-20" />
-                <p className="text-lg font-medium">준비 중입니다</p>
-                <p className="text-sm opacity-60">조별리그 결과에 따른 16강 진출 경우의 수 기능이 곧 추가됩니다</p>
-              </div>
+              <ScenarioPage
+                selectedGroupKey={scenarioGroupKey}
+                onSelectGroup={setScenarioGroupKey}
+                groups={groups}
+                onScoreChange={handleScoreChange}
+              />
             )}
 
             {/* 조추첨 탭 */}
