@@ -27,7 +27,9 @@ function TeamBall({ team, potKey, highlight = false, small = false }) {
         ${highlight ? `${POT_COLORS[potKey]?.bg} ${POT_COLORS[potKey]?.border} animate-ball-bounce` : 'bg-white/5 border-fifa-border/50'}
       `}
     >
-      <span className={small ? 'text-sm' : 'text-base'}>{team.flag}</span>
+      {team.flagImg
+        ? <img src={team.flagImg} alt={team.name} className={small ? 'w-5 h-3' : 'w-6 h-4'} style={{objectFit:'cover', borderRadius:'2px'}} />
+        : <span className={small ? 'text-sm' : 'text-base'}>{team.flag}</span>}
       <span className={`font-medium ${highlight ? 'text-white' : 'text-fifa-text'}`}>{team.name}</span>
       <span className={`text-xs px-1 rounded ${CONF_COLORS[team.confederation] || 'bg-gray-800 text-gray-400'}`}>
         {team.confederation}

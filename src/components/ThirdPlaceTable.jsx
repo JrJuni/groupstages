@@ -50,7 +50,9 @@ export default function ThirdPlaceTable({ best8, allThirds }) {
                     <td className="px-3 py-2 text-fifa-muted">{idx + 1}</td>
                     <td className="px-3 py-2">
                       <div className="flex items-center gap-2">
-                        <span>{team.flag}</span>
+                        {team.flagImg
+                          ? <img src={team.flagImg} alt={team.name} className="w-6 h-4 object-cover rounded-sm" />
+                          : <span>{team.flag}</span>}
                         <span className="font-medium text-white">{team.name}</span>
                       </div>
                     </td>

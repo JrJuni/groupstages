@@ -26,9 +26,11 @@ export default function GroupTable({ groupKey, standings, matches, onScoreChange
       >
         <div className="flex items-center gap-2">
           <span className="font-bold text-lg text-white">조 {groupKey}</span>
-          <div className="flex gap-1">
+          <div className="flex gap-1 items-center">
             {standings.map((t) => (
-              <span key={t.id} className="text-sm" title={t.name}>{t.flag}</span>
+              t.flagImg
+                ? <img key={t.id} src={t.flagImg} alt={t.name} title={t.name} className="w-5 h-3 object-cover rounded-sm" />
+                : <span key={t.id} className="text-sm" title={t.name}>{t.flag}</span>
             ))}
           </div>
         </div>
@@ -63,7 +65,10 @@ export default function GroupTable({ groupKey, standings, matches, onScoreChange
                     <td className="px-3 py-2 text-fifa-muted text-xs">{idx + 1}</td>
                     <td className="px-3 py-2">
                       <div className="flex items-center gap-2">
-                        <span className="text-base">{team.flag}</span>
+                        {team.flagImg ? (
+                          <img src={team.flagImg} alt={team.name} className="w-6 h-4 object-cover rounded-sm" onError={(e) => { e.target.style.display='none'; e.target.nextSibling.style.display='inline'; }} />
+                        ) : null}
+                        <span className="text-base" style={team.flagImg ? {display:'none'} : {}}>{team.flag}</span>
                         <span className="font-medium text-white text-xs sm:text-sm whitespace-nowrap">{team.name}</span>
                         {team.host && (
                           <span className="hidden sm:inline text-xs bg-fifa-gold/20 text-fifa-gold px-1 rounded">H</span>
@@ -99,7 +104,9 @@ export default function GroupTable({ groupKey, standings, matches, onScoreChange
                     <div key={match.id} className="flex items-center gap-2 text-sm">
                       <div className="flex items-center gap-1 flex-1 justify-end">
                         <span className="text-xs hidden sm:inline">{homeTeam.name}</span>
-                        <span>{homeTeam.flag}</span>
+                        {homeTeam.flagImg
+                          ? <img src={homeTeam.flagImg} alt={homeTeam.name} className="w-6 h-4 object-cover rounded-sm" />
+                          : <span>{homeTeam.flag}</span>}
                       </div>
                       <div className="flex items-center gap-1">
                         <input
@@ -123,7 +130,9 @@ export default function GroupTable({ groupKey, standings, matches, onScoreChange
                         />
                       </div>
                       <div className="flex items-center gap-1 flex-1 justify-start">
-                        <span>{awayTeam.flag}</span>
+                        {awayTeam.flagImg
+                          ? <img src={awayTeam.flagImg} alt={awayTeam.name} className="w-6 h-4 object-cover rounded-sm" />
+                          : <span>{awayTeam.flag}</span>}
                         <span className="text-xs hidden sm:inline">{awayTeam.name}</span>
                       </div>
                     </div>
