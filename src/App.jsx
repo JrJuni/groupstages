@@ -1,29 +1,11 @@
-import React, { useState, useCallback } from 'react';
-import { Globe, Shuffle, Trophy, Share2, Menu, X } from 'lucide-react';
-import { INITIAL_GROUPS } from './data/worldcup2026.js';
-import {
-  createInitialStandings,
-  createInitialMatches,
-  calculateStandings,
-  getBest8ThirdPlace,
-} from './utils/rankings.js';
+import React, { useState } from 'react';
+import { Globe, Shuffle, Trophy, Share2, Menu, X, Database, RotateCcw, Wifi, WifiOff } from 'lucide-react';
+import { getBest8ThirdPlace } from './utils/rankings.js';
+import { useMatches } from './hooks/useMatches.js';
 import GroupTable from './components/GroupTable.jsx';
 import ThirdPlaceTable from './components/ThirdPlaceTable.jsx';
 import DrawSimulator from './components/DrawSimulator.jsx';
 import ShareButtons from './components/ShareButtons.jsx';
-
-// ── 초기 상태 생성 ──────────────────────────────────────
-function buildInitialState() {
-  const groups = {};
-  Object.entries(INITIAL_GROUPS).forEach(([key, { teams }]) => {
-    groups[key] = {
-      teams,
-      standings: createInitialStandings(teams),
-      matches: createInitialMatches(teams),
-    };
-  });
-  return groups;
-}
 
 // ── 탭 정의 ─────────────────────────────────────────────
 const TABS = [
@@ -68,31 +50,10 @@ function AdSlot({ slot, className = '' }) {
 
 // ── 메인 앱 ─────────────────────────────────────────────
 export default function App() {
-  const [groups, setGroups] = useState(() => buildInitialState());
+  const { groups, loading, apiAvailable, handleScoreChange, resetAll } = useMatches();
   const [activeTab, setActiveTab] = useState('groups');
   const [menuOpen, setMenuOpen] = useState(false);
-
-  // 경기 결과 변경 핸들러
-  const handleScoreChange = useCallback((groupKey, matchId, field, value) => {
-    setGroups((prev) => {
-      const group = prev[groupKey];
-      const newMatches = group.matches.map((m) => {
-        if (m.id !== matchId) return m;
-        const updated = { ...m, [field]: value };
-        updated.played =
-          updated.homeScore !== null &&
-          updated.homeScore !== '' &&
-          updated.awayScore !== null &&
-          updated.awayScore !== '';
-        return updated;
-      });
-      const newStandings = calculateStandings(group.teams, newMatches);
-      return {
-        ...prev,
-        [groupKey]: { ...group, matches: newMatches, standings: newStandings },
-      };
-    });
-  }, []);
+  const [resetting, setResetting] = useState(false);
 
   // 3위팀 목록
   const allGroupStandings = Object.fromEntries(
@@ -110,6 +71,13 @@ export default function App() {
       return b.gf - a.gf;
     });
   const best8 = getBest8ThirdPlace(allGroupStandings);
+
+  const handleReset = async () => {
+    if (!window.confirm('모든 경기 결과를 초기화하시겠습니까?')) return;
+    setResetting(true);
+    await resetAll();
+    setResetting(false);
+  };
 
   return (
     <div className="min-h-screen bg-fifa-dark">
@@ -146,6 +114,30 @@ export default function App() {
             ))}
           </nav>
 
+          {/* DB 상태 + 초기화 버튼 */}
+          <div className="hidden md:flex items-center gap-2">
+            <span
+              title={apiAvailable ? 'DB 연결됨' : 'DB 미연결 (로컬 모드)'}
+              className={`flex items-center gap-1 text-xs px-2 py-1 rounded-full ${
+                apiAvailable
+                  ? 'bg-green-900/30 text-green-400'
+                  : 'bg-red-900/30 text-red-400'
+              }`}
+            >
+              <Database size={10} />
+              {apiAvailable ? 'DB' : 'Local'}
+            </span>
+            <button
+              onClick={handleReset}
+              disabled={resetting}
+              title="전체 경기 결과 초기화"
+              className="flex items-center gap-1 text-xs px-2 py-1 rounded-lg text-fifa-muted hover:text-white hover:bg-white/10 transition-colors"
+            >
+              <RotateCcw size={12} />
+              초기화
+            </button>
+          </div>
+
           {/* Mobile Menu */}
           <button
             className="md:hidden text-fifa-muted hover:text-white"
@@ -169,6 +161,13 @@ export default function App() {
                 {label}
               </button>
             ))}
+            <button
+              onClick={handleReset}
+              className="w-full flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm text-red-400 hover:bg-red-900/20"
+            >
+              <RotateCcw size={14} />
+              전체 초기화
+            </button>
           </div>
         )}
       </header>
@@ -178,8 +177,11 @@ export default function App() {
         {/* Page Title */}
         <div className="mb-6 flex items-center justify-between flex-wrap gap-3">
           <div>
-            <h2 className="text-xl font-bold text-white">
+            <h2 className="text-xl font-bold text-white flex items-center gap-2">
               {TABS.find((t) => t.id === activeTab)?.label}
+              {loading && (
+                <span className="text-xs font-normal text-fifa-muted animate-pulse">로딩 중...</span>
+              )}
             </h2>
             <p className="text-sm text-fifa-muted mt-0.5">
               {activeTab === 'groups' && '12개 조, 48팀 조별 순위 실시간 계산'}
@@ -219,7 +221,12 @@ export default function App() {
             {/* 3위 순위 탭 */}
             {activeTab === 'thirds' && (
               <div className="space-y-4">
-                <ThirdPlaceTable best8={best8} allThirds={allThirds} />
+                <ThirdPlaceTable
+                  best8={best8}
+                  allThirds={allThirds}
+                  loading={loading}
+                  apiAvailable={apiAvailable}
+                />
 
                 {/* 중간 광고 */}
                 <AdSlot slot="중간 배너 728×90" className="h-[90px]" />

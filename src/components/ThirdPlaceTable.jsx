@@ -1,15 +1,28 @@
 import React from 'react';
-import { Trophy, TrendingUp } from 'lucide-react';
+import { Trophy, TrendingUp, Database, WifiOff } from 'lucide-react';
 
-export default function ThirdPlaceTable({ best8, allThirds }) {
+export default function ThirdPlaceTable({ best8, allThirds, loading = false, apiAvailable = true }) {
   const qualifiedIds = new Set(best8.map((t) => t.id));
 
   return (
     <div className="card overflow-hidden">
-      <div className="px-4 py-3 bg-yellow-900/20 border-b border-fifa-border flex items-center gap-2">
+      <div className="px-4 py-3 bg-yellow-900/20 border-b border-fifa-border flex items-center gap-2 flex-wrap">
         <Trophy size={16} className="text-fifa-gold" />
         <span className="font-bold text-white">조 3위 상위 8팀 (16강 진출)</span>
-        <span className="text-xs text-fifa-muted ml-auto">{best8.length}/8팀 확정</span>
+        <div className="flex items-center gap-2 ml-auto">
+          <span
+            title={apiAvailable ? 'DB에서 실시간 쿼리' : '로컬 계산'}
+            className={`flex items-center gap-1 text-xs px-2 py-0.5 rounded-full ${
+              apiAvailable
+                ? 'bg-green-900/30 text-green-400'
+                : 'bg-gray-700/50 text-gray-400'
+            }`}
+          >
+            {apiAvailable ? <Database size={9} /> : <WifiOff size={9} />}
+            {apiAvailable ? 'DB' : 'Local'}
+          </span>
+          <span className="text-xs text-fifa-muted">{best8.length}/8팀 확정</span>
+        </div>
       </div>
 
       <div className="overflow-x-auto">
@@ -29,10 +42,16 @@ export default function ThirdPlaceTable({ best8, allThirds }) {
             </tr>
           </thead>
           <tbody>
-            {allThirds.length === 0 ? (
+            {loading ? (
+              <tr>
+                <td colSpan={10} className="text-center py-8 text-fifa-muted animate-pulse">
+                  DB에서 데이터 로딩 중...
+                </td>
+              </tr>
+            ) : allThirds.length === 0 ? (
               <tr>
                 <td colSpan={10} className="text-center py-8 text-fifa-muted">
-                  경기 결과를 입력하면 3위팀 순위가 표시됩니다
+                  조별리그 탭에서 경기 결과를 입력하면 3위팀 순위가 표시됩니다
                 </td>
               </tr>
             ) : (
