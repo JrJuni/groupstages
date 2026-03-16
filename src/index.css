@@ -1,0 +1,49 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-fifa-dark text-fifa-text font-sans;
+  }
+
+  * {
+    @apply box-border;
+  }
+}
+
+@layer components {
+  .card {
+    @apply bg-fifa-card border border-fifa-border rounded-xl;
+  }
+
+  .btn-primary {
+    @apply bg-fifa-blue hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-semibold transition-colors duration-200;
+  }
+
+  .btn-gold {
+    @apply bg-fifa-gold hover:bg-yellow-500 text-black px-4 py-2 rounded-lg font-semibold transition-colors duration-200;
+  }
+
+  .btn-ghost {
+    @apply border border-fifa-border hover:border-fifa-muted text-fifa-muted hover:text-fifa-text px-4 py-2 rounded-lg transition-colors duration-200;
+  }
+
+  .tab-active {
+    @apply border-b-2 border-fifa-gold text-fifa-gold font-semibold;
+  }
+
+  .tab-inactive {
+    @apply border-b-2 border-transparent text-fifa-muted hover:text-fifa-text transition-colors duration-200;
+  }
+
+  .score-input {
+    @apply w-10 h-8 text-center bg-[#0d1117] border border-fifa-border rounded text-white text-sm focus:outline-none focus:border-fifa-gold;
+  }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { @apply bg-fifa-dark; }
+::-webkit-scrollbar-thumb { @apply bg-fifa-border rounded-full; }
+::-webkit-scrollbar-thumb:hover { @apply bg-fifa-muted; }
