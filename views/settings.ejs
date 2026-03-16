@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <%- include('partials/head', {title: '설정'}) %>
+  <style>
+    .profile-card {
+      background:linear-gradient(135deg,#f06292,#ffb347);
+      border-radius:24px;
+      padding:24px;
+      display:flex;
+      align-items:center;
+      gap:16px;
+      margin-bottom:20px;
+      box-shadow:0 6px 24px rgba(240,98,146,0.32);
+      cursor:pointer;
+    }
+    .profile-avatar {
+      width:66px; height:66px;
+      border-radius:50%;
+      object-fit:cover;
+      border:3px solid rgba(255,255,255,0.85);
+      box-shadow:0 2px 12px rgba(0,0,0,0.15);
+    }
+    .profile-info { flex:1; }
+    .profile-name { font-size:18px; font-weight:900; color:#fff; margin-bottom:3px; }
+    .profile-email { font-size:13px; color:rgba(255,255,255,0.8); font-weight:600; }
+    .profile-edit-btn { background:rgba(255,255,255,0.25); border:none; color:#fff; font-size:13px; font-weight:700; font-family:'Nunito',sans-serif; padding:7px 14px; border-radius:10px; cursor:pointer; }
+
+    .settings-group { margin-bottom:14px; }
+    .settings-label { font-size:12px; font-weight:800; color:#c09ab0; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:8px; padding-left:4px; }
+    .settings-card {
+      background:var(--card-bg);
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,0.72);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .settings-row {
+      display:flex;
+      align-items:center;
+      gap:12px;
+      padding:14px 16px;
+      cursor:pointer;
+      transition:background .15s;
+      border-bottom:1px solid rgba(240,180,210,0.15);
+    }
+    .settings-row:last-child { border-bottom:none; }
+    .settings-row:hover { background:rgba(240,98,146,0.04); }
+    .settings-icon { font-size:22px; width:36px; height:36px; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg,rgba(255,240,248,0.9),rgba(255,252,235,0.9)); border-radius:10px; flex-shrink:0; }
+    .settings-text { flex:1; }
+    .settings-title { font-size:15px; font-weight:700; color:#444; }
+    .settings-desc { font-size:12px; color:#bbb; margin-top:1px; }
+    .settings-arrow { font-size:16px; color:#ddd; }
+    .settings-value { font-size:13px; font-weight:700; color:#aaa; margin-right:4px; }
+
+    /* toggle */
+    .toggle { width:46px; height:26px; background:#e0e0e0; border-radius:13px; position:relative; cursor:pointer; transition:background .25s; flex-shrink:0; }
+    .toggle.on { background:linear-gradient(135deg,#f06292,#ffb347); }
+    .toggle::after { content:''; position:absolute; top:3px; left:3px; width:20px; height:20px; background:#fff; border-radius:50%; transition:transform .25s; box-shadow:0 1px 4px rgba(0,0,0,0.2); }
+    .toggle.on::after { transform:translateX(20px); }
+
+    .logout-btn {
+      width:100%;
+      padding:15px;
+      background:rgba(255,255,255,0.75);
+      color:#f06292;
+      font-size:15px;
+      font-weight:800;
+      font-family:'Nunito',sans-serif;
+      border:2px solid rgba(240,98,146,0.25);
+      border-radius:16px;
+      cursor:pointer;
+      margin-top:6px;
+      transition:background .2s,border-color .2s;
+    }
+    .logout-btn:hover { background:#fff; border-color:rgba(240,98,146,0.5); }
+  </style>
+</head>
+<body>
+  <div class="blob blob1"></div>
+  <div class="blob blob2"></div>
+
+  <div class="topbar">
+    <span class="topbar-title">⚙️ 설정</span>
+  </div>
+
+  <div class="page">
+
+    <!-- profile card -->
+    <div class="profile-card">
+      <img class="profile-avatar" src="https://picsum.photos/seed/my/66/66" alt="내 프로필" />
+      <div class="profile-info">
+        <div class="profile-name">지우맘 👶</div>
+        <div class="profile-email">jiwoomom@example.com</div>
+      </div>
+      <button class="profile-edit-btn">수정</button>
+    </div>
+
+    <!-- 프로필 -->
+    <div class="settings-group">
+      <div class="settings-label">프로필</div>
+      <div class="settings-card">
+        <div class="settings-row">
+          <div class="settings-icon">👤</div>
+          <div class="settings-text">
+            <div class="settings-title">프로필 편집</div>
+            <div class="settings-desc">이름, 사진, 소개글 변경</div>
+          </div>
+          <span class="settings-arrow">›</span>
+        </div>
+        <div class="settings-row">
+          <div class="settings-icon">🍼</div>
+          <div class="settings-text">
+            <div class="settings-title">아기 정보 관리</div>
+            <div class="settings-desc">아기 이름, 생년월일</div>
+          </div>
+          <span class="settings-arrow">›</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 보안 -->
+    <div class="settings-group">
+      <div class="settings-label">보안</div>
+      <div class="settings-card">
+        <div class="settings-row">
+          <div class="settings-icon">🔒</div>
+          <div class="settings-text">
+            <div class="settings-title">비밀번호 변경</div>
+            <div class="settings-desc">주기적으로 변경하면 안전해요</div>
+          </div>
+          <span class="settings-arrow">›</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 화면 -->
+    <div class="settings-group">
+      <div class="settings-label">화면</div>
+      <div class="settings-card">
+        <div class="settings-row">
+          <div class="settings-icon">🌙</div>
+          <div class="settings-text">
+            <div class="settings-title">다크 모드</div>
+            <div class="settings-desc">어두운 화면으로 전환</div>
+          </div>
+          <div class="toggle" id="darkToggle" onclick="this.classList.toggle('on')"></div>
+        </div>
+        <div class="settings-row">
+          <div class="settings-icon">🌍</div>
+          <div class="settings-text">
+            <div class="settings-title">언어 설정</div>
+          </div>
+          <span class="settings-value">한국어</span>
+          <span class="settings-arrow">›</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 알림 -->
+    <div class="settings-group">
+      <div class="settings-label">알림</div>
+      <div class="settings-card">
+        <div class="settings-row">
+          <div class="settings-icon">🔔</div>
+          <div class="settings-text">
+            <div class="settings-title">푸시 알림</div>
+            <div class="settings-desc">좋아요, 댓글, DM 알림</div>
+          </div>
+          <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+        </div>
+      </div>
+    </div>
+
+    <button class="logout-btn" onclick="location.href='/'">🚪 로그아웃</button>
+
+  </div>
+
+  <%- include('partials/nav', {page:'settings'}) %>
+</body>
+</html>

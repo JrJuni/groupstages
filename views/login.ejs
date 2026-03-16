@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <%- include('partials/head', {title: '로그인'}) %>
+  <style>
+    body { display:flex; align-items:center; justify-content:center; min-height:100vh; padding:20px; overflow:hidden; padding-bottom:0; }
+    .blob1{width:320px;height:320px;background:#ffacc7;top:-80px;left:-80px;}
+    .blob2{width:260px;height:260px;background:#ffd6a5;top:50%;right:-60px;animation-delay:2s;}
+    .blob3{width:200px;height:200px;background:#b5d8ff;bottom:-60px;left:20%;animation-delay:4s;}
+    .login-card {
+      background: linear-gradient(160deg,rgba(255,240,248,0.85) 0%,rgba(255,252,235,0.85) 50%,rgba(235,246,255,0.85) 100%);
+      backdrop-filter: blur(20px);
+      border: 1.5px solid rgba(255,255,255,0.72);
+      border-radius: 36px;
+      padding: 44px 36px 36px;
+      width: 100%; max-width: 400px;
+      box-shadow: 0 8px 48px rgba(255,140,180,0.16), 0 2px 0 rgba(255,255,255,0.8) inset;
+      position: relative; z-index: 1;
+    }
+    .logo-area { text-align:center; margin-bottom:28px; }
+    .logo-icon { font-size:62px; display:block; margin-bottom:10px; animation: bounce 3s ease-in-out infinite; filter:drop-shadow(0 4px 10px rgba(255,140,180,0.35)); }
+    @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-5px)} }
+    .app-name { font-size:28px; font-weight:900; background:linear-gradient(135deg,#f06292 30%,#ffb347); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .app-sub { font-size:13px; color:#c0a8b8; margin-top:5px; font-weight:600; }
+    hr.div { border:none; border-top:1.5px solid rgba(240,180,210,0.3); margin:22px 0; }
+    label { display:block; font-size:12px; font-weight:800; color:#c09ab0; margin-bottom:7px; text-transform:uppercase; letter-spacing:0.4px; }
+    .input-wrap { position:relative; margin-bottom:14px; }
+    .inp-icon { position:absolute; left:13px; top:50%; transform:translateY(-50%); font-size:16px; pointer-events:none; }
+    .input-wrap input {
+      width:100%; padding:13px 14px 13px 41px;
+      border:2px solid rgba(240,180,210,0.32); border-radius:14px;
+      font-size:15px; font-family:'Nunito',sans-serif; color:#555;
+      background:rgba(255,255,255,0.62); outline:none;
+      transition:border-color .2s,box-shadow .2s;
+    }
+    .input-wrap input:focus { border-color:#f06292; background:#fff; box-shadow:0 0 0 3px rgba(240,98,146,0.1); }
+    .input-wrap input.invalid { border-color:#ff6b6b; box-shadow:0 0 0 3px rgba(255,107,107,0.1); }
+    .opts { display:flex; justify-content:space-between; align-items:center; margin-bottom:22px; }
+    .remember { display:flex; align-items:center; gap:6px; font-size:13px; color:#b09ab0; font-weight:600; cursor:pointer; user-select:none; }
+    .remember input[type=checkbox] { accent-color:#f06292; width:15px; height:15px; }
+    .forgot { font-size:13px; color:#f06292; font-weight:700; text-decoration:none; }
+    .forgot:hover { text-decoration:underline; }
+    .btn-login { width:100%; padding:15px; background:linear-gradient(135deg,#f06292,#ffb347); color:#fff; font-size:16px; font-weight:800; font-family:'Nunito',sans-serif; border:none; border-radius:16px; cursor:pointer; box-shadow:0 6px 20px rgba(240,98,146,0.38); transition:transform .15s,box-shadow .15s; }
+    .btn-login:hover { transform:translateY(-2px); box-shadow:0 10px 28px rgba(240,98,146,0.45); }
+    .soc-div { display:flex; align-items:center; gap:12px; margin:20px 0 14px; color:#c8b8c8; font-size:13px; font-weight:600; }
+    .soc-div::before,.soc-div::after { content:''; flex:1; border-top:1.5px solid rgba(240,180,210,0.28); }
+    .soc-btns { display:flex; gap:10px; }
+    .btn-soc { flex:1; padding:11px; border:1.5px solid rgba(240,180,210,0.32); border-radius:14px; background:rgba(255,255,255,0.58); cursor:pointer; transition:border-color .2s,transform .15s; display:flex; align-items:center; justify-content:center; }
+    .btn-soc:hover { border-color:#f06292; transform:translateY(-1px); }
+    .signup { text-align:center; margin-top:20px; font-size:13.5px; color:#b0a0b8; font-weight:600; }
+    .signup a { color:#f06292; font-weight:800; text-decoration:none; }
+    .signup a:hover { text-decoration:underline; }
+    .deco { position:fixed; pointer-events:none; z-index:1; animation:decoF 7s ease-in-out infinite; opacity:0.68; }
+    @keyframes decoF { 0%,100%{transform:translateY(0) rotate(0deg)} 50%{transform:translateY(-14px) rotate(8deg)} }
+    .error-msg { background:rgba(255,107,107,0.12); border:1.5px solid rgba(255,107,107,0.3); border-radius:12px; color:#e05050; font-size:13px; font-weight:700; padding:10px 14px; margin-bottom:16px; text-align:center; }
+  </style>
+</head>
+<body>
+  <div class="blob blob1"></div>
+  <div class="blob blob2"></div>
+  <div class="blob blob3"></div>
+  <div class="deco" style="top:7%;left:5%;font-size:26px;animation-delay:0s;">🌙</div>
+  <div class="deco" style="top:12%;right:7%;font-size:22px;animation-delay:1.2s;">✨</div>
+  <div class="deco" style="bottom:18%;left:6%;font-size:24px;animation-delay:2s;">🧸</div>
+  <div class="deco" style="bottom:12%;right:8%;font-size:24px;animation-delay:.6s;">🌟</div>
+  <div class="deco" style="top:45%;left:2%;font-size:20px;animation-delay:1.8s;">🐥</div>
+  <div class="deco" style="top:35%;right:3%;font-size:20px;animation-delay:3s;">🍭</div>
+
+  <div class="login-card">
+    <div class="logo-area">
+      <span class="logo-icon">🍼</span>
+      <div class="app-name">예쁜 아가</div>
+      <div class="app-sub">우리 아기의 소중한 순간들 💕</div>
+    </div>
+    <hr class="div" />
+
+    <% if (error) { %>
+    <div class="error-msg">⚠️ <%= error %></div>
+    <% } %>
+
+    <form id="loginForm" action="/login" method="POST" novalidate>
+      <label for="username">아이디 / 이메일</label>
+      <div class="input-wrap">
+        <span class="inp-icon">✉️</span>
+        <input
+          type="text"
+          id="username"
+          name="username"
+          autocomplete="username"
+          placeholder="이메일 또는 admin"
+          required
+        />
+      </div>
+
+      <label for="password">비밀번호</label>
+      <div class="input-wrap">
+        <span class="inp-icon">🔒</span>
+        <input type="password" id="password" name="password" autocomplete="current-password" placeholder="비밀번호를 입력하세요" required />
+      </div>
+
+      <div class="opts">
+        <label class="remember"><input type="checkbox" name="remember" /> 로그인 상태 유지</label>
+        <a href="/forgot" class="forgot">비밀번호 찾기</a>
+      </div>
+
+      <button type="submit" class="btn-login">로그인 🐥</button>
+    </form>
+
+    <div class="soc-div">또는</div>
+    <div class="soc-btns">
+      <button class="btn-soc"><img src="https://upload.wikimedia.org/wikipedia/commons/e/e3/KakaoTalk_logo.svg" width="22" height="22" alt="카카오" /></button>
+      <button class="btn-soc"><img src="https://upload.wikimedia.org/wikipedia/commons/2/23/Naver_Logotype.svg" width="36" height="14" alt="네이버" /></button>
+      <button class="btn-soc"><img src="https://www.svgrepo.com/show/475656/google-color.svg" width="22" height="22" alt="Google" /></button>
+    </div>
+    <div class="signup">아직 계정이 없으신가요? <a href="/signup">회원가입</a></div>
+  </div>
+
+  <script>
+    const form = document.getElementById('loginForm');
+    const usernameInput = document.getElementById('username');
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    form.addEventListener('submit', (e) => {
+      const val = usernameInput.value.trim();
+      // admin은 이메일 형식 예외 처리
+      if (val === 'admin') return;
+      // 그 외에는 이메일 형식 검사
+      if (!emailRegex.test(val)) {
+        e.preventDefault();
+        usernameInput.classList.add('invalid');
+        usernameInput.focus();
+        usernameInput.placeholder = '올바른 이메일 형식을 입력해 주세요';
+      }
+    });
+
+    usernameInput.addEventListener('input', () => {
+      usernameInput.classList.remove('invalid');
+    });
+  </script>
+</body>
+</html>
