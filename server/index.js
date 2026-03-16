@@ -14,10 +14,15 @@ app.use(cors());
 app.use(express.json());
 
 // GET /api/matches - 모든 경기 결과 조회
+// API-Football 호환 컬럼: fixture_id (fixture.id), match_date (fixture.date),
+//   status (fixture.status.short: NS/1H/HT/2H/FT), matchday (league.round 숫자)
 app.get('/api/matches', async (req, res) => {
   try {
     const { rows } = await pool.query(
-      'SELECT id, group_key, home_id, away_id, home_score, away_score FROM match_results ORDER BY group_key, id'
+      `SELECT id, group_key, home_id, away_id, home_score, away_score,
+              matchday, match_date, status, fixture_id
+       FROM match_results
+       ORDER BY match_date ASC NULLS LAST, group_key, id`
     );
     res.json(rows);
   } catch (err) {
@@ -27,22 +32,34 @@ app.get('/api/matches', async (req, res) => {
 });
 
 // POST /api/matches - 경기 결과 저장 (upsert)
+// API-Football 연동 시 fixture_id, match_date, status도 함께 저장 가능
 app.post('/api/matches', async (req, res) => {
-  const { id, group_key, home_id, away_id, home_score, away_score } = req.body;
+  const { id, group_key, home_id, away_id, home_score, away_score,
+          matchday, match_date, status, fixture_id } = req.body;
   if (!id || !group_key || !home_id || !away_id) {
     return res.status(400).json({ error: 'id, group_key, home_id, away_id 필수' });
   }
   try {
     await pool.query(
-      `INSERT INTO match_results (id, group_key, home_id, away_id, home_score, away_score, updated_at)
-       VALUES ($1, $2, $3, $4, $5, $6, NOW())
+      `INSERT INTO match_results
+         (id, group_key, home_id, away_id, home_score, away_score,
+          matchday, match_date, status, fixture_id, updated_at)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, NOW())
        ON CONFLICT (id) DO UPDATE
-         SET home_score = EXCLUDED.home_score,
-             away_score = EXCLUDED.away_score,
-             updated_at = NOW()`,
+         SET home_score  = EXCLUDED.home_score,
+             away_score  = EXCLUDED.away_score,
+             matchday    = COALESCE(EXCLUDED.matchday,    match_results.matchday),
+             match_date  = COALESCE(EXCLUDED.match_date,  match_results.match_date),
+             status      = COALESCE(EXCLUDED.status,      match_results.status),
+             fixture_id  = COALESCE(EXCLUDED.fixture_id,  match_results.fixture_id),
+             updated_at  = NOW()`,
       [id, group_key, home_id, away_id,
         home_score !== '' && home_score !== null && home_score !== undefined ? parseInt(home_score) : null,
-        away_score !== '' && away_score !== null && away_score !== undefined ? parseInt(away_score) : null]
+        away_score !== '' && away_score !== null && away_score !== undefined ? parseInt(away_score) : null,
+        matchday ?? null,
+        match_date ?? null,
+        status ?? 'NS',
+        fixture_id ?? null]
     );
     res.json({ ok: true });
   } catch (err) {

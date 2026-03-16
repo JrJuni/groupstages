@@ -192,6 +192,114 @@ export const DRAW_POTS = {
   ],
 };
 
+// ──────────────────────────────────────────────────────────────────
+// 2026 FIFA World Cup 조별리그 공식 경기 일정
+// 모든 시간 UTC 기준 (KST = UTC+9)
+// 출처: FIFA 공식 대회 일정 (2024년 발표)
+//
+// API-Football (RapidAPI) 연동 시 fixture_id 필드를 통해 매핑됩니다.
+// ──────────────────────────────────────────────────────────────────
+export const MATCH_SCHEDULE = {
+  // ── Group A (MEX · KOR · RSA · UEFA_PO_D) ────────────────────
+  // R1: MEX vs RSA (Jun 11), KOR vs UEFA_PO_D (Jun 12)
+  // R2: MEX vs KOR (Jun 18/19), RSA vs UEFA_PO_D (Jun 18)
+  // R3: MEX vs UEFA_PO_D · KOR vs RSA (Jun 24/25 동시)
+  'MEX_vs_RSA':         { matchday: 1, date: '2026-06-11T19:00:00Z', venue: 'Estadio Azteca',          city: 'Mexico City, MEX' },
+  'KOR_vs_UEFA_PO_D':   { matchday: 1, date: '2026-06-12T16:00:00Z', venue: 'Estadio Guadalajara',     city: 'Guadalajara, MEX' },
+  'MEX_vs_KOR':         { matchday: 2, date: '2026-06-19T01:00:00Z', venue: 'Estadio Guadalajara',     city: 'Guadalajara, MEX' },
+  'RSA_vs_UEFA_PO_D':   { matchday: 2, date: '2026-06-18T22:00:00Z', venue: 'Mercedes-Benz Stadium',   city: 'Atlanta, GA' },
+  'KOR_vs_RSA':         { matchday: 3, date: '2026-06-24T22:00:00Z', venue: 'NRG Stadium',             city: 'Houston, TX' },
+  'MEX_vs_UEFA_PO_D':   { matchday: 3, date: '2026-06-25T01:00:00Z', venue: 'Estadio Azteca',          city: 'Mexico City, MEX' },
+
+  // ── Group B (CAN · CHE · QAT · UEFA_PO_A) ────────────────────
+  'CAN_vs_UEFA_PO_A':   { matchday: 1, date: '2026-06-12T19:00:00Z', venue: 'BMO Field',               city: 'Toronto, CAN' },
+  'CHE_vs_QAT':         { matchday: 1, date: '2026-06-12T22:00:00Z', venue: "Levi's Stadium",          city: 'Santa Clara, CA' },
+  'CHE_vs_UEFA_PO_A':   { matchday: 2, date: '2026-06-18T22:00:00Z', venue: 'SoFi Stadium',            city: 'Inglewood, CA' },
+  'CAN_vs_QAT':         { matchday: 2, date: '2026-06-19T01:00:00Z', venue: 'BC Place',                city: 'Vancouver, CAN' },
+  'CAN_vs_CHE':         { matchday: 3, date: '2026-06-25T04:00:00Z', venue: 'BC Place',                city: 'Vancouver, CAN' },
+  'QAT_vs_UEFA_PO_A':   { matchday: 3, date: '2026-06-25T04:00:00Z', venue: 'Lumen Field',             city: 'Seattle, WA' },
+
+  // ── Group C (BRA · MAR · SCO · HTI) ──────────────────────────
+  'SCO_vs_MAR':         { matchday: 1, date: '2026-06-13T16:00:00Z', venue: 'Hard Rock Stadium',       city: 'Miami, FL' },
+  'BRA_vs_HTI':         { matchday: 1, date: '2026-06-13T19:00:00Z', venue: 'Rose Bowl',               city: 'Pasadena, CA' },
+  'BRA_vs_SCO':         { matchday: 2, date: '2026-06-19T22:00:00Z', venue: 'Gillette Stadium',        city: 'Foxborough, MA' },
+  'MAR_vs_HTI':         { matchday: 2, date: '2026-06-20T01:00:00Z', venue: 'Lincoln Financial Field', city: 'Philadelphia, PA' },
+  'BRA_vs_MAR':         { matchday: 3, date: '2026-06-24T04:00:00Z', venue: 'Mercedes-Benz Stadium',   city: 'Atlanta, GA' },
+  'SCO_vs_HTI':         { matchday: 3, date: '2026-06-24T04:00:00Z', venue: 'Hard Rock Stadium',       city: 'Miami, FL' },
+
+  // ── Group D (USA · AUS · PAR · UEFA_PO_C) ────────────────────
+  'USA_vs_PAR':         { matchday: 1, date: '2026-06-13T01:00:00Z', venue: 'SoFi Stadium',            city: 'Inglewood, CA' },
+  'AUS_vs_UEFA_PO_C':   { matchday: 1, date: '2026-06-13T04:00:00Z', venue: 'BC Place',                city: 'Vancouver, CAN' },
+  'USA_vs_AUS':         { matchday: 2, date: '2026-06-19T19:00:00Z', venue: 'Lumen Field',             city: 'Seattle, WA' },
+  'PAR_vs_UEFA_PO_C':   { matchday: 2, date: '2026-06-19T04:00:00Z', venue: "Levi's Stadium",          city: 'Santa Clara, CA' },
+  'AUS_vs_PAR':         { matchday: 3, date: '2026-06-26T02:00:00Z', venue: "Levi's Stadium",          city: 'Santa Clara, CA' },
+  'USA_vs_UEFA_PO_C':   { matchday: 3, date: '2026-06-26T02:00:00Z', venue: 'SoFi Stadium',            city: 'Inglewood, CA' },
+
+  // ── Group E (GER · ECU · CIV · CUW) ──────────────────────────
+  'GER_vs_CIV':         { matchday: 1, date: '2026-06-14T19:00:00Z', venue: 'BMO Field',               city: 'Toronto, CAN' },
+  'ECU_vs_CUW':         { matchday: 1, date: '2026-06-14T22:00:00Z', venue: 'Arrowhead Stadium',       city: 'Kansas City, MO' },
+  'ECU_vs_CIV':         { matchday: 2, date: '2026-06-20T04:00:00Z', venue: 'Lincoln Financial Field', city: 'Philadelphia, PA' },
+  'GER_vs_CUW':         { matchday: 2, date: '2026-06-20T16:00:00Z', venue: 'BMO Field',               city: 'Toronto, CAN' },
+  'GER_vs_ECU':         { matchday: 3, date: '2026-06-26T19:00:00Z', venue: 'Lincoln Financial Field', city: 'Philadelphia, PA' },
+  'CIV_vs_CUW':         { matchday: 3, date: '2026-06-26T19:00:00Z', venue: 'Arrowhead Stadium',       city: 'Kansas City, MO' },
+
+  // ── Group F (NED · JPN · TUN · UEFA_PO_B) ────────────────────
+  'NED_vs_UEFA_PO_B':   { matchday: 1, date: '2026-06-14T16:00:00Z', venue: 'AT&T Stadium',            city: 'Arlington, TX' },
+  'JPN_vs_TUN':         { matchday: 1, date: '2026-06-15T16:00:00Z', venue: 'Arrowhead Stadium',       city: 'Kansas City, MO' },
+  'TUN_vs_UEFA_PO_B':   { matchday: 2, date: '2026-06-20T07:00:00Z', venue: 'Estadio Monterrey',       city: 'Monterrey, MEX' },
+  'NED_vs_JPN':         { matchday: 2, date: '2026-06-20T22:00:00Z', venue: 'Estadio Akron',           city: 'Guadalajara, MEX' },
+  'NED_vs_TUN':         { matchday: 3, date: '2026-06-26T22:00:00Z', venue: 'AT&T Stadium',            city: 'Arlington, TX' },
+  'JPN_vs_UEFA_PO_B':   { matchday: 3, date: '2026-06-26T22:00:00Z', venue: 'Estadio Monterrey',       city: 'Monterrey, MEX' },
+
+  // ── Group G (BEL · IRN · EGY · NZL) ──────────────────────────
+  'BEL_vs_EGY':         { matchday: 1, date: '2026-06-15T19:00:00Z', venue: 'Lumen Field',             city: 'Seattle, WA' },
+  'IRN_vs_NZL':         { matchday: 1, date: '2026-06-15T22:00:00Z', venue: 'SoFi Stadium',            city: 'Inglewood, CA' },
+  'BEL_vs_IRN':         { matchday: 2, date: '2026-06-21T19:00:00Z', venue: 'Lumen Field',             city: 'Seattle, WA' },
+  'EGY_vs_NZL':         { matchday: 2, date: '2026-06-21T22:00:00Z', venue: 'SoFi Stadium',            city: 'Inglewood, CA' },
+  'BEL_vs_NZL':         { matchday: 3, date: '2026-06-27T21:00:00Z', venue: 'Lumen Field',             city: 'Seattle, WA' },
+  'IRN_vs_EGY':         { matchday: 3, date: '2026-06-27T21:00:00Z', venue: 'BC Place',                city: 'Vancouver, CAN' },
+
+  // ── Group H (ESP · URU · SAU · CPV) ──────────────────────────
+  'ESP_vs_CPV':         { matchday: 1, date: '2026-06-15T16:00:00Z', venue: 'Mercedes-Benz Stadium',   city: 'Atlanta, GA' },
+  'URU_vs_SAU':         { matchday: 1, date: '2026-06-16T01:00:00Z', venue: 'Hard Rock Stadium',       city: 'Miami, FL' },
+  'ESP_vs_SAU':         { matchday: 2, date: '2026-06-21T16:00:00Z', venue: 'Mercedes-Benz Stadium',   city: 'Atlanta, GA' },
+  'URU_vs_CPV':         { matchday: 2, date: '2026-06-22T01:00:00Z', venue: 'Hard Rock Stadium',       city: 'Miami, FL' },
+  'ESP_vs_URU':         { matchday: 3, date: '2026-06-27T19:00:00Z', venue: 'Hard Rock Stadium',       city: 'Miami, FL' },
+  'SAU_vs_CPV':         { matchday: 3, date: '2026-06-27T19:00:00Z', venue: 'Mercedes-Benz Stadium',   city: 'Atlanta, GA' },
+
+  // ── Group I (FRA · SEN · NOR · IC_PO_2) ──────────────────────
+  'FRA_vs_SEN':         { matchday: 1, date: '2026-06-16T16:00:00Z', venue: 'MetLife Stadium',         city: 'East Rutherford, NJ' },
+  'NOR_vs_IC_PO_2':     { matchday: 1, date: '2026-06-16T19:00:00Z', venue: 'Gillette Stadium',        city: 'Foxborough, MA' },
+  'FRA_vs_NOR':         { matchday: 2, date: '2026-06-22T02:00:00Z', venue: 'Lincoln Financial Field', city: 'Philadelphia, PA' },
+  'SEN_vs_IC_PO_2':     { matchday: 2, date: '2026-06-22T04:00:00Z', venue: 'BMO Field',               city: 'Toronto, CAN' },
+  'FRA_vs_IC_PO_2':     { matchday: 3, date: '2026-06-27T23:00:00Z', venue: 'MetLife Stadium',         city: 'East Rutherford, NJ' },
+  'SEN_vs_NOR':         { matchday: 3, date: '2026-06-27T23:00:00Z', venue: 'Gillette Stadium',        city: 'Foxborough, MA' },
+
+  // ── Group J (ARG · AUT · ALG · JOR) ──────────────────────────
+  'ARG_vs_ALG':         { matchday: 1, date: '2026-06-16T22:00:00Z', venue: 'Arrowhead Stadium',       city: 'Kansas City, MO' },
+  'AUT_vs_JOR':         { matchday: 1, date: '2026-06-17T01:00:00Z', venue: "Levi's Stadium",          city: 'Santa Clara, CA' },
+  'ARG_vs_AUT':         { matchday: 2, date: '2026-06-22T22:00:00Z', venue: 'AT&T Stadium',            city: 'Arlington, TX' },
+  'ALG_vs_JOR':         { matchday: 2, date: '2026-06-22T07:00:00Z', venue: "Levi's Stadium",          city: 'Santa Clara, CA' },
+  'ARG_vs_JOR':         { matchday: 3, date: '2026-06-28T00:00:00Z', venue: "Levi's Stadium",          city: 'Santa Clara, CA' },
+  'AUT_vs_ALG':         { matchday: 3, date: '2026-06-28T00:00:00Z', venue: 'AT&T Stadium',            city: 'Arlington, TX' },
+
+  // ── Group K (POR · COL · UZB · IC_PO_1) ──────────────────────
+  'POR_vs_IC_PO_1':     { matchday: 1, date: '2026-06-17T16:00:00Z', venue: 'NRG Stadium',             city: 'Houston, TX' },
+  'COL_vs_UZB':         { matchday: 1, date: '2026-06-17T19:00:00Z', venue: "Levi's Stadium",          city: 'Santa Clara, CA' },
+  'POR_vs_COL':         { matchday: 2, date: '2026-06-23T22:00:00Z', venue: 'NRG Stadium',             city: 'Houston, TX' },
+  'UZB_vs_IC_PO_1':     { matchday: 2, date: '2026-06-23T04:00:00Z', venue: 'Estadio Guadalajara',     city: 'Guadalajara, MEX' },
+  'POR_vs_UZB':         { matchday: 3, date: '2026-06-27T02:00:00Z', venue: 'NRG Stadium',             city: 'Houston, TX' },
+  'COL_vs_IC_PO_1':     { matchday: 3, date: '2026-06-27T02:00:00Z', venue: 'Estadio Guadalajara',     city: 'Guadalajara, MEX' },
+
+  // ── Group L (ENG · CRO · GHA · PAN) ──────────────────────────
+  'GHA_vs_PAN':         { matchday: 1, date: '2026-06-17T22:00:00Z', venue: 'Gillette Stadium',        city: 'Foxborough, MA' },
+  'ENG_vs_CRO':         { matchday: 1, date: '2026-06-18T01:00:00Z', venue: 'AT&T Stadium',            city: 'Arlington, TX' },
+  'ENG_vs_GHA':         { matchday: 2, date: '2026-06-23T01:00:00Z', venue: 'Gillette Stadium',        city: 'Foxborough, MA' },
+  'CRO_vs_PAN':         { matchday: 2, date: '2026-06-23T07:00:00Z', venue: 'BMO Field',               city: 'Toronto, CAN' },
+  'ENG_vs_PAN':         { matchday: 3, date: '2026-06-27T21:00:00Z', venue: 'MetLife Stadium',         city: 'East Rutherford, NJ' },
+  'CRO_vs_GHA':         { matchday: 3, date: '2026-06-27T21:00:00Z', venue: 'Lincoln Financial Field', city: 'Philadelphia, PA' },
+};
+
 // 팀별 글로벌 시드 번호 (1=최강, 48=최약)
 // 포트 순서 기반: Pot1(1-12) → Pot2(13-24) → Pot3(25-36) → Pot4(37-48)
 // 경기 전 타이브레이커 "히든 룰"로 사용 (낮을수록 상위 시드)

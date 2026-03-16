@@ -21,15 +21,43 @@
 ## Database Schema
 ```sql
 CREATE TABLE match_results (
-  id VARCHAR(100) PRIMARY KEY,   -- e.g. "MEX_vs_KOR"
-  group_key CHAR(1) NOT NULL,    -- "A"~"L"
-  home_id VARCHAR(30) NOT NULL,
-  away_id VARCHAR(30) NOT NULL,
+  id         VARCHAR(100) PRIMARY KEY,  -- e.g. "MEX_vs_KOR"
+  group_key  CHAR(1)      NOT NULL,     -- "A"~"L"
+  home_id    VARCHAR(30)  NOT NULL,
+  away_id    VARCHAR(30)  NOT NULL,
   home_score INTEGER,
   away_score INTEGER,
-  updated_at TIMESTAMP DEFAULT NOW()
+  -- 경기 일정 관련 (API-Football 호환)
+  matchday   SMALLINT,                  -- 1/2/3  ← API: league.round 숫자
+  match_date TIMESTAMPTZ,               -- UTC 킥오프 ← API: fixture.date
+  status     VARCHAR(10)  DEFAULT 'NS', -- NS/FT/1H/HT/2H ← API: fixture.status.short
+  fixture_id INTEGER,                   -- API-Football fixture.id (연동 전 NULL)
+  updated_at TIMESTAMP    DEFAULT NOW()
 );
+-- 인덱스
+CREATE INDEX idx_match_results_group      ON match_results (group_key);
+CREATE INDEX idx_match_results_match_date ON match_results (match_date);
+CREATE INDEX idx_match_results_fixture_id ON match_results (fixture_id);
 ```
+
+### API-Football (RapidAPI) 호환성 분석
+
+**현재 구조와의 매핑:**
+| 우리 필드         | API-Football 필드               | 비고                          |
+|-------------------|---------------------------------|-------------------------------|
+| `fixture_id`      | `fixture.id`                    | NULL → 연동 후 채움           |
+| `match_date`      | `fixture.date` (ISO 8601 UTC)   | ✅ 동일 포맷                   |
+| `status`          | `fixture.status.short`          | NS/FT/1H/HT/2H 등             |
+| `matchday`        | `league.round` ("Group Stage - 1") → 숫자 추출 | 파싱 필요 |
+| `home_score`      | `goals.home`                    | ✅ 직접 매핑                   |
+| `away_score`      | `goals.away`                    | ✅ 직접 매핑                   |
+| `home_id`/`away_id` | `teams.home.id` (정수)        | ⚠️ 별도 팀 ID 매핑 테이블 필요 |
+
+**미래 연동 시 필요한 추가 작업:**
+1. `team_mapping` 테이블: `our_id VARCHAR ↔ api_team_id INT`
+2. `fixture_id`로 모든 72경기 레코드 사전 삽입 (현재 played=0 경기 포함)
+3. API sync 시: `UPDATE match_results SET status='FT', home_score=..., away_score=... WHERE fixture_id=...`
+4. `GET /api/matches?league=1&season=2026` → fixture_id NULL 레코드 조회 후 bulk upsert
 
 ## Key Features
 1. **조별리그 순위 계산**: 12개 조, 48팀, 실시간 경기 결과 입력 (DB 자동 저장)

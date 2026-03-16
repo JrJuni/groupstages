@@ -1,5 +1,5 @@
 // 조별 순위 계산 유틸리티
-import { TEAM_SEEDS } from '../data/worldcup2026.js';
+import { TEAM_SEEDS, MATCH_SCHEDULE } from '../data/worldcup2026.js';
 
 // 시드 번호 조회 (없으면 99로 처리 → 미확정 플레이오프 팀)
 function getSeed(id) { return TEAM_SEEDS[id] ?? 99; }
@@ -22,12 +22,18 @@ export function createInitialMatches(teams) {
   const matches = [];
   for (let i = 0; i < teams.length; i++) {
     for (let j = i + 1; j < teams.length; j++) {
+      const id = `${teams[i].id}_vs_${teams[j].id}`;
+      const sched = MATCH_SCHEDULE[id] || {};
       matches.push({
-        id: `${teams[i].id}_vs_${teams[j].id}`,
+        id,
         home: teams[i].id,
         away: teams[j].id,
         homeScore: null,
         awayScore: null,
+        matchday: sched.matchday ?? null,
+        date: sched.date ?? null,
+        venue: sched.venue ?? null,
+        city: sched.city ?? null,
         played: false,
       });
     }

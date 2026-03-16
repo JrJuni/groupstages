@@ -1,5 +1,17 @@
 import React from 'react';
-import { ChevronRight } from 'lucide-react';
+import { ChevronRight, MapPin } from 'lucide-react';
+
+// UTC ISO 날짜를 KST (UTC+9) 포맷으로 변환
+function formatKST(iso) {
+  if (!iso) return null;
+  const d = new Date(new Date(iso).getTime() + 9 * 3_600_000);
+  const mo = d.getUTCMonth() + 1;
+  const da = d.getUTCDate();
+  const dayName = ['일', '월', '화', '수', '목', '금', '토'][d.getUTCDay()];
+  const hh = String(d.getUTCHours()).padStart(2, '0');
+  const mm = String(d.getUTCMinutes()).padStart(2, '0');
+  return `${mo}월 ${da}일(${dayName}) ${hh}:${mm} KST`;
+}
 
 const RANK_BG = {
   1: 'bg-green-900/40 border-l-2 border-green-500',
@@ -76,54 +88,113 @@ function MatchRow({ match, standings, onScoreChange }) {
                  match.homeScore !== '' && match.awayScore !== null &&
                  match.awayScore !== undefined && match.awayScore !== '';
 
+  const dateStr = formatKST(match.date);
+
   return (
-    <div className={`flex items-center gap-3 py-2.5 px-4 border-b border-fifa-border/20 last:border-0 text-sm ${played ? '' : 'opacity-80'}`}>
-      {/* 홈팀 */}
-      <div className="flex items-center gap-1.5 flex-1 justify-end">
-        <span className="text-white text-xs sm:text-sm whitespace-nowrap hidden sm:inline">{homeTeam.name}</span>
-        <TeamFlag team={homeTeam} />
-      </div>
+    <div className={`border-b border-fifa-border/20 last:border-0 ${played ? '' : 'opacity-80'}`}>
+      {/* 날짜 / 경기장 */}
+      {dateStr && (
+        <div className="flex items-center gap-2 px-4 pt-2 pb-0.5">
+          <span className="text-[10px] text-fifa-gold font-medium">{dateStr}</span>
+          {match.city && (
+            <span className="flex items-center gap-0.5 text-[10px] text-fifa-muted">
+              <MapPin size={9} />
+              {match.city}
+            </span>
+          )}
+        </div>
+      )}
 
-      {/* 스코어 */}
-      <div className="flex items-center gap-1.5 shrink-0">
-        {played ? (
-          <div className="flex items-center gap-1 bg-white/10 rounded px-3 py-1">
-            <span className="font-bold text-white text-base w-5 text-right">{match.homeScore}</span>
-            <span className="text-fifa-muted text-xs">:</span>
-            <span className="font-bold text-white text-base w-5 text-left">{match.awayScore}</span>
-          </div>
-        ) : (
-          <>
-            <input
-              type="number"
-              min="0"
-              max="99"
-              className="score-input"
-              value={match.homeScore ?? ''}
-              onChange={(e) => onScoreChange(match.id, 'homeScore', e.target.value)}
-              placeholder="-"
-            />
-            <span className="text-fifa-muted text-xs">:</span>
-            <input
-              type="number"
-              min="0"
-              max="99"
-              className="score-input"
-              value={match.awayScore ?? ''}
-              onChange={(e) => onScoreChange(match.id, 'awayScore', e.target.value)}
-              placeholder="-"
-            />
-          </>
-        )}
-      </div>
+      <div className="flex items-center gap-3 py-2 px-4 text-sm">
+        {/* 홈팀 */}
+        <div className="flex items-center gap-1.5 flex-1 justify-end">
+          <span className="text-white text-xs sm:text-sm whitespace-nowrap hidden sm:inline">{homeTeam.name}</span>
+          <TeamFlag team={homeTeam} />
+        </div>
 
-      {/* 원정팀 */}
-      <div className="flex items-center gap-1.5 flex-1 justify-start">
-        <TeamFlag team={awayTeam} />
-        <span className="text-white text-xs sm:text-sm whitespace-nowrap hidden sm:inline">{awayTeam.name}</span>
+        {/* 스코어 */}
+        <div className="flex items-center gap-1.5 shrink-0">
+          {played ? (
+            <div className="flex items-center gap-1 bg-white/10 rounded px-3 py-1">
+              <span className="font-bold text-white text-base w-5 text-right">{match.homeScore}</span>
+              <span className="text-fifa-muted text-xs">:</span>
+              <span className="font-bold text-white text-base w-5 text-left">{match.awayScore}</span>
+            </div>
+          ) : (
+            <>
+              <input
+                type="number"
+                min="0"
+                max="99"
+                className="score-input"
+                value={match.homeScore ?? ''}
+                onChange={(e) => onScoreChange(match.id, 'homeScore', e.target.value)}
+                placeholder="-"
+              />
+              <span className="text-fifa-muted text-xs">:</span>
+              <input
+                type="number"
+                min="0"
+                max="99"
+                className="score-input"
+                value={match.awayScore ?? ''}
+                onChange={(e) => onScoreChange(match.id, 'awayScore', e.target.value)}
+                placeholder="-"
+              />
+            </>
+          )}
+        </div>
+
+        {/* 원정팀 */}
+        <div className="flex items-center gap-1.5 flex-1 justify-start">
+          <TeamFlag team={awayTeam} />
+          <span className="text-white text-xs sm:text-sm whitespace-nowrap hidden sm:inline">{awayTeam.name}</span>
+        </div>
       </div>
     </div>
   );
+}
+
+// 경기 목록: 날짜순 정렬 + 경기일 구분 헤더
+function MatchList({ matches, standings, groupKey, onScoreChange }) {
+  if (!matches?.length) return null;
+
+  // 날짜 기준 오름차순 정렬 (날짜 없는 경기는 마지막)
+  const sorted = [...matches].sort((a, b) => {
+    if (!a.date && !b.date) return 0;
+    if (!a.date) return 1;
+    if (!b.date) return -1;
+    return new Date(a.date) - new Date(b.date);
+  });
+
+  // matchday 구분 헤더 삽입
+  let lastMatchday = null;
+  const rows = [];
+  sorted.forEach((match) => {
+    const md = match.matchday;
+    if (md && md !== lastMatchday) {
+      rows.push(
+        <div key={`md-${md}`} className="flex items-center gap-2 px-4 py-1.5 bg-white/5 border-b border-fifa-border/30">
+          <span className="text-[10px] font-bold text-fifa-muted uppercase tracking-wider">
+            경기일 {md}
+          </span>
+        </div>
+      );
+      lastMatchday = md;
+    }
+    rows.push(
+      <MatchRow
+        key={match.id}
+        match={match}
+        standings={standings}
+        onScoreChange={(matchId, field, value) =>
+          onScoreChange(groupKey, matchId, field, value)
+        }
+      />
+    );
+  });
+
+  return <div className="card overflow-hidden">{rows}</div>;
 }
 
 export default function ScenarioPage({ selectedGroupKey, onSelectGroup, groups, onScoreChange }) {
@@ -194,18 +265,12 @@ export default function ScenarioPage({ selectedGroupKey, onSelectGroup, groups, 
             {/* 경기 일정 / 결과 */}
             <div>
               <p className="text-xs text-fifa-muted font-medium mb-2">경기 일정 · 결과</p>
-              <div className="card overflow-hidden">
-                {groups[selectedGroupKey].matches?.map((match) => (
-                  <MatchRow
-                    key={match.id}
-                    match={match}
-                    standings={groups[selectedGroupKey].standings}
-                    onScoreChange={(matchId, field, value) =>
-                      onScoreChange(selectedGroupKey, matchId, field, value)
-                    }
-                  />
-                ))}
-              </div>
+              <MatchList
+                matches={groups[selectedGroupKey].matches}
+                standings={groups[selectedGroupKey].standings}
+                groupKey={selectedGroupKey}
+                onScoreChange={onScoreChange}
+              />
             </div>
           </div>
         </div>
