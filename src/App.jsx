@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Globe, Shuffle, Trophy, Share2, Menu, X, Database, RotateCcw, Wifi, WifiOff } from 'lucide-react';
 import { getBest8ThirdPlace } from './utils/rankings.js';
+import { TEAM_SEEDS } from './data/worldcup2026.js';
 import { useMatches } from './hooks/useMatches.js';
 import GroupTable from './components/GroupTable.jsx';
 import ThirdPlaceTable from './components/ThirdPlaceTable.jsx';
@@ -64,11 +65,13 @@ export default function App() {
       if (!standings || standings.length < 3) return null;
       return { group, ...standings[2] };
     })
-    .filter((t) => t !== null && t.played > 0)
+    .filter((t) => t !== null)
     .sort((a, b) => {
       if (b.pts !== a.pts) return b.pts - a.pts;
       if (b.gd !== a.gd) return b.gd - a.gd;
-      return b.gf - a.gf;
+      if (b.gf !== a.gf) return b.gf - a.gf;
+      // 히든 룰: 경기 전/동점 시 포트 시드 순서 적용
+      return (TEAM_SEEDS[a.id] ?? 99) - (TEAM_SEEDS[b.id] ?? 99);
     });
   const best8 = getBest8ThirdPlace(allGroupStandings);
 

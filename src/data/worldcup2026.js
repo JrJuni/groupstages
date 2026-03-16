@@ -191,3 +191,15 @@ export const DRAW_POTS = {
     { id: 'IC_PO_2', name: 'IC PO-2', flag: '🏆', flagImg: null, confederation: 'AFC' },
   ],
 };
+
+// 팀별 글로벌 시드 번호 (1=최강, 48=최약)
+// 포트 순서 기반: Pot1(1-12) → Pot2(13-24) → Pot3(25-36) → Pot4(37-48)
+// 경기 전 타이브레이커 "히든 룰"로 사용 (낮을수록 상위 시드)
+export const TEAM_SEEDS = (() => {
+  const seeds = {};
+  let seed = 1;
+  [DRAW_POTS.pot1, DRAW_POTS.pot2, DRAW_POTS.pot3, DRAW_POTS.pot4].forEach((pot) => {
+    pot.forEach((team) => { seeds[team.id] = seed++; });
+  });
+  return seeds;
+})();

@@ -1,4 +1,8 @@
 // 조별 순위 계산 유틸리티
+import { TEAM_SEEDS } from '../data/worldcup2026.js';
+
+// 시드 번호 조회 (없으면 99로 처리 → 미확정 플레이오프 팀)
+function getSeed(id) { return TEAM_SEEDS[id] ?? 99; }
 
 export function createInitialStandings(teams) {
   return teams.map((team) => ({
@@ -99,7 +103,8 @@ export function calculateStandings(teams, matches) {
         if (h2h[b.id].gf !== h2h[a.id].gf) return h2h[b.id].gf - h2h[a.id].gf;
       }
     }
-    return a.name.localeCompare(b.name);
+    // 최종 타이브레이커: 포트 시드 순서 (히든 룰 - 경기 전 초기 순위)
+    return getSeed(a.id) - getSeed(b.id);
   });
 
   return arr;
@@ -113,14 +118,14 @@ export function getBest8ThirdPlace(allGroupStandings) {
       if (!standings || standings.length < 3) return null;
       return { group, ...standings[2] };
     })
-    .filter((t) => t !== null && t.played > 0);
+    .filter((t) => t !== null);
 
   return thirds
     .sort((a, b) => {
       if (b.pts !== a.pts) return b.pts - a.pts;
       if (b.gd !== a.gd) return b.gd - a.gd;
       if (b.gf !== a.gf) return b.gf - a.gf;
-      return a.name.localeCompare(b.name);
+      return getSeed(a.id) - getSeed(b.id);
     })
     .slice(0, 8);
 }

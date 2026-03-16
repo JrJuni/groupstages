@@ -50,8 +50,8 @@ export default function ThirdPlaceTable({ best8, allThirds, loading = false, api
               </tr>
             ) : allThirds.length === 0 ? (
               <tr>
-                <td colSpan={10} className="text-center py-8 text-fifa-muted">
-                  조별리그 탭에서 경기 결과를 입력하면 3위팀 순위가 표시됩니다
+                <td colSpan={10} className="text-center py-8 text-fifa-muted animate-pulse">
+                  데이터 로딩 중...
                 </td>
               </tr>
             ) : (
@@ -91,10 +91,12 @@ export default function ThirdPlaceTable({ best8, allThirds, loading = false, api
                     <td className="px-2 py-2 text-center">
                       {isQualified ? (
                         <span className="text-xs bg-green-900/40 text-green-400 px-2 py-0.5 rounded-full">
-                          ✓ 진출
+                          {team.played === 0 ? '↑ 시드' : '✓ 진출'}
                         </span>
                       ) : (
-                        <span className="text-xs text-fifa-muted">탈락</span>
+                        <span className="text-xs text-fifa-muted">
+                          {team.played === 0 ? '↓ 시드' : '탈락'}
+                        </span>
                       )}
                     </td>
                   </tr>
@@ -113,7 +115,7 @@ export default function ThirdPlaceTable({ best8, allThirds, loading = false, api
         </div>
         <div className="flex items-center gap-1">
           <TrendingUp size={12} />
-          <span>승점 → 득실차 → 다득점 순으로 결정</span>
+          <span>승점 → 득실차 → 다득점 → FIFA 시드 순으로 결정</span>
         </div>
       </div>
     </div>
