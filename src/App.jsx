@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Globe, Shuffle, Trophy, Share2, Menu, X, Database, RotateCcw, Wifi, WifiOff } from 'lucide-react';
+import { Globe, Shuffle, Trophy, Share2, Menu, X, Database, RotateCcw, Wifi, WifiOff, GitBranch, BookOpen } from 'lucide-react';
 import { getBest8ThirdPlace } from './utils/rankings.js';
 import { TEAM_SEEDS } from './data/worldcup2026.js';
 import { useMatches } from './hooks/useMatches.js';
@@ -7,12 +7,15 @@ import GroupTable from './components/GroupTable.jsx';
 import ThirdPlaceTable from './components/ThirdPlaceTable.jsx';
 import DrawSimulator from './components/DrawSimulator.jsx';
 import ShareButtons from './components/ShareButtons.jsx';
+import RulesPage from './components/RulesPage.jsx';
 
 // ── 탭 정의 ─────────────────────────────────────────────
 const TABS = [
   { id: 'groups', label: '조별리그', icon: Globe },
+  { id: 'scenarios', label: '경우의 수', icon: GitBranch },
   { id: 'thirds', label: '3위 순위', icon: Trophy },
   { id: 'draw', label: '조추첨', icon: Shuffle },
+  { id: 'rules', label: '규칙', icon: BookOpen },
 ];
 
 // ── Markdown 생성 ────────────────────────────────────────
@@ -188,11 +191,13 @@ export default function App() {
             </h2>
             <p className="text-sm text-fifa-muted mt-0.5">
               {activeTab === 'groups' && '12개 조, 48팀 조별 순위 실시간 계산'}
+              {activeTab === 'scenarios' && '조별리그 결과에 따른 16강 진출 경우의 수 계산'}
               {activeTab === 'thirds' && '12개 조 3위팀 중 상위 8팀 16강 진출 판별'}
               {activeTab === 'draw' && '포트 시스템 및 지리적 제약 조건 조추첨 시뮬레이션'}
+              {activeTab === 'rules' && '2026 FIFA 월드컵 조별리그 순위 결정 방식 안내'}
             </p>
           </div>
-          {activeTab !== 'draw' && (
+          {activeTab === 'groups' && (
             <ShareButtons
               targetId="main-content"
               generateMarkdown={() => makeMarkdown(groups)}
@@ -246,8 +251,20 @@ export default function App() {
               </div>
             )}
 
+            {/* 경우의 수 탭 */}
+            {activeTab === 'scenarios' && (
+              <div className="flex flex-col items-center justify-center py-24 text-fifa-muted gap-4">
+                <GitBranch size={48} className="opacity-20" />
+                <p className="text-lg font-medium">준비 중입니다</p>
+                <p className="text-sm opacity-60">조별리그 결과에 따른 16강 진출 경우의 수 기능이 곧 추가됩니다</p>
+              </div>
+            )}
+
             {/* 조추첨 탭 */}
             {activeTab === 'draw' && <DrawSimulator />}
+
+            {/* 규칙 탭 */}
+            {activeTab === 'rules' && <RulesPage />}
           </div>
 
           {/* ── 사이드 광고 (데스크탑) ── */}
