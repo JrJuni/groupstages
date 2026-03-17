@@ -316,15 +316,13 @@ export const FIFA_RANKINGS_DRAW = {
   CRO: 10, MAR: 11, COL: 13, URU: 16, CHE: 17,
   JPN: 18, SEN: 19, IRN: 20, KOR: 22, ECU: 23,
   AUT: 24, AUS: 26,
-  // ── Pot 3 (일부 확인 — 나머지 TODO) ─────────────────────────
-  NOR: 29, PAN: 30, EGY: 34,
-  // TODO: Pot 3 나머지 9팀 랭킹 미확인 (CIV, SCO, PAR, TUN, UZB, SAU, RSA, ALG + 1팀)
-  CIV: 999, SCO: 999, PAR: 999, TUN: 999,
-  UZB: 999, SAU: 999, RSA: 999, ALG: 999,
-  // ── Pot 4 (일부 확인 — QAT 등 TODO) ─────────────────────────
+  // ── Pot 3 ────────────────────────────────────────────────────
+  NOR: 29, PAN: 30, EGY: 34, ALG: 35, SCO: 36,
+  PAR: 39, TUN: 40, CIV: 42,
+  // TODO: Pot 3 나머지 4팀 랭킹 미확인
+  UZB: 999, SAU: 999, RSA: 999, QAT: 999,
+  // ── Pot 4 ────────────────────────────────────────────────────
   JOR: 66, CPV: 68, GHA: 72, CUW: 82, HTI: 84, NZL: 86,
-  // TODO: QAT 랭킹 미확인
-  QAT: 999,
   // 미확정 플레이오프
   UEFA_PO_A: 999, UEFA_PO_B: 999, UEFA_PO_C: 999, UEFA_PO_D: 999,
   IC_PO_1:   999, IC_PO_2:   999,
