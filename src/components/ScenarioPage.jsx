@@ -2,6 +2,29 @@ import React, { useState } from 'react';
 import { ChevronRight, MapPin, ChevronDown, ChevronUp } from 'lucide-react';
 import { getFairPlayPoints } from '../utils/rankings.js';
 
+const YellowCard = () => (
+  <svg width="10" height="14" viewBox="0 0 10 14" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ display: 'inline-block' }}>
+    <rect width="10" height="14" rx="1.5" fill="#FACC15" />
+  </svg>
+);
+
+const DoubleYellowCard = () => (
+  <svg width="20" height="17" viewBox="0 0 20 17" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ display: 'inline-block' }}>
+    <g transform="rotate(-22, 7, 9)">
+      <rect x="1" y="2" width="10" height="14" rx="1.5" fill="#CA8A04" />
+    </g>
+    <g transform="rotate(18, 14, 8)">
+      <rect x="9" y="1" width="10" height="14" rx="1.5" fill="#FACC15" />
+    </g>
+  </svg>
+);
+
+const RedCard = () => (
+  <svg width="10" height="14" viewBox="0 0 10 14" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ display: 'inline-block' }}>
+    <rect width="10" height="14" rx="1.5" fill="#EF4444" />
+  </svg>
+);
+
 function formatKST(iso) {
   if (!iso) return null;
   const d = new Date(new Date(iso).getTime() + 9 * 3_600_000);
@@ -50,7 +73,7 @@ function GroupStandingsTable({ standings, onCardChange }) {
           <tr className="text-fifa-muted text-[11px] border-b border-fifa-border bg-white/5">
             <th className="px-2 py-2 text-left w-5">#</th>
             <th className="px-2 py-2 text-left">팀</th>
-            <th className="px-1 py-2 text-center">경</th>
+            <th className="px-1 py-2 text-center">경기</th>
             <th className="px-1 py-2 text-center">승</th>
             <th className="px-1 py-2 text-center">무</th>
             <th className="px-1 py-2 text-center">패</th>
@@ -60,9 +83,9 @@ function GroupStandingsTable({ standings, onCardChange }) {
             <th className="px-1 py-2 text-center font-bold">승점</th>
             {onCardChange && (
               <>
-                <th className="px-1 py-2 text-center" title="옐로카드 (-1점)">🟨</th>
-                <th className="px-1 py-2 text-center" title="옐로 누적 퇴장 (-3점)">🟨🟨</th>
-                <th className="px-1 py-2 text-center" title="직접 퇴장 레드카드 (-4점)">🟥</th>
+                <th className="px-1 py-2 text-center" title="옐로카드 (-1점)"><YellowCard /></th>
+                <th className="px-1 py-2 text-center" title="옐로 누적 퇴장 (-3점)"><DoubleYellowCard /></th>
+                <th className="px-1 py-2 text-center" title="직접 퇴장 레드카드 (-4점)"><RedCard /></th>
                 <th className="px-1 py-2 text-center text-[10px] text-fifa-muted" title="페어플레이 포인트">FP</th>
               </>
             )}
@@ -310,8 +333,11 @@ export default function ScenarioPage({ selectedGroupKey, onSelectGroup, groups, 
             <p className="text-xs text-fifa-muted font-medium mb-2">
               순위표
               {onCardChange && (
-                <span className="ml-2 text-[10px] text-fifa-muted/60">
-                  · 🟨 -1 &nbsp;🟨🟨 -3 &nbsp;🟥 -4 (페어플레이)
+                <span className="ml-2 inline-flex items-center gap-1.5 text-[10px] text-fifa-muted/60">
+                  · <YellowCard /> <span>-1</span>
+                  <DoubleYellowCard /> <span>-3</span>
+                  <RedCard /> <span>-4</span>
+                  <span>(페어플레이)</span>
                 </span>
               )}
             </p>

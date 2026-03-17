@@ -48,7 +48,7 @@ export default function GroupTable({ groupKey, standings, onGroupClick, onTeamCl
               <tr className="text-fifa-muted text-xs border-b border-fifa-border">
                 <th className="px-3 py-2 text-left w-6">#</th>
                 <th className="px-3 py-2 text-left">팀</th>
-                <th className="px-2 py-2 text-center">경</th>
+                <th className="px-2 py-2 text-center">경기</th>
                 <th className="px-2 py-2 text-center">승</th>
                 <th className="px-2 py-2 text-center">무</th>
                 <th className="px-2 py-2 text-center">패</th>
