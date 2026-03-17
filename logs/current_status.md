@@ -8,7 +8,7 @@
 ## 전체 로드맵 진행률
 
 ```
-[███████████████░░░░░] 75%
+[██████████████████░░] 90%
 
 Phase 1: 조별리그 대시보드      ✅ 완료
 Phase 2: 경우의 수 탭           ✅ 완료
@@ -17,7 +17,7 @@ Phase 4: 조추첨 시뮬레이터      ✅ 완료
 Phase 5: 규칙 페이지            ✅ 완료
 Phase 6: 경기 일정 정렬         ✅ 완료 (2026-03-17)
 Phase 7: API-Football 연동      ✅ 완료 (2026-03-17)
-Phase 8: 실제 배포 (도메인)     ⬜ 미시작
+Phase 8: Cloudflare 배포        🔄 진행중 (2026-03-17)
 Phase 9: SEO / AdSense 최적화   ⬜ 미시작
 ```
 
@@ -31,7 +31,18 @@ Phase 9: SEO / AdSense 최적화   ⬜ 미시작
 
 ## 최근 완료된 작업 (2026-03-17)
 
-### [DONE] 보안 강화 및 .env 암호화 (최신)
+### [DONE] Cloudflare 풀스택 아키텍처 구축 (최신)
+- **배포 전략**: groupstages.com/wc2026 (48팀), /wc2022 (32팀 예정)
+- **Workers API**: Express → Cloudflare Workers 변환 (D1 SQLite)
+- **비용 절감**: Railway $5/월 → Cloudflare 무료 (연간 $50 절감)
+- **파일 생성**:
+  - workers/index.js (Workers API)
+  - workers/schema.sql (D1 스키마)
+  - wrangler.toml (Workers 설정)
+  - DEPLOYMENT_GUIDE.md (배포 가이드)
+  - CLOUDFLARE_ARCHITECTURE.md (아키텍처 분석)
+
+### [DONE] 보안 강화 및 .env 암호화
 - **dotenvx 적용**: .env 파일 전체 암호화 (7개 환경 변수)
 - **API 키 재발급**: GitHub 노출로 인한 새 키 발급 및 적용
 - **복호화 키 보호**: .env.keys를 .gitignore에 추가
@@ -96,9 +107,9 @@ Phase 9: SEO / AdSense 최적화   ⬜ 미시작
 
 | 날짜 | 커밋 | 내용 |
 |------|------|------|
+| 2026-03-17 | `b57c669` | Cloudflare 풀스택 아키텍처 구축 (Workers + D1) |
+| 2026-03-17 | `38e69b5` | 아카이브 구조 개선 (logs/archive/) |
 | 2026-03-17 | `cb0301c` | .env 암호화 + 새 API 키 적용 (보안 강화) |
 | 2026-03-17 | `2809577` | claude.md에서 민감한 정보 제거 (보안 패치) |
 | 2026-03-17 | `22d7b61` | API-Football 완전 연동 + JSON 캐싱 시스템 (54/54 동기화) |
 | 2026-03-17 | `d548935` | 경기 일정 날짜순 정렬 + API-Football 호환 DB 스키마 |
-| 2026-03-17 | `fd551c6` | 조별리그 대시보드 뷰 전환 + 경우의 수 탭 신설 |
-| 이전 | `1e5eb0d` | 경우의 수·규칙 탭 추가 |
