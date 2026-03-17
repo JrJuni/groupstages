@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Globe, Shuffle, Trophy, Share2, Menu, X, Database, RotateCcw, Wifi, WifiOff, GitBranch, BookOpen } from 'lucide-react';
 import { getBest8ThirdPlace, getFairPlayPoints } from './utils/rankings.js';
-import { TEAM_SEEDS, FIFA_RANKINGS } from './data/worldcup2026.js';
+import { TEAM_SEEDS, FIFA_RANKINGS, FIFA_RANKINGS_CURRENT } from './data/worldcup2026.js';
 import { useMatches } from './hooks/useMatches.js';
 import GroupTable from './components/GroupTable.jsx';
 import ThirdPlaceTable from './components/ThirdPlaceTable.jsx';
@@ -19,7 +19,34 @@ const TABS = [
   { id: 'rules', label: '규칙', icon: BookOpen },
 ];
 
-// ── Markdown 생성 ────────────────────────────────────────
+// ── 3위 테이블 Markdown 생성 ─────────────────────────────
+function makeThirdsMarkdown(allThirds, best8) {
+  const qualifiedIds = new Set(best8.map((t) => t.id));
+  let md = '# 2026 FIFA World Cup - 조 3위 순위\n\n';
+  md += '| # | 팀 | 조 | 경 | 승 | 무 | 패 | 득실 | 승점 | FIFA | 상태 |\n';
+  md += '|---|---|---|---|---|---|---|---|---|---|---|\n';
+  allThirds.forEach((t, i) => {
+    const gd = t.gd > 0 ? `+${t.gd}` : t.gd;
+    const status = qualifiedIds.has(t.id) ? '✓ 진출' : '탈락';
+    md += `| ${i + 1} | ${t.flag} ${t.name} | ${t.group} | ${t.played} | ${t.won} | ${t.drawn} | ${t.lost} | ${gd} | **${t.pts}** | ${t.fifaRank ?? '—'} | ${status} |\n`;
+  });
+  return md;
+}
+
+function makeThirdsHtmlTable(allThirds, best8) {
+  const qualifiedIds = new Set(best8.map((t) => t.id));
+  let html = '<h3>2026 FIFA World Cup - 조 3위 순위</h3>';
+  html += '<table border="1"><tr><th>#</th><th>팀</th><th>조</th><th>경기</th><th>승</th><th>무</th><th>패</th><th>득실</th><th>승점</th><th>FIFA</th><th>상태</th></tr>';
+  allThirds.forEach((t, i) => {
+    const gd = t.gd >= 0 ? `+${t.gd}` : t.gd;
+    const status = qualifiedIds.has(t.id) ? '✓ 진출' : '탈락';
+    html += `<tr><td>${i + 1}</td><td>${t.flag} ${t.name}</td><td>${t.group}</td><td>${t.played}</td><td>${t.won}</td><td>${t.drawn}</td><td>${t.lost}</td><td>${gd}</td><td><b>${t.pts}</b></td><td>${t.fifaRank ?? '—'}</td><td>${status}</td></tr>`;
+  });
+  html += '</table>';
+  return html;
+}
+
+// ── 조별리그 Markdown 생성 ────────────────────────────────
 function makeMarkdown(groups) {
   let md = '# 2026 FIFA World Cup - 조별리그 순위\n\n';
   Object.entries(groups).forEach(([key, { standings }]) => {
@@ -73,7 +100,8 @@ export default function App() {
   const allThirds = Object.entries(allGroupStandings)
     .map(([group, standings]) => {
       if (!standings || standings.length < 3) return null;
-      return { group, ...standings[2] };
+      const t = standings[2];
+      return { group, ...t, fifaRank: FIFA_RANKINGS_CURRENT[t.id] ?? null };
     })
     .filter((t) => t !== null)
     .sort((a, b) => {
@@ -214,6 +242,13 @@ export default function App() {
               generateHtmlTable={() => makeHtmlTable(groups)}
             />
           )}
+          {activeTab === 'thirds' && (
+            <ShareButtons
+              targetId="thirds-content"
+              generateMarkdown={() => makeThirdsMarkdown(allThirds, best8)}
+              generateHtmlTable={() => makeThirdsHtmlTable(allThirds, best8)}
+            />
+          )}
         </div>
 
         <div className="flex gap-6">
@@ -236,7 +271,7 @@ export default function App() {
 
             {/* 3위 순위 탭 */}
             {activeTab === 'thirds' && (
-              <div className="space-y-4">
+              <div id="thirds-content" className="space-y-4">
                 <ThirdPlaceTable
                   best8={best8}
                   allThirds={allThirds}
