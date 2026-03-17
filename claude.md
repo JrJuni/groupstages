@@ -114,11 +114,11 @@ logs/                         - 프로젝트 문서
 
 ## Environment Variables (.env)
 ```bash
-RAPIDAPI_KEY=ea680f9e5203c0efe930df2c1b9e6be8
+RAPIDAPI_KEY=your_rapidapi_key_here
 RAPIDAPI_HOST=v3.football.api-sports.io
 WORLD_CUP_LEAGUE_ID=1
 WORLD_CUP_SEASON=2026
-DATABASE_URL=postgresql://juni@localhost:5432/groupstages_2026?sslmode=disable
+DATABASE_URL=postgresql://username@localhost:5432/groupstages_2026?sslmode=disable
 API_PORT=3001
 ```
 
