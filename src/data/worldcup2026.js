@@ -301,12 +301,13 @@ export const MATCH_SCHEDULE = {
 };
 
 // ──────────────────────────────────────────────────────────────────
-// FIFA 공식 랭킹 (2026년 4월 기준 — 월드컵 조별리그 타이브레이커 기준점)
-// 출처: FIFA 공식 랭킹 (2026년 4월 발표)
+// FIFA 공식 랭킹 - 고정값 (2025년 11월 기준 — 조추첨 기준점)
+// 출처: FIFA 공식 랭킹 (2025년 11월 발표)
 // 3위팀 상위 8팀 선별 타이브레이커 최종 기준으로 사용 (낮을수록 상위)
 // 미확정 플레이오프 팀(UEFA PO, 대륙간 PO)은 999 처리
+// ⚠️ TODO: 실제 2025년 11월 랭킹으로 교체 필요
 // ──────────────────────────────────────────────────────────────────
-export const FIFA_RANKINGS = {
+export const FIFA_RANKINGS_DRAW = {
   // Pot 1
   ESP:  1, ARG:  2, FRA:  3, ENG:  4, BRA:  5,
   POR:  6, NED:  7, MAR:  8, BEL:  9, GER: 10,
@@ -325,6 +326,35 @@ export const FIFA_RANKINGS = {
   UEFA_PO_A: 999, UEFA_PO_B: 999, UEFA_PO_C: 999, UEFA_PO_D: 999,
   IC_PO_1:   999, IC_PO_2:   999,
 };
+
+// ──────────────────────────────────────────────────────────────────
+// FIFA 공식 랭킹 - 실시간 (2026년 3월 기준 하드코딩 — 추후 API 연동 예정)
+// 출처: FIFA 공식 랭킹 (2026년 3월 발표)
+// 팀 이름 옆 표시 용도 (타이브레이커는 FIFA_RANKINGS_DRAW 사용)
+// TODO: API 연동 시 이 상수를 서버 응답으로 대체
+// ──────────────────────────────────────────────────────────────────
+export const FIFA_RANKINGS_CURRENT = {
+  // Pot 1
+  ESP:  1, ARG:  2, FRA:  3, ENG:  4, BRA:  5,
+  POR:  6, NED:  7, MAR:  8, BEL:  9, GER: 10,
+  USA: 15, MEX: 16, CAN: 29,  // 개최국 3팀
+  // Pot 2
+  CRO: 11, SEN: 12, COL: 14, URU: 17, CHE: 18,
+  JPN: 19, IRN: 20, KOR: 22, ECU: 23, AUT: 24,
+  AUS: 27, ALG: 28,
+  // Pot 3
+  EGY: 31, NOR: 32, PAN: 33, CIV: 37, SCO: 38,
+  PAR: 40, TUN: 47, UZB: 60, GHA: 65, SAU: 55,
+  RSA: 58, JOR: 70,
+  // Pot 4
+  QAT: 75, CPV: 80, HTI: 82, NZL: 85, CUW: 88,
+  // 미확정 플레이오프
+  UEFA_PO_A: 999, UEFA_PO_B: 999, UEFA_PO_C: 999, UEFA_PO_D: 999,
+  IC_PO_1:   999, IC_PO_2:   999,
+};
+
+// 하위 호환 alias (기존 import 유지)
+export const FIFA_RANKINGS = FIFA_RANKINGS_DRAW;
 
 // 팀별 글로벌 시드 번호 (1=최강, 48=최약)
 // 포트 순서 기반: Pot1(1-12) → Pot2(13-24) → Pot3(25-36) → Pot4(37-48)

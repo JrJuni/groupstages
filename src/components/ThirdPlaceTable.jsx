@@ -1,7 +1,7 @@
 import React from 'react';
 import { Trophy, TrendingUp, Database, WifiOff } from 'lucide-react';
 import { BASE_URL } from '../config.js';
-import { FIFA_RANKINGS } from '../data/worldcup2026.js';
+import { FIFA_RANKINGS_CURRENT } from '../data/worldcup2026.js';
 
 export default function ThirdPlaceTable({ best8, allThirds, loading = false, apiAvailable = true }) {
   const qualifiedIds = new Set(best8.map((t) => t.id));
@@ -92,7 +92,7 @@ export default function ThirdPlaceTable({ best8, allThirds, loading = false, api
                     </td>
                     <td className="px-2 py-2 text-center font-bold text-white">{team.pts}</td>
                     <td className="px-2 py-2 text-center text-fifa-muted text-xs">
-                      {(FIFA_RANKINGS[team.id] ?? '—')}
+                      {(FIFA_RANKINGS_CURRENT[team.id] ?? '—')}
                     </td>
                     <td className="px-2 py-2 text-center">
                       {isQualified ? (
