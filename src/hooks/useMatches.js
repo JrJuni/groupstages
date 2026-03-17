@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { INITIAL_GROUPS } from '../data/worldcup2026.js';
 import { createInitialStandings, createInitialMatches, calculateStandings } from '../utils/rankings.js';
+import { API_BASE } from '../config.js';
 
 function buildEmptyGroups() {
   const groups = {};
@@ -23,7 +24,7 @@ export function useMatches() {
   useEffect(() => {
     async function loadMatches() {
       try {
-        const res = await fetch('/api/matches');
+        const res = await fetch(`${API_BASE}/matches`);
         if (!res.ok) throw new Error('API 응답 오류');
         const rows = await res.json();
 
@@ -87,7 +88,7 @@ export function useMatches() {
       // API로 저장 (비동기 - 실패해도 UI는 유지)
       if (updatedMatch && apiAvailable) {
         try {
-          await fetch('/api/matches', {
+          await fetch(`${API_BASE}/matches`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -124,7 +125,7 @@ export function useMatches() {
     setGroups(buildEmptyGroups());
     if (apiAvailable) {
       try {
-        await fetch('/api/matches', { method: 'DELETE' });
+        await fetch(`${API_BASE}/matches`, { method: 'DELETE' });
       } catch (err) {
         console.warn('[useMatches] 초기화 실패:', err.message);
       }

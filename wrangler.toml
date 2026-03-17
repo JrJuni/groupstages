@@ -1,0 +1,20 @@
+# Cloudflare Workers 설정
+
+name = "groupstages-api"
+main = "workers/index.js"
+compatibility_date = "2024-01-01"
+
+# D1 데이터베이스 바인딩
+[[d1_databases]]
+binding = "DB"
+database_name = "groupstages"
+database_id = ""  # 'wrangler d1 create groupstages' 후 자동 생성
+
+# 환경 변수 (민감하지 않은 정보만)
+[vars]
+WORLD_CUP_LEAGUE_ID = "1"
+WORLD_CUP_SEASON = "2026"
+
+# Secrets (Cloudflare Dashboard에서 설정)
+# wrangler secret put RAPIDAPI_KEY
+# wrangler secret put RAPIDAPI_HOST
