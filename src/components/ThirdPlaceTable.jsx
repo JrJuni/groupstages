@@ -97,11 +97,11 @@ export default function ThirdPlaceTable({ best8, allThirds, loading = false, api
                     <td className="px-2 py-2 text-center">
                       {isQualified ? (
                         <span className="text-xs bg-green-900/40 text-green-400 px-2 py-0.5 rounded-full">
-                          {team.played === 0 ? '↑ 시드' : '✓ 진출'}
+                          ✓ 진출
                         </span>
                       ) : (
-                        <span className="text-xs text-fifa-muted">
-                          {team.played === 0 ? '↓ 시드' : '탈락'}
+                        <span className="text-xs text-red-400/70">
+                          탈락
                         </span>
                       )}
                     </td>
