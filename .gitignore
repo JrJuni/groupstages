@@ -208,3 +208,5 @@ __marimo__/
 
 # API Cache
 cache/
+
+.env.keys
