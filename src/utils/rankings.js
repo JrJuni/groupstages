@@ -17,9 +17,9 @@ export function createInitialStandings(teams) {
     ga: 0,
     gd: 0,
     pts: 0,
-    yc: 0,
-    twoYR: 0,
-    dr: 0,
+    yc: team.yc ?? 0,
+    twoYR: team.twoYR ?? 0,
+    dr: team.dr ?? 0,
   }));
 }
 

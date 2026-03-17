@@ -50,22 +50,8 @@ function TeamFlag({ team, size = 'sm' }) {
     : <span className="text-base leading-none">{team.flag}</span>;
 }
 
-function CardInput({ value, onChange }) {
-  return (
-    <input
-      type="number"
-      min="0"
-      max="99"
-      className="score-input"
-      style={{ width: '2rem' }}
-      value={value || ''}
-      placeholder="0"
-      onChange={(e) => onChange(e.target.value)}
-    />
-  );
-}
 
-function GroupStandingsTable({ standings, onCardChange }) {
+function GroupStandingsTable({ standings }) {
   return (
     <div className="overflow-x-auto rounded-lg border border-fifa-border/40">
       <table className="w-full text-xs">
@@ -81,14 +67,10 @@ function GroupStandingsTable({ standings, onCardChange }) {
             <th className="px-1 py-2 text-center">실</th>
             <th className="px-1 py-2 text-center">차</th>
             <th className="px-1 py-2 text-center font-bold">승점</th>
-            {onCardChange && (
-              <>
-                <th className="px-1 py-2 text-center" title="옐로카드 (-1점)"><YellowCard /></th>
-                <th className="px-1 py-2 text-center" title="옐로 누적 퇴장 (-3점)"><DoubleYellowCard /></th>
-                <th className="px-1 py-2 text-center" title="직접 퇴장 레드카드 (-4점)"><RedCard /></th>
-                <th className="px-1 py-2 text-center text-[10px] text-fifa-muted" title="페어플레이 포인트">FP</th>
-              </>
-            )}
+            <th className="px-1 py-2 text-center" title="옐로카드 (-1점)"><YellowCard /></th>
+            <th className="px-1 py-2 text-center" title="옐로 누적 퇴장 (-3점)"><DoubleYellowCard /></th>
+            <th className="px-1 py-2 text-center" title="직접 퇴장 레드카드 (-4점)"><RedCard /></th>
+            <th className="px-1 py-2 text-center text-[10px] text-fifa-muted" title="페어플레이 포인트">FP</th>
           </tr>
         </thead>
         <tbody>
@@ -119,22 +101,12 @@ function GroupStandingsTable({ standings, onCardChange }) {
                   {team.gd > 0 ? `+${team.gd}` : team.gd}
                 </td>
                 <td className="px-1 py-1.5 text-center font-bold text-white">{team.pts}</td>
-                {onCardChange && (
-                  <>
-                    <td className="px-0.5 py-1 text-center">
-                      <CardInput value={team.yc} onChange={(v) => onCardChange(team.id, 'yc', v)} />
-                    </td>
-                    <td className="px-0.5 py-1 text-center">
-                      <CardInput value={team.twoYR} onChange={(v) => onCardChange(team.id, 'twoYR', v)} />
-                    </td>
-                    <td className="px-0.5 py-1 text-center">
-                      <CardInput value={team.dr} onChange={(v) => onCardChange(team.id, 'dr', v)} />
-                    </td>
-                    <td className={`px-1 py-1.5 text-center font-bold ${fp < 0 ? 'text-red-400' : 'text-fifa-muted'}`}>
-                      {fp}
-                    </td>
-                  </>
-                )}
+                <td className="px-1 py-1.5 text-center text-yellow-400">{team.yc || 0}</td>
+                <td className="px-1 py-1.5 text-center text-orange-400">{team.twoYR || 0}</td>
+                <td className="px-1 py-1.5 text-center text-red-400">{team.dr || 0}</td>
+                <td className={`px-1 py-1.5 text-center font-bold ${fp < 0 ? 'text-red-400' : 'text-fifa-muted'}`}>
+                  {fp}
+                </td>
               </tr>
             );
           })}
@@ -255,7 +227,7 @@ function MatchList({ matches, standings, groupKey, onScoreChange }) {
   return <div className="card overflow-hidden">{rows}</div>;
 }
 
-export default function ScenarioPage({ selectedGroupKey, onSelectGroup, groups, onScoreChange, onCardChange }) {
+export default function ScenarioPage({ selectedGroupKey, onSelectGroup, groups, onScoreChange }) {
   const [selectorOpen, setSelectorOpen] = useState(true);
   const groupEntries = Object.entries(groups);
 
@@ -333,9 +305,6 @@ export default function ScenarioPage({ selectedGroupKey, onSelectGroup, groups, 
             <p className="text-xs text-fifa-muted font-medium mb-2">순위표</p>
             <GroupStandingsTable
               standings={groups[selectedGroupKey].standings}
-              onCardChange={onCardChange
-                ? (teamId, field, value) => onCardChange(selectedGroupKey, teamId, field, value)
-                : null}
             />
             <div className="flex items-center justify-between mt-2 text-xs text-fifa-muted flex-wrap gap-y-1">
               <div className="flex gap-4">
