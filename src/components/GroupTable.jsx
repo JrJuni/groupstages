@@ -1,5 +1,6 @@
 import React from 'react';
 import { ArrowRight } from 'lucide-react';
+import { BASE_URL } from '../config.js';
 
 const RANK_BG = {
   1: 'bg-green-900/40 border-l-2 border-green-500',
@@ -22,7 +23,7 @@ export default function GroupTable({ groupKey, standings, onGroupClick, onTeamCl
           <div className="flex gap-1 items-center shrink-0">
             {standings.map((t) => (
               t.flagImg
-                ? <img key={t.id} src={t.flagImg} alt={t.name} title={t.name} className="w-5 h-3 object-cover rounded-sm" />
+                ? <img key={t.id} src={`${BASE_URL}${t.flagImg}`} alt={t.name} title={t.name} className="w-5 h-3 object-cover rounded-sm" />
                 : <span key={t.id} className="text-sm" title={t.name}>{t.flag}</span>
             ))}
           </div>
@@ -69,7 +70,7 @@ export default function GroupTable({ groupKey, standings, onGroupClick, onTeamCl
               <td className="px-2 py-2 min-w-0">
                 <div className="flex items-center gap-1.5 min-w-0">
                   {team.flagImg ? (
-                    <img src={team.flagImg} alt={team.name} className="w-5 h-3.5 object-cover rounded-sm shrink-0"
+                    <img src={`${BASE_URL}${team.flagImg}`} alt={team.name} className="w-5 h-3.5 object-cover rounded-sm shrink-0"
                       onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'inline'; }} />
                   ) : null}
                   <span className="text-sm shrink-0" style={team.flagImg ? { display: 'none' } : {}}>{team.flag}</span>

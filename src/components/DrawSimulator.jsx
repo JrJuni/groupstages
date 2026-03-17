@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Play, RotateCcw, ChevronRight, Shuffle } from 'lucide-react';
 import { DRAW_POTS, CONFEDERATIONS } from '../data/worldcup2026.js';
 import { createInitialDrawState, drawOneTeam, runFullDraw, generateDrawSteps } from '../utils/draw.js';
+import { BASE_URL } from '../config.js';
 
 const POT_COLORS = {
   pot1: { bg: 'bg-yellow-900/30', border: 'border-yellow-600', text: 'text-yellow-400', label: 'Pot 1' },
@@ -28,7 +29,7 @@ function TeamBall({ team, potKey, highlight = false, small = false }) {
       `}
     >
       {team.flagImg
-        ? <img src={team.flagImg} alt={team.name} className={small ? 'w-5 h-3' : 'w-6 h-4'} style={{objectFit:'cover', borderRadius:'2px'}} />
+        ? <img src={`${BASE_URL}${team.flagImg}`} alt={team.name} className={small ? 'w-5 h-3' : 'w-6 h-4'} style={{objectFit:'cover', borderRadius:'2px'}} />
         : <span className={small ? 'text-sm' : 'text-base'}>{team.flag}</span>}
       <span className={`font-medium ${highlight ? 'text-white' : 'text-fifa-text'}`}>{team.name}</span>
       <span className={`text-xs px-1 rounded ${CONF_COLORS[team.confederation] || 'bg-gray-800 text-gray-400'}`}>

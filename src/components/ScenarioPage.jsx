@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ChevronRight, MapPin, ChevronDown, ChevronUp } from 'lucide-react';
 import { getFairPlayPoints } from '../utils/rankings.js';
+import { BASE_URL } from '../config.js';
 
 const YellowCard = () => (
   <svg width="10" height="14" viewBox="0 0 10 14" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ display: 'inline-block' }}>
@@ -46,7 +47,7 @@ const RANK_BG = {
 function TeamFlag({ team, size = 'sm' }) {
   const imgClass = size === 'sm' ? 'w-5 h-3.5' : 'w-7 h-5';
   return team.flagImg
-    ? <img src={team.flagImg} alt={team.name} className={`${imgClass} object-cover rounded-sm shrink-0`} />
+    ? <img src={`${BASE_URL}${team.flagImg}`} alt={team.name} className={`${imgClass} object-cover rounded-sm shrink-0`} />
     : <span className="text-base leading-none">{team.flag}</span>;
 }
 

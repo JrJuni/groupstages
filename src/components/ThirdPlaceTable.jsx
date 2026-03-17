@@ -1,5 +1,6 @@
 import React from 'react';
 import { Trophy, TrendingUp, Database, WifiOff } from 'lucide-react';
+import { BASE_URL } from '../config.js';
 
 export default function ThirdPlaceTable({ best8, allThirds, loading = false, apiAvailable = true }) {
   const qualifiedIds = new Set(best8.map((t) => t.id));
@@ -70,7 +71,7 @@ export default function ThirdPlaceTable({ best8, allThirds, loading = false, api
                     <td className="px-3 py-2">
                       <div className="flex items-center gap-2">
                         {team.flagImg
-                          ? <img src={team.flagImg} alt={team.name} className="w-6 h-4 object-cover rounded-sm" />
+                          ? <img src={`${BASE_URL}${team.flagImg}`} alt={team.name} className="w-6 h-4 object-cover rounded-sm" />
                           : <span>{team.flag}</span>}
                         <span className="font-medium text-white">{team.name}</span>
                       </div>

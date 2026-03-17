@@ -210,3 +210,9 @@ __marimo__/
 cache/
 
 .env.keys
+
+# Cloudflare
+.wrangler/
+
+# Node
+node_modules/

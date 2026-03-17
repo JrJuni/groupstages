@@ -8,7 +8,7 @@ compatibility_date = "2024-01-01"
 [[d1_databases]]
 binding = "DB"
 database_name = "groupstages"
-database_id = ""  # 'wrangler d1 create groupstages' 후 자동 생성
+database_id = "13ee6163-ca10-40cf-8df2-b770146d80f3"
 
 # 환경 변수 (민감하지 않은 정보만)
 [vars]
