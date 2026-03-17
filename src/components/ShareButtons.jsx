@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Copy, Download, Table, CheckCircle } from 'lucide-react';
-import html2canvas from 'html2canvas';
+import { toPng } from 'html-to-image';
 
 export default function ShareButtons({ targetId, generateMarkdown, generateHtmlTable }) {
   const [copied, setCopied] = useState(null);
@@ -31,19 +31,19 @@ export default function ShareButtons({ targetId, generateMarkdown, generateHtmlT
     const el = document.getElementById(targetId);
     if (!el) return;
     try {
-      const canvas = await html2canvas(el, {
+      const dataUrl = await toPng(el, {
         backgroundColor: '#0d1117',
-        scale: 2,
-        useCORS: true,
+        pixelRatio: 2,
+        skipFonts: false,
       });
       const link = document.createElement('a');
       link.download = 'groupstages-result.png';
-      link.href = canvas.toDataURL('image/png');
+      link.href = dataUrl;
       link.click();
       setCopied('image');
       setTimeout(() => setCopied(null), 2000);
     } catch (e) {
-      console.error('html2canvas error:', e);
+      console.error('html-to-image error:', e);
     }
   };
 
