@@ -308,20 +308,23 @@ export const MATCH_SCHEDULE = {
 // ⚠️ TODO: 실제 2025년 11월 랭킹으로 교체 필요
 // ──────────────────────────────────────────────────────────────────
 export const FIFA_RANKINGS_DRAW = {
-  // Pot 1
+  // ── Pot 1 (개최국 3팀 + FIFA 상위 9팀) ───────────────────────
   ESP:  1, ARG:  2, FRA:  3, ENG:  4, BRA:  5,
-  POR:  6, NED:  7, MAR:  8, BEL:  9, GER: 10,
-  USA: 15, MEX: 16, CAN: 29,  // 개최국 3팀
-  // Pot 2
-  CRO: 11, SEN: 12, COL: 14, URU: 17, CHE: 18,
-  JPN: 19, IRN: 20, KOR: 22, ECU: 23, AUT: 24,
-  AUS: 27, ALG: 28,
-  // Pot 3
-  EGY: 31, NOR: 32, PAN: 33, CIV: 37, SCO: 38,
-  PAR: 40, TUN: 47, UZB: 60, GHA: 65, SAU: 55,
-  RSA: 58, JOR: 70,
-  // Pot 4
-  QAT: 75, CPV: 80, HTI: 82, NZL: 85, CUW: 88,
+  POR:  6, NED:  7, BEL:  8, GER:  9,
+  USA: 14, MEX: 15, CAN: 27,
+  // ── Pot 2 ────────────────────────────────────────────────────
+  CRO: 10, MAR: 11, COL: 13, URU: 16, CHE: 17,
+  JPN: 18, SEN: 19, IRN: 20, KOR: 22, ECU: 23,
+  AUT: 24, AUS: 26,
+  // ── Pot 3 (일부 확인 — 나머지 TODO) ─────────────────────────
+  NOR: 29, PAN: 30, EGY: 34,
+  // TODO: Pot 3 나머지 9팀 랭킹 미확인 (CIV, SCO, PAR, TUN, UZB, SAU, RSA, ALG + 1팀)
+  CIV: 999, SCO: 999, PAR: 999, TUN: 999,
+  UZB: 999, SAU: 999, RSA: 999, ALG: 999,
+  // ── Pot 4 (일부 확인 — QAT 등 TODO) ─────────────────────────
+  JOR: 66, CPV: 68, GHA: 72, CUW: 82, HTI: 84, NZL: 86,
+  // TODO: QAT 랭킹 미확인
+  QAT: 999,
   // 미확정 플레이오프
   UEFA_PO_A: 999, UEFA_PO_B: 999, UEFA_PO_C: 999, UEFA_PO_D: 999,
   IC_PO_1:   999, IC_PO_2:   999,
