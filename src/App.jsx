@@ -263,7 +263,6 @@ export default function App() {
                 onSelectGroup={setScenarioGroupKey}
                 groups={groups}
                 onScoreChange={handleScoreChange}
-                onCardChange={handleCardChange}
               />
             )}
 
