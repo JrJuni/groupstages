@@ -132,7 +132,7 @@ export const R32_MATCHUPS = [
 ];
 
 // 실제 2026 WC 조추첨 Pot 시스템
-// (2025년 12월 5일 케네디 센터 추첨 기준)
+// (2025년 12월 5일 케네디 센터 추첨 기준 / 포트 배정: 2025년 11월 19일 FIFA 랭킹)
 export const DRAW_POTS = {
   pot1: [
     { id: 'USA', name: '미국', flag: '🇺🇸', flagImg: 'flags/us.png', confederation: 'CONCACAF', host: true },
@@ -145,17 +145,17 @@ export const DRAW_POTS = {
     { id: 'BRA', name: '브라질', flag: '🇧🇷', flagImg: 'flags/br.png', confederation: 'CONMEBOL' },
     { id: 'POR', name: '포르투갈', flag: '🇵🇹', flagImg: 'flags/pt.png', confederation: 'UEFA' },
     { id: 'NED', name: '네덜란드', flag: '🇳🇱', flagImg: 'flags/nl.png', confederation: 'UEFA' },
-    { id: 'MAR', name: '모로코', flag: '🇲🇦', flagImg: 'flags/ma.png', confederation: 'CAF' },
     { id: 'BEL', name: '벨기에', flag: '🇧🇪', flagImg: 'flags/be.png', confederation: 'UEFA' },
+    { id: 'GER', name: '독일', flag: '🇩🇪', flagImg: 'flags/de.png', confederation: 'UEFA' },
   ],
   pot2: [
-    { id: 'GER', name: '독일', flag: '🇩🇪', flagImg: 'flags/de.png', confederation: 'UEFA' },
     { id: 'CRO', name: '크로아티아', flag: '🇭🇷', flagImg: 'flags/hr.png', confederation: 'UEFA' },
-    { id: 'SEN', name: '세네갈', flag: '🇸🇳', flagImg: 'flags/sn.png', confederation: 'CAF' },
+    { id: 'MAR', name: '모로코', flag: '🇲🇦', flagImg: 'flags/ma.png', confederation: 'CAF' },
     { id: 'COL', name: '콜롬비아', flag: '🇨🇴', flagImg: 'flags/co.png', confederation: 'CONMEBOL' },
     { id: 'URU', name: '우루과이', flag: '🇺🇾', flagImg: 'flags/uy.png', confederation: 'CONMEBOL' },
     { id: 'CHE', name: '스위스', flag: '🇨🇭', flagImg: 'flags/ch.png', confederation: 'UEFA' },
     { id: 'JPN', name: '일본', flag: '🇯🇵', flagImg: 'flags/jp.png', confederation: 'AFC' },
+    { id: 'SEN', name: '세네갈', flag: '🇸🇳', flagImg: 'flags/sn.png', confederation: 'CAF' },
     { id: 'IRN', name: '이란', flag: '🇮🇷', flagImg: 'flags/ir.png', confederation: 'AFC' },
     { id: 'KOR', name: '대한민국', flag: '🇰🇷', flagImg: 'flags/kr.png', confederation: 'AFC' },
     { id: 'ECU', name: '에콰도르', flag: '🇪🇨', flagImg: 'flags/ec.png', confederation: 'CONMEBOL' },
@@ -163,26 +163,26 @@ export const DRAW_POTS = {
     { id: 'AUS', name: '호주', flag: '🇦🇺', flagImg: 'flags/au.png', confederation: 'AFC' },
   ],
   pot3: [
-    { id: 'ALG', name: '알제리', flag: '🇩🇿', flagImg: 'flags/dz.png', confederation: 'CAF' },
-    { id: 'EGY', name: '이집트', flag: '🇪🇬', flagImg: 'flags/eg.png', confederation: 'CAF' },
     { id: 'NOR', name: '노르웨이', flag: '🇳🇴', flagImg: 'flags/no.png', confederation: 'UEFA' },
     { id: 'PAN', name: '파나마', flag: '🇵🇦', flagImg: 'flags/pa.png', confederation: 'CONCACAF' },
-    { id: 'CIV', name: '코트디부아르', flag: '🇨🇮', flagImg: 'flags/ci.png', confederation: 'CAF' },
+    { id: 'EGY', name: '이집트', flag: '🇪🇬', flagImg: 'flags/eg.png', confederation: 'CAF' },
+    { id: 'ALG', name: '알제리', flag: '🇩🇿', flagImg: 'flags/dz.png', confederation: 'CAF' },
     { id: 'SCO', name: '스코틀랜드', flag: '🏴󠁧󠁢󠁳󠁣󠁴󠁿', flagImg: 'flags/gb-sct.png', confederation: 'UEFA' },
     { id: 'PAR', name: '파라과이', flag: '🇵🇾', flagImg: 'flags/py.png', confederation: 'CONMEBOL' },
     { id: 'TUN', name: '튀니지', flag: '🇹🇳', flagImg: 'flags/tn.png', confederation: 'CAF' },
+    { id: 'CIV', name: '코트디부아르', flag: '🇨🇮', flagImg: 'flags/ci.png', confederation: 'CAF' },
     { id: 'UZB', name: '우즈베키스탄', flag: '🇺🇿', flagImg: 'flags/uz.png', confederation: 'AFC' },
-    { id: 'GHA', name: '가나', flag: '🇬🇭', flagImg: 'flags/gh.png', confederation: 'CAF' },
+    { id: 'QAT', name: '카타르', flag: '🇶🇦', flagImg: 'flags/qa.png', confederation: 'AFC' },
     { id: 'SAU', name: '사우디아라비아', flag: '🇸🇦', flagImg: 'flags/sa.png', confederation: 'AFC' },
     { id: 'RSA', name: '남아프리카공화국', flag: '🇿🇦', flagImg: 'flags/za.png', confederation: 'CAF' },
   ],
   pot4: [
     { id: 'JOR', name: '요르단', flag: '🇯🇴', flagImg: 'flags/jo.png', confederation: 'AFC' },
-    { id: 'QAT', name: '카타르', flag: '🇶🇦', flagImg: 'flags/qa.png', confederation: 'AFC' },
     { id: 'CPV', name: '카보베르데', flag: '🇨🇻', flagImg: 'flags/cv.png', confederation: 'CAF' },
+    { id: 'GHA', name: '가나', flag: '🇬🇭', flagImg: 'flags/gh.png', confederation: 'CAF' },
+    { id: 'CUW', name: '퀴라소', flag: '🇨🇼', flagImg: 'flags/cw.png', confederation: 'CONCACAF' },
     { id: 'HTI', name: '아이티', flag: '🇭🇹', flagImg: 'flags/ht.png', confederation: 'CONCACAF' },
     { id: 'NZL', name: '뉴질랜드', flag: '🇳🇿', flagImg: 'flags/nz.png', confederation: 'OFC' },
-    { id: 'CUW', name: '퀴라소', flag: '🇨🇼', flagImg: 'flags/cw.png', confederation: 'CONCACAF' },
     { id: 'UEFA_PO_A', name: 'UEFA PO-A', flag: '🏴', flagImg: null, confederation: 'UEFA' },
     { id: 'UEFA_PO_B', name: 'UEFA PO-B', flag: '🏴', flagImg: null, confederation: 'UEFA' },
     { id: 'UEFA_PO_C', name: 'UEFA PO-C', flag: '🏴', flagImg: null, confederation: 'UEFA' },
