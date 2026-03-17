@@ -300,17 +300,30 @@ export const MATCH_SCHEDULE = {
   'CRO_vs_GHA':         { matchday: 3, date: '2026-06-27T21:00:00Z', venue: 'Lincoln Financial Field', city: 'Philadelphia, PA' },
 };
 
-// FIFA 공식 랭킹 (2026년 3월 기준)
-// 3위팀 타이브레이커 최종 기준으로 사용 (낮을수록 상위)
-// 미확정 플레이오프 팀은 999 처리
+// ──────────────────────────────────────────────────────────────────
+// FIFA 공식 랭킹 (2026년 4월 기준 — 월드컵 조별리그 타이브레이커 기준점)
+// 출처: FIFA 공식 랭킹 (2026년 4월 발표)
+// 3위팀 상위 8팀 선별 타이브레이커 최종 기준으로 사용 (낮을수록 상위)
+// 미확정 플레이오프 팀(UEFA PO, 대륙간 PO)은 999 처리
+// ──────────────────────────────────────────────────────────────────
 export const FIFA_RANKINGS = {
-  ESP: 1, ARG: 2, FRA: 3, ENG: 4, BRA: 5, POR: 6, NED: 7, MAR: 8, BEL: 9, GER: 10,
-  CRO: 11, SEN: 12, COL: 14, USA: 15, MEX: 16, URU: 17, CHE: 18, JPN: 19, IRN: 20,
-  KOR: 22, ECU: 23, AUT: 24, AUS: 27, ALG: 28, CAN: 29,
-  EGY: 31, NOR: 32, PAN: 33, SAU: 55, RSA: 58, UZB: 60, GHA: 65, JOR: 70, CPV: 80,
-  HTI: 82, NZL: 85, CUW: 88, CIV: 37, SCO: 38, PAR: 40, TUN: 47, QAT: 75,
+  // Pot 1
+  ESP:  1, ARG:  2, FRA:  3, ENG:  4, BRA:  5,
+  POR:  6, NED:  7, MAR:  8, BEL:  9, GER: 10,
+  USA: 15, MEX: 16, CAN: 29,  // 개최국 3팀
+  // Pot 2
+  CRO: 11, SEN: 12, COL: 14, URU: 17, CHE: 18,
+  JPN: 19, IRN: 20, KOR: 22, ECU: 23, AUT: 24,
+  AUS: 27, ALG: 28,
+  // Pot 3
+  EGY: 31, NOR: 32, PAN: 33, CIV: 37, SCO: 38,
+  PAR: 40, TUN: 47, UZB: 60, GHA: 65, SAU: 55,
+  RSA: 58, JOR: 70,
+  // Pot 4
+  QAT: 75, CPV: 80, HTI: 82, NZL: 85, CUW: 88,
+  // 미확정 플레이오프
   UEFA_PO_A: 999, UEFA_PO_B: 999, UEFA_PO_C: 999, UEFA_PO_D: 999,
-  IC_PO_1: 999, IC_PO_2: 999,
+  IC_PO_1:   999, IC_PO_2:   999,
 };
 
 // 팀별 글로벌 시드 번호 (1=최강, 48=최약)
