@@ -1,5 +1,5 @@
-import React from 'react';
-import { ChevronRight, MapPin } from 'lucide-react';
+import React, { useState } from 'react';
+import { ChevronRight, MapPin, ChevronDown, ChevronUp } from 'lucide-react';
 import { getFairPlayPoints } from '../utils/rankings.js';
 
 function formatKST(iso) {
@@ -99,22 +99,13 @@ function GroupStandingsTable({ standings, onCardChange }) {
                 {onCardChange && (
                   <>
                     <td className="px-0.5 py-1 text-center">
-                      <CardInput
-                        value={team.yc}
-                        onChange={(v) => onCardChange(team.id, 'yc', v)}
-                      />
+                      <CardInput value={team.yc} onChange={(v) => onCardChange(team.id, 'yc', v)} />
                     </td>
                     <td className="px-0.5 py-1 text-center">
-                      <CardInput
-                        value={team.twoYR}
-                        onChange={(v) => onCardChange(team.id, 'twoYR', v)}
-                      />
+                      <CardInput value={team.twoYR} onChange={(v) => onCardChange(team.id, 'twoYR', v)} />
                     </td>
                     <td className="px-0.5 py-1 text-center">
-                      <CardInput
-                        value={team.dr}
-                        onChange={(v) => onCardChange(team.id, 'dr', v)}
-                      />
+                      <CardInput value={team.dr} onChange={(v) => onCardChange(team.id, 'dr', v)} />
                     </td>
                     <td className={`px-1 py-1.5 text-center font-bold ${fp < 0 ? 'text-red-400' : 'text-fifa-muted'}`}>
                       {fp}
@@ -242,42 +233,65 @@ function MatchList({ matches, standings, groupKey, onScoreChange }) {
 }
 
 export default function ScenarioPage({ selectedGroupKey, onSelectGroup, groups, onScoreChange, onCardChange }) {
+  const [selectorOpen, setSelectorOpen] = useState(true);
   const groupEntries = Object.entries(groups);
 
   return (
     <div className="space-y-4">
 
-      {/* ── 조 선택 (컴팩트 필 스타일) ─────────────────────── */}
-      <div className="card px-3 py-2.5">
-        <div className="flex flex-wrap gap-1.5">
-          {groupEntries.map(([key, { standings }]) => (
-            <button
-              key={key}
-              onClick={() => onSelectGroup(key)}
-              className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border transition-all
-                ${selectedGroupKey === key
-                  ? 'bg-fifa-blue/30 border-fifa-blue/60 text-white'
-                  : 'border-fifa-border/40 text-fifa-muted hover:border-fifa-blue/40 hover:bg-white/5'}`}
-            >
-              <span className="text-[11px] font-bold text-white w-4 shrink-0">조{key}</span>
-              <div className="flex gap-0.5 items-center">
-                {standings.map((t) => (
-                  <span key={t.id} title={t.name}>
-                    {t.flagImg
-                      ? <img src={t.flagImg} alt={t.name} className="w-4 h-3 object-cover rounded-sm" />
-                      : <span className="text-[11px]">{t.flag}</span>}
-                  </span>
-                ))}
-              </div>
-              {selectedGroupKey === key && <ChevronRight size={10} className="text-fifa-blue shrink-0" />}
-            </button>
-          ))}
-        </div>
+      {/* ── 조·팀 선택 (접기 가능) ─────────────────────── */}
+      <div className="card overflow-hidden">
+        <button
+          onClick={() => setSelectorOpen((v) => !v)}
+          className="w-full flex items-center justify-between px-4 py-2.5 hover:bg-white/5 transition-colors"
+        >
+          <span className="text-xs font-medium text-fifa-muted">
+            조·팀 선택
+            {selectedGroupKey && (
+              <span className="ml-2 text-white font-bold">— 조 {selectedGroupKey} 선택됨</span>
+            )}
+          </span>
+          {selectorOpen
+            ? <ChevronUp size={14} className="text-fifa-muted" />
+            : <ChevronDown size={14} className="text-fifa-muted" />}
+        </button>
+
+        {selectorOpen && (
+          <div className="px-4 pb-4 pt-1">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6 gap-2">
+              {groupEntries.map(([key, { standings }]) => (
+                <button
+                  key={key}
+                  onClick={() => { onSelectGroup(key); setSelectorOpen(false); }}
+                  className={`flex flex-col items-start gap-1.5 px-3 py-2.5 rounded-lg border transition-all text-left
+                    ${selectedGroupKey === key
+                      ? 'bg-fifa-blue/30 border-fifa-blue/60 text-white'
+                      : 'border-fifa-border/40 text-fifa-muted hover:border-fifa-blue/40 hover:bg-white/5'}`}
+                >
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-xs font-bold text-white">조 {key}</span>
+                    {selectedGroupKey === key && <ChevronRight size={10} className="text-fifa-blue" />}
+                  </div>
+                  <div className="flex gap-1 flex-wrap">
+                    {standings.map((t) => (
+                      <span key={t.id} title={t.name}>
+                        {t.flagImg
+                          ? <img src={t.flagImg} alt={t.name} className="w-5 h-3.5 object-cover rounded-sm" />
+                          : <span className="text-xs">{t.flag}</span>}
+                      </span>
+                    ))}
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
-      {/* ── 선택된 조 상세 ───────────────────────────────── */}
+      {/* ── 선택된 조 상세 (수직 배치) ───────────────────── */}
       {selectedGroupKey && groups[selectedGroupKey] ? (
         <div className="space-y-4">
+          {/* 섹션 헤더 */}
           <div className="flex items-center gap-2 pb-1 border-b border-fifa-border/30">
             <span className="text-lg font-bold text-white">조 {selectedGroupKey}</span>
             <div className="flex gap-1">
@@ -291,37 +305,37 @@ export default function ScenarioPage({ selectedGroupKey, onSelectGroup, groups, 
             </div>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-4 items-start">
-            <div>
-              <p className="text-xs text-fifa-muted font-medium mb-2">
-                순위표
-                {onCardChange && (
-                  <span className="ml-2 text-[10px] text-fifa-muted/60">
-                    · 🟨 -1 &nbsp;🟨🟨 -3 &nbsp;🟥 -4 (페어플레이)
-                  </span>
-                )}
-              </p>
-              <GroupStandingsTable
-                standings={groups[selectedGroupKey].standings}
-                onCardChange={onCardChange
-                  ? (teamId, field, value) => onCardChange(selectedGroupKey, teamId, field, value)
-                  : null}
-              />
-              <div className="flex gap-4 mt-2 text-xs text-fifa-muted">
-                <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-green-500 inline-block" />16강 진출</span>
-                <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-yellow-500 inline-block" />3위 경쟁</span>
-              </div>
+          {/* 순위표 (전체 너비) */}
+          <div>
+            <p className="text-xs text-fifa-muted font-medium mb-2">
+              순위표
+              {onCardChange && (
+                <span className="ml-2 text-[10px] text-fifa-muted/60">
+                  · 🟨 -1 &nbsp;🟨🟨 -3 &nbsp;🟥 -4 (페어플레이)
+                </span>
+              )}
+            </p>
+            <GroupStandingsTable
+              standings={groups[selectedGroupKey].standings}
+              onCardChange={onCardChange
+                ? (teamId, field, value) => onCardChange(selectedGroupKey, teamId, field, value)
+                : null}
+            />
+            <div className="flex gap-4 mt-2 text-xs text-fifa-muted">
+              <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-green-500 inline-block" />16강 진출</span>
+              <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-yellow-500 inline-block" />3위 경쟁</span>
             </div>
+          </div>
 
-            <div>
-              <p className="text-xs text-fifa-muted font-medium mb-2">경기 일정 · 결과</p>
-              <MatchList
-                matches={groups[selectedGroupKey].matches}
-                standings={groups[selectedGroupKey].standings}
-                groupKey={selectedGroupKey}
-                onScoreChange={onScoreChange}
-              />
-            </div>
+          {/* 경기 일정 / 결과 (전체 너비) */}
+          <div>
+            <p className="text-xs text-fifa-muted font-medium mb-2">경기 일정 · 결과</p>
+            <MatchList
+              matches={groups[selectedGroupKey].matches}
+              standings={groups[selectedGroupKey].standings}
+              groupKey={selectedGroupKey}
+              onScoreChange={onScoreChange}
+            />
           </div>
         </div>
       ) : (
