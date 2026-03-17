@@ -220,12 +220,12 @@ export const MATCH_SCHEDULE = {
   'QAT_vs_UEFA_PO_A':   { matchday: 3, date: '2026-06-25T04:00:00Z', venue: 'Lumen Field',             city: 'Seattle, WA' },
 
   // ── Group C (BRA · MAR · SCO · HTI) ──────────────────────────
-  'SCO_vs_MAR':         { matchday: 1, date: '2026-06-13T16:00:00Z', venue: 'Hard Rock Stadium',       city: 'Miami, FL' },
-  'BRA_vs_HTI':         { matchday: 1, date: '2026-06-13T19:00:00Z', venue: 'Rose Bowl',               city: 'Pasadena, CA' },
-  'BRA_vs_SCO':         { matchday: 2, date: '2026-06-19T22:00:00Z', venue: 'Gillette Stadium',        city: 'Foxborough, MA' },
-  'MAR_vs_HTI':         { matchday: 2, date: '2026-06-20T01:00:00Z', venue: 'Lincoln Financial Field', city: 'Philadelphia, PA' },
-  'BRA_vs_MAR':         { matchday: 3, date: '2026-06-24T04:00:00Z', venue: 'Mercedes-Benz Stadium',   city: 'Atlanta, GA' },
-  'SCO_vs_HTI':         { matchday: 3, date: '2026-06-24T04:00:00Z', venue: 'Hard Rock Stadium',       city: 'Miami, FL' },
+  'BRA_vs_MAR':         { matchday: 1, date: '2026-06-13T22:00:00Z', venue: 'SoFi Stadium',            city: 'Inglewood, CA' },
+  'SCO_vs_HTI':         { matchday: 1, date: '2026-06-14T01:00:00Z', venue: 'Hard Rock Stadium',       city: 'Miami, FL' },
+  'SCO_vs_MAR':         { matchday: 2, date: '2026-06-19T22:00:00Z', venue: 'Gillette Stadium',        city: 'Foxborough, MA' },
+  'BRA_vs_HTI':         { matchday: 2, date: '2026-06-20T01:00:00Z', venue: 'Rose Bowl',               city: 'Pasadena, CA' },
+  'BRA_vs_SCO':         { matchday: 3, date: '2026-06-24T22:00:00Z', venue: 'Mercedes-Benz Stadium',   city: 'Atlanta, GA' },
+  'MAR_vs_HTI':         { matchday: 3, date: '2026-06-24T22:00:00Z', venue: 'Lincoln Financial Field', city: 'Philadelphia, PA' },
 
   // ── Group D (USA · AUS · PAR · UEFA_PO_C) ────────────────────
   'USA_vs_PAR':         { matchday: 1, date: '2026-06-13T01:00:00Z', venue: 'SoFi Stadium',            city: 'Inglewood, CA' },
