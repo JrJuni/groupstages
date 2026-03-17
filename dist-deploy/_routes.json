@@ -1,0 +1,6 @@
+{
+  "version": 1,
+  "description": "API 요청은 Workers로, 나머지는 Pages로 라우팅",
+  "include": ["/*"],
+  "exclude": []
+}
