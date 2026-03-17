@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Globe, Shuffle, Trophy, Share2, Menu, X, Database, RotateCcw, Wifi, WifiOff, GitBranch, BookOpen } from 'lucide-react';
-import { getBest8ThirdPlace } from './utils/rankings.js';
-import { TEAM_SEEDS } from './data/worldcup2026.js';
+import { getBest8ThirdPlace, getFairPlayPoints } from './utils/rankings.js';
+import { TEAM_SEEDS, FIFA_RANKINGS } from './data/worldcup2026.js';
 import { useMatches } from './hooks/useMatches.js';
 import GroupTable from './components/GroupTable.jsx';
 import ThirdPlaceTable from './components/ThirdPlaceTable.jsx';
@@ -80,7 +80,10 @@ export default function App() {
       if (b.pts !== a.pts) return b.pts - a.pts;
       if (b.gd !== a.gd) return b.gd - a.gd;
       if (b.gf !== a.gf) return b.gf - a.gf;
-      // 히든 룰: 경기 전/동점 시 포트 시드 순서 적용
+      const fpA = getFairPlayPoints(a), fpB = getFairPlayPoints(b);
+      if (fpB !== fpA) return fpB - fpA;
+      const ra = FIFA_RANKINGS[a.id] ?? 999, rb = FIFA_RANKINGS[b.id] ?? 999;
+      if (ra !== rb) return ra - rb;
       return (TEAM_SEEDS[a.id] ?? 99) - (TEAM_SEEDS[b.id] ?? 99);
     });
   const best8 = getBest8ThirdPlace(allGroupStandings);

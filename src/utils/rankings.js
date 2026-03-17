@@ -1,5 +1,5 @@
 // 조별 순위 계산 유틸리티
-import { TEAM_SEEDS, MATCH_SCHEDULE } from '../data/worldcup2026.js';
+import { TEAM_SEEDS, FIFA_RANKINGS, MATCH_SCHEDULE } from '../data/worldcup2026.js';
 
 function getFP(team) { return -1*(team.yc||0) + -3*(team.twoYR||0) + -4*(team.dr||0); }
 
@@ -128,6 +128,8 @@ export function calculateStandings(teams, matches) {
   return arr;
 }
 
+function getFifaRank(id) { return FIFA_RANKINGS[id] ?? 999; }
+
 // 3위팀 상위 8팀 선별 (12개 조 중)
 // allGroupStandings: { A: [...standings], B: [...], ... }
 export function getBest8ThirdPlace(allGroupStandings) {
@@ -143,6 +145,9 @@ export function getBest8ThirdPlace(allGroupStandings) {
       if (b.pts !== a.pts) return b.pts - a.pts;
       if (b.gd !== a.gd) return b.gd - a.gd;
       if (b.gf !== a.gf) return b.gf - a.gf;
+      const fpA = getFP(a), fpB = getFP(b);
+      if (fpB !== fpA) return fpB - fpA;
+      if (getFifaRank(a.id) !== getFifaRank(b.id)) return getFifaRank(a.id) - getFifaRank(b.id);
       return getSeed(a.id) - getSeed(b.id);
     })
     .slice(0, 8);

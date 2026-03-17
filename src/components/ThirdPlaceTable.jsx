@@ -1,6 +1,7 @@
 import React from 'react';
 import { Trophy, TrendingUp, Database, WifiOff } from 'lucide-react';
 import { BASE_URL } from '../config.js';
+import { FIFA_RANKINGS } from '../data/worldcup2026.js';
 
 export default function ThirdPlaceTable({ best8, allThirds, loading = false, apiAvailable = true }) {
   const qualifiedIds = new Set(best8.map((t) => t.id));
@@ -39,19 +40,20 @@ export default function ThirdPlaceTable({ best8, allThirds, loading = false, api
               <th className="px-2 py-2 text-center">패</th>
               <th className="px-2 py-2 text-center">득실</th>
               <th className="px-2 py-2 text-center font-bold">승점</th>
+              <th className="px-2 py-2 text-center" title="FIFA 랭킹">FIFA</th>
               <th className="px-2 py-2 text-center">상태</th>
             </tr>
           </thead>
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan={10} className="text-center py-8 text-fifa-muted animate-pulse">
+                <td colSpan={11} className="text-center py-8 text-fifa-muted animate-pulse">
                   DB에서 데이터 로딩 중...
                 </td>
               </tr>
             ) : allThirds.length === 0 ? (
               <tr>
-                <td colSpan={10} className="text-center py-8 text-fifa-muted animate-pulse">
+                <td colSpan={11} className="text-center py-8 text-fifa-muted animate-pulse">
                   데이터 로딩 중...
                 </td>
               </tr>
@@ -89,6 +91,9 @@ export default function ThirdPlaceTable({ best8, allThirds, loading = false, api
                       {team.gd > 0 ? `+${team.gd}` : team.gd}
                     </td>
                     <td className="px-2 py-2 text-center font-bold text-white">{team.pts}</td>
+                    <td className="px-2 py-2 text-center text-fifa-muted text-xs">
+                      {(FIFA_RANKINGS[team.id] ?? '—')}
+                    </td>
                     <td className="px-2 py-2 text-center">
                       {isQualified ? (
                         <span className="text-xs bg-green-900/40 text-green-400 px-2 py-0.5 rounded-full">
