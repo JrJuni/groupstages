@@ -1,7 +1,7 @@
 import React from 'react';
 import { ChevronRight, MapPin } from 'lucide-react';
+import { getFairPlayPoints } from '../utils/rankings.js';
 
-// UTC ISO 날짜를 KST (UTC+9) 포맷으로 변환
 function formatKST(iso) {
   if (!iso) return null;
   const d = new Date(new Date(iso).getTime() + 9 * 3_600_000);
@@ -27,52 +27,103 @@ function TeamFlag({ team, size = 'sm' }) {
     : <span className="text-base leading-none">{team.flag}</span>;
 }
 
-function GroupStandingsTable({ standings }) {
+function CardInput({ value, onChange }) {
+  return (
+    <input
+      type="number"
+      min="0"
+      max="99"
+      className="score-input"
+      style={{ width: '2rem' }}
+      value={value || ''}
+      placeholder="0"
+      onChange={(e) => onChange(e.target.value)}
+    />
+  );
+}
+
+function GroupStandingsTable({ standings, onCardChange }) {
   return (
     <div className="overflow-x-auto rounded-lg border border-fifa-border/40">
-      <table className="w-full text-sm">
+      <table className="w-full text-xs">
         <thead>
-          <tr className="text-fifa-muted text-xs border-b border-fifa-border bg-white/5">
-            <th className="px-3 py-2 text-left w-6">#</th>
-            <th className="px-3 py-2 text-left">팀</th>
-            <th className="px-2 py-2 text-center">경</th>
-            <th className="px-2 py-2 text-center">승</th>
-            <th className="px-2 py-2 text-center">무</th>
-            <th className="px-2 py-2 text-center">패</th>
-            <th className="px-2 py-2 text-center">득</th>
-            <th className="px-2 py-2 text-center">실</th>
-            <th className="px-2 py-2 text-center">차</th>
-            <th className="px-2 py-2 text-center font-bold">승점</th>
+          <tr className="text-fifa-muted text-[11px] border-b border-fifa-border bg-white/5">
+            <th className="px-2 py-2 text-left w-5">#</th>
+            <th className="px-2 py-2 text-left">팀</th>
+            <th className="px-1 py-2 text-center">경</th>
+            <th className="px-1 py-2 text-center">승</th>
+            <th className="px-1 py-2 text-center">무</th>
+            <th className="px-1 py-2 text-center">패</th>
+            <th className="px-1 py-2 text-center">득</th>
+            <th className="px-1 py-2 text-center">실</th>
+            <th className="px-1 py-2 text-center">차</th>
+            <th className="px-1 py-2 text-center font-bold">승점</th>
+            {onCardChange && (
+              <>
+                <th className="px-1 py-2 text-center" title="옐로카드 (-1점)">🟨</th>
+                <th className="px-1 py-2 text-center" title="옐로 누적 퇴장 (-3점)">🟨🟨</th>
+                <th className="px-1 py-2 text-center" title="직접 퇴장 레드카드 (-4점)">🟥</th>
+                <th className="px-1 py-2 text-center text-[10px] text-fifa-muted" title="페어플레이 포인트">FP</th>
+              </>
+            )}
           </tr>
         </thead>
         <tbody>
-          {standings.map((team, idx) => (
-            <tr
-              key={team.id}
-              className={`border-b border-fifa-border/30 ${RANK_BG[idx + 1] || ''}`}
-            >
-              <td className="px-3 py-2 text-fifa-muted text-xs">{idx + 1}</td>
-              <td className="px-3 py-2">
-                <div className="flex items-center gap-2">
-                  <TeamFlag team={team} />
-                  <span className="font-medium text-white text-xs sm:text-sm whitespace-nowrap">{team.name}</span>
-                  {team.host && (
-                    <span className="text-xs bg-fifa-gold/20 text-fifa-gold px-1 rounded">H</span>
-                  )}
-                </div>
-              </td>
-              <td className="px-2 py-2 text-center text-fifa-muted">{team.played}</td>
-              <td className="px-2 py-2 text-center text-green-400">{team.won}</td>
-              <td className="px-2 py-2 text-center">{team.drawn}</td>
-              <td className="px-2 py-2 text-center text-red-400">{team.lost}</td>
-              <td className="px-2 py-2 text-center">{team.gf}</td>
-              <td className="px-2 py-2 text-center">{team.ga}</td>
-              <td className={`px-2 py-2 text-center ${team.gd > 0 ? 'text-green-400' : team.gd < 0 ? 'text-red-400' : ''}`}>
-                {team.gd > 0 ? `+${team.gd}` : team.gd}
-              </td>
-              <td className="px-2 py-2 text-center font-bold text-white">{team.pts}</td>
-            </tr>
-          ))}
+          {standings.map((team, idx) => {
+            const fp = getFairPlayPoints(team);
+            return (
+              <tr
+                key={team.id}
+                className={`border-b border-fifa-border/30 ${RANK_BG[idx + 1] || ''}`}
+              >
+                <td className="px-2 py-1.5 text-fifa-muted">{idx + 1}</td>
+                <td className="px-2 py-1.5">
+                  <div className="flex items-center gap-1.5">
+                    <TeamFlag team={team} />
+                    <span className="font-medium text-white whitespace-nowrap">{team.name}</span>
+                    {team.host && (
+                      <span className="text-[9px] bg-fifa-gold/20 text-fifa-gold px-1 rounded">H</span>
+                    )}
+                  </div>
+                </td>
+                <td className="px-1 py-1.5 text-center text-fifa-muted">{team.played}</td>
+                <td className="px-1 py-1.5 text-center text-green-400">{team.won}</td>
+                <td className="px-1 py-1.5 text-center">{team.drawn}</td>
+                <td className="px-1 py-1.5 text-center text-red-400">{team.lost}</td>
+                <td className="px-1 py-1.5 text-center">{team.gf}</td>
+                <td className="px-1 py-1.5 text-center">{team.ga}</td>
+                <td className={`px-1 py-1.5 text-center ${team.gd > 0 ? 'text-green-400' : team.gd < 0 ? 'text-red-400' : ''}`}>
+                  {team.gd > 0 ? `+${team.gd}` : team.gd}
+                </td>
+                <td className="px-1 py-1.5 text-center font-bold text-white">{team.pts}</td>
+                {onCardChange && (
+                  <>
+                    <td className="px-0.5 py-1 text-center">
+                      <CardInput
+                        value={team.yc}
+                        onChange={(v) => onCardChange(team.id, 'yc', v)}
+                      />
+                    </td>
+                    <td className="px-0.5 py-1 text-center">
+                      <CardInput
+                        value={team.twoYR}
+                        onChange={(v) => onCardChange(team.id, 'twoYR', v)}
+                      />
+                    </td>
+                    <td className="px-0.5 py-1 text-center">
+                      <CardInput
+                        value={team.dr}
+                        onChange={(v) => onCardChange(team.id, 'dr', v)}
+                      />
+                    </td>
+                    <td className={`px-1 py-1.5 text-center font-bold ${fp < 0 ? 'text-red-400' : 'text-fifa-muted'}`}>
+                      {fp}
+                    </td>
+                  </>
+                )}
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>
@@ -92,7 +143,6 @@ function MatchRow({ match, standings, onScoreChange }) {
 
   return (
     <div className={`border-b border-fifa-border/20 last:border-0 ${played ? '' : 'opacity-80'}`}>
-      {/* 날짜 / 경기장 */}
       {dateStr && (
         <div className="flex items-center gap-2 px-4 pt-2 pb-0.5">
           <span className="text-[10px] text-fifa-gold font-medium">{dateStr}</span>
@@ -106,13 +156,11 @@ function MatchRow({ match, standings, onScoreChange }) {
       )}
 
       <div className="flex items-center gap-3 py-2 px-4 text-sm">
-        {/* 홈팀 */}
         <div className="flex items-center gap-1.5 flex-1 justify-end">
           <span className="text-white text-xs sm:text-sm whitespace-nowrap hidden sm:inline">{homeTeam.name}</span>
           <TeamFlag team={homeTeam} />
         </div>
 
-        {/* 스코어 */}
         <div className="flex items-center gap-1.5 shrink-0">
           {played ? (
             <div className="flex items-center gap-1 bg-white/10 rounded px-3 py-1">
@@ -145,7 +193,6 @@ function MatchRow({ match, standings, onScoreChange }) {
           )}
         </div>
 
-        {/* 원정팀 */}
         <div className="flex items-center gap-1.5 flex-1 justify-start">
           <TeamFlag team={awayTeam} />
           <span className="text-white text-xs sm:text-sm whitespace-nowrap hidden sm:inline">{awayTeam.name}</span>
@@ -155,11 +202,9 @@ function MatchRow({ match, standings, onScoreChange }) {
   );
 }
 
-// 경기 목록: 날짜순 정렬 + 경기일 구분 헤더
 function MatchList({ matches, standings, groupKey, onScoreChange }) {
   if (!matches?.length) return null;
 
-  // 날짜 기준 오름차순 정렬 (날짜 없는 경기는 마지막)
   const sorted = [...matches].sort((a, b) => {
     if (!a.date && !b.date) return 0;
     if (!a.date) return 1;
@@ -167,7 +212,6 @@ function MatchList({ matches, standings, groupKey, onScoreChange }) {
     return new Date(a.date) - new Date(b.date);
   });
 
-  // matchday 구분 헤더 삽입
   let lastMatchday = null;
   const rows = [];
   sorted.forEach((match) => {
@@ -197,38 +241,35 @@ function MatchList({ matches, standings, groupKey, onScoreChange }) {
   return <div className="card overflow-hidden">{rows}</div>;
 }
 
-export default function ScenarioPage({ selectedGroupKey, onSelectGroup, groups, onScoreChange }) {
+export default function ScenarioPage({ selectedGroupKey, onSelectGroup, groups, onScoreChange, onCardChange }) {
   const groupEntries = Object.entries(groups);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
 
-      {/* ── 팀 선택 그리드 ───────────────────────────────── */}
-      <div className="card p-4">
-        <p className="text-xs text-fifa-muted mb-3 font-medium">조·팀 선택</p>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6 gap-2">
+      {/* ── 조 선택 (컴팩트 필 스타일) ─────────────────────── */}
+      <div className="card px-3 py-2.5">
+        <div className="flex flex-wrap gap-1.5">
           {groupEntries.map(([key, { standings }]) => (
             <button
               key={key}
               onClick={() => onSelectGroup(key)}
-              className={`flex flex-col items-start gap-1.5 px-3 py-2.5 rounded-lg border transition-all text-left
+              className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border transition-all
                 ${selectedGroupKey === key
                   ? 'bg-fifa-blue/30 border-fifa-blue/60 text-white'
                   : 'border-fifa-border/40 text-fifa-muted hover:border-fifa-blue/40 hover:bg-white/5'}`}
             >
-              <div className="flex items-center gap-1.5">
-                <span className="text-xs font-bold text-white">조 {key}</span>
-                {selectedGroupKey === key && <ChevronRight size={10} className="text-fifa-blue" />}
-              </div>
-              <div className="flex gap-1 flex-wrap">
+              <span className="text-[11px] font-bold text-white w-4 shrink-0">조{key}</span>
+              <div className="flex gap-0.5 items-center">
                 {standings.map((t) => (
                   <span key={t.id} title={t.name}>
                     {t.flagImg
-                      ? <img src={t.flagImg} alt={t.name} className="w-5 h-3.5 object-cover rounded-sm" />
-                      : <span className="text-xs">{t.flag}</span>}
+                      ? <img src={t.flagImg} alt={t.name} className="w-4 h-3 object-cover rounded-sm" />
+                      : <span className="text-[11px]">{t.flag}</span>}
                   </span>
                 ))}
               </div>
+              {selectedGroupKey === key && <ChevronRight size={10} className="text-fifa-blue shrink-0" />}
             </button>
           ))}
         </div>
@@ -237,7 +278,6 @@ export default function ScenarioPage({ selectedGroupKey, onSelectGroup, groups, 
       {/* ── 선택된 조 상세 ───────────────────────────────── */}
       {selectedGroupKey && groups[selectedGroupKey] ? (
         <div className="space-y-4">
-          {/* 섹션 헤더 */}
           <div className="flex items-center gap-2 pb-1 border-b border-fifa-border/30">
             <span className="text-lg font-bold text-white">조 {selectedGroupKey}</span>
             <div className="flex gap-1">
@@ -252,17 +292,27 @@ export default function ScenarioPage({ selectedGroupKey, onSelectGroup, groups, 
           </div>
 
           <div className="grid md:grid-cols-2 gap-4 items-start">
-            {/* 순위표 */}
             <div>
-              <p className="text-xs text-fifa-muted font-medium mb-2">순위표</p>
-              <GroupStandingsTable standings={groups[selectedGroupKey].standings} />
+              <p className="text-xs text-fifa-muted font-medium mb-2">
+                순위표
+                {onCardChange && (
+                  <span className="ml-2 text-[10px] text-fifa-muted/60">
+                    · 🟨 -1 &nbsp;🟨🟨 -3 &nbsp;🟥 -4 (페어플레이)
+                  </span>
+                )}
+              </p>
+              <GroupStandingsTable
+                standings={groups[selectedGroupKey].standings}
+                onCardChange={onCardChange
+                  ? (teamId, field, value) => onCardChange(selectedGroupKey, teamId, field, value)
+                  : null}
+              />
               <div className="flex gap-4 mt-2 text-xs text-fifa-muted">
                 <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-green-500 inline-block" />16강 진출</span>
                 <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-yellow-500 inline-block" />3위 경쟁</span>
               </div>
             </div>
 
-            {/* 경기 일정 / 결과 */}
             <div>
               <p className="text-xs text-fifa-muted font-medium mb-2">경기 일정 · 결과</p>
               <MatchList

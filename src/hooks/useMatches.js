@@ -107,6 +107,18 @@ export function useMatches() {
     [apiAvailable]
   );
 
+  // 카드 변경: 팀의 yc/twoYR/dr 업데이트 후 순위 재계산
+  const handleCardChange = useCallback((groupKey, teamId, field, value) => {
+    setGroups((prev) => {
+      const group = prev[groupKey];
+      const newTeams = group.teams.map((t) =>
+        t.id !== teamId ? t : { ...t, [field]: parseInt(value) || 0 }
+      );
+      const newStandings = calculateStandings(newTeams, group.matches);
+      return { ...prev, [groupKey]: { ...group, teams: newTeams, standings: newStandings } };
+    });
+  }, []);
+
   // 전체 초기화
   const resetAll = useCallback(async () => {
     setGroups(buildEmptyGroups());
@@ -119,5 +131,5 @@ export function useMatches() {
     }
   }, [apiAvailable]);
 
-  return { groups, loading, apiAvailable, handleScoreChange, resetAll };
+  return { groups, loading, apiAvailable, handleScoreChange, handleCardChange, resetAll };
 }

@@ -55,7 +55,7 @@ function AdSlot({ slot, className = '' }) {
 
 // ── 메인 앱 ─────────────────────────────────────────────
 export default function App() {
-  const { groups, loading, apiAvailable, handleScoreChange, resetAll } = useMatches();
+  const { groups, loading, apiAvailable, handleScoreChange, handleCardChange, resetAll } = useMatches();
   const [activeTab, setActiveTab] = useState('groups');
   const [menuOpen, setMenuOpen] = useState(false);
   const [resetting, setResetting] = useState(false);
@@ -263,6 +263,7 @@ export default function App() {
                 onSelectGroup={setScenarioGroupKey}
                 groups={groups}
                 onScoreChange={handleScoreChange}
+                onCardChange={handleCardChange}
               />
             )}
 

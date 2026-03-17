@@ -82,8 +82,8 @@ export default function RulesPage() {
           <div className="px-4 divide-y divide-fifa-border/20">
             <FPRow card="🟡 경고 1장" pts="-1점" />
             <FPRow card="🟡🟡 경고 2장 누적 퇴장 (간접 퇴장)" pts="-3점" />
-            <FPRow card="🟥 직접 퇴장 (레드카드)" pts="-3점" />
-            <FPRow card="🟡🟥 경고 후 직접 퇴장" pts="-4점" />
+            <FPRow card="🟥 직접 퇴장 (레드카드)" pts="-4점" />
+            <FPRow card="🟡🟥 경고 후 직접 퇴장" pts="-5점" />
           </div>
         </div>
         <p className="text-xs mt-2 text-fifa-muted/70">출전 정지 등 행정 징계는 해당 선수에게 부과되며 팀 페어플레이 점수에는 영향을 주지 않습니다.</p>

@@ -1,6 +1,8 @@
 // 조별 순위 계산 유틸리티
 import { TEAM_SEEDS, MATCH_SCHEDULE } from '../data/worldcup2026.js';
 
+function getFP(team) { return -1*(team.yc||0) + -3*(team.twoYR||0) + -4*(team.dr||0); }
+
 // 시드 번호 조회 (없으면 99로 처리 → 미확정 플레이오프 팀)
 function getSeed(id) { return TEAM_SEEDS[id] ?? 99; }
 
@@ -15,7 +17,14 @@ export function createInitialStandings(teams) {
     ga: 0,
     gd: 0,
     pts: 0,
+    yc: 0,
+    twoYR: 0,
+    dr: 0,
   }));
+}
+
+export function getFairPlayPoints(team) {
+  return -1 * (team.yc || 0) + -3 * (team.twoYR || 0) + -4 * (team.dr || 0);
 }
 
 export function createInitialMatches(teams) {
@@ -109,7 +118,10 @@ export function calculateStandings(teams, matches) {
         if (h2h[b.id].gf !== h2h[a.id].gf) return h2h[b.id].gf - h2h[a.id].gf;
       }
     }
-    // 최종 타이브레이커: 포트 시드 순서 (히든 룰 - 경기 전 초기 순위)
+    // ⑦ 페어플레이 포인트 (높을수록 유리)
+    const fpA = getFP(a), fpB = getFP(b);
+    if (fpB !== fpA) return fpB - fpA;
+    // ⑧ 최종 타이브레이커: 포트 시드 순서
     return getSeed(a.id) - getSeed(b.id);
   });
 
