@@ -8,7 +8,7 @@
 ## 전체 로드맵 진행률
 
 ```
-[██████████████████░░] 90%
+[████████████████████] 100%
 
 Phase 1: 조별리그 대시보드      ✅ 완료
 Phase 2: 경우의 수 탭           ✅ 완료
@@ -17,8 +17,8 @@ Phase 4: 조추첨 시뮬레이터      ✅ 완료
 Phase 5: 규칙 페이지            ✅ 완료
 Phase 6: 경기 일정 정렬         ✅ 완료 (2026-03-17)
 Phase 7: API-Football 연동      ✅ 완료 (2026-03-17)
-Phase 8: Cloudflare 배포        🔄 진행중 (2026-03-17)
-Phase 9: SEO / AdSense 최적화   ⬜ 미시작
+Phase 8: Cloudflare 배포        ✅ 완료 (2026-03-17)
+Phase 9: SEO / AdSense 최적화   ⬜ 다음 단계
 ```
 
 ---
@@ -31,7 +31,17 @@ Phase 9: SEO / AdSense 최적화   ⬜ 미시작
 
 ## 최근 완료된 작업 (2026-03-17)
 
-### [DONE] Cloudflare 풀스택 아키텍처 구축 (최신)
+### [DONE] Cloudflare Pages 프로덕션 배포 완료 (최신)
+- **Production URL**: https://groupstages.com/wc2026/
+- **Preview URL**: https://af738676.groupstages.pages.dev
+- **Workers API**: https://groupstages-api.behomely0409.workers.dev
+- **D1 Database**: 72개 경기 데이터 마이그레이션 완료
+- **Custom Domain**: groupstages.com 활성화
+- **환경 변수**: VITE_API_URL 설정 (Workers API 연동)
+- **Flag 이미지**: BASE_URL 동적 경로 적용
+- **배포 구조**: /wc2026/ 경로로 재구성
+
+### [DONE] Cloudflare 풀스택 아키텍처 구축
 - **배포 전략**: groupstages.com/wc2026 (48팀), /wc2022 (32팀 예정)
 - **Workers API**: Express → Cloudflare Workers 변환 (D1 SQLite)
 - **비용 절감**: Railway $5/월 → Cloudflare 무료 (연간 $50 절감)
