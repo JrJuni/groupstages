@@ -330,26 +330,26 @@ export default function ScenarioPage({ selectedGroupKey, onSelectGroup, groups, 
 
           {/* 순위표 (전체 너비) */}
           <div>
-            <p className="text-xs text-fifa-muted font-medium mb-2">
-              순위표
-              {onCardChange && (
-                <span className="ml-2 inline-flex items-center gap-1.5 text-[10px] text-fifa-muted/60">
-                  · <YellowCard /> <span>-1</span>
-                  <DoubleYellowCard /> <span>-3</span>
-                  <RedCard /> <span>-4</span>
-                  <span>(페어플레이)</span>
-                </span>
-              )}
-            </p>
+            <p className="text-xs text-fifa-muted font-medium mb-2">순위표</p>
             <GroupStandingsTable
               standings={groups[selectedGroupKey].standings}
               onCardChange={onCardChange
                 ? (teamId, field, value) => onCardChange(selectedGroupKey, teamId, field, value)
                 : null}
             />
-            <div className="flex gap-4 mt-2 text-xs text-fifa-muted">
-              <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-green-500 inline-block" />16강 진출</span>
-              <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-yellow-500 inline-block" />3위 경쟁</span>
+            <div className="flex items-center justify-between mt-2 text-xs text-fifa-muted flex-wrap gap-y-1">
+              <div className="flex gap-4">
+                <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-green-500 inline-block" />16강 진출</span>
+                <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-yellow-500 inline-block" />3위 경쟁</span>
+              </div>
+              {onCardChange && (
+                <span className="inline-flex items-center gap-1.5 text-[10px] text-fifa-muted/60">
+                  <YellowCard /> <span>-1</span>
+                  <DoubleYellowCard /> <span>-3</span>
+                  <RedCard /> <span>-4</span>
+                  <span>페어플레이</span>
+                </span>
+              )}
             </div>
           </div>
 
