@@ -236,19 +236,19 @@ export const MATCH_SCHEDULE = {
   'USA_vs_UEFA_PO_C':   { matchday: 3, date: '2026-06-26T02:00:00Z', venue: 'SoFi Stadium',            city: 'Inglewood, CA' },
 
   // ── Group E (GER · ECU · CIV · CUW) ──────────────────────────
-  'GER_vs_CIV':         { matchday: 1, date: '2026-06-14T19:00:00Z', venue: 'BMO Field',               city: 'Toronto, CAN' },
-  'ECU_vs_CUW':         { matchday: 1, date: '2026-06-14T22:00:00Z', venue: 'Arrowhead Stadium',       city: 'Kansas City, MO' },
-  'ECU_vs_CIV':         { matchday: 2, date: '2026-06-20T04:00:00Z', venue: 'Lincoln Financial Field', city: 'Philadelphia, PA' },
-  'GER_vs_CUW':         { matchday: 2, date: '2026-06-20T16:00:00Z', venue: 'BMO Field',               city: 'Toronto, CAN' },
-  'GER_vs_ECU':         { matchday: 3, date: '2026-06-26T19:00:00Z', venue: 'Lincoln Financial Field', city: 'Philadelphia, PA' },
-  'CIV_vs_CUW':         { matchday: 3, date: '2026-06-26T19:00:00Z', venue: 'Arrowhead Stadium',       city: 'Kansas City, MO' },
+  'GER_vs_CUW':         { matchday: 1, date: '2026-06-14T17:00:00Z', venue: 'BMO Field',               city: 'Toronto, CAN' },
+  'ECU_vs_CIV':         { matchday: 1, date: '2026-06-14T23:00:00Z', venue: 'Lincoln Financial Field', city: 'Philadelphia, PA' },
+  'GER_vs_CIV':         { matchday: 2, date: '2026-06-20T20:00:00Z', venue: 'BMO Field',               city: 'Toronto, CAN' },
+  'ECU_vs_CUW':         { matchday: 2, date: '2026-06-21T00:00:00Z', venue: 'Arrowhead Stadium',       city: 'Kansas City, MO' },
+  'GER_vs_ECU':         { matchday: 3, date: '2026-06-25T20:00:00Z', venue: 'Lincoln Financial Field', city: 'Philadelphia, PA' },
+  'CIV_vs_CUW':         { matchday: 3, date: '2026-06-25T20:00:00Z', venue: 'Arrowhead Stadium',       city: 'Kansas City, MO' },
 
   // ── Group F (NED · JPN · TUN · UEFA_PO_B) ────────────────────
   'NED_vs_UEFA_PO_B':   { matchday: 1, date: '2026-06-14T16:00:00Z', venue: 'AT&T Stadium',            city: 'Arlington, TX' },
-  'JPN_vs_TUN':         { matchday: 1, date: '2026-06-15T16:00:00Z', venue: 'Arrowhead Stadium',       city: 'Kansas City, MO' },
+  'NED_vs_JPN':         { matchday: 1, date: '2026-06-14T20:00:00Z', venue: 'Estadio Akron',           city: 'Guadalajara, MEX' },
   'TUN_vs_UEFA_PO_B':   { matchday: 2, date: '2026-06-20T07:00:00Z', venue: 'Estadio Monterrey',       city: 'Monterrey, MEX' },
-  'NED_vs_JPN':         { matchday: 2, date: '2026-06-20T22:00:00Z', venue: 'Estadio Akron',           city: 'Guadalajara, MEX' },
-  'NED_vs_TUN':         { matchday: 3, date: '2026-06-26T22:00:00Z', venue: 'AT&T Stadium',            city: 'Arlington, TX' },
+  'JPN_vs_TUN':         { matchday: 2, date: '2026-06-21T04:00:00Z', venue: 'Arrowhead Stadium',       city: 'Kansas City, MO' },
+  'NED_vs_TUN':         { matchday: 3, date: '2026-06-25T23:00:00Z', venue: 'AT&T Stadium',            city: 'Arlington, TX' },
   'JPN_vs_UEFA_PO_B':   { matchday: 3, date: '2026-06-26T22:00:00Z', venue: 'Estadio Monterrey',       city: 'Monterrey, MEX' },
 
   // ── Group G (BEL · IRN · EGY · NZL) ──────────────────────────
@@ -268,12 +268,12 @@ export const MATCH_SCHEDULE = {
   'SAU_vs_CPV':         { matchday: 3, date: '2026-06-27T19:00:00Z', venue: 'Mercedes-Benz Stadium',   city: 'Atlanta, GA' },
 
   // ── Group I (FRA · SEN · NOR · IC_PO_2) ──────────────────────
-  'FRA_vs_SEN':         { matchday: 1, date: '2026-06-16T16:00:00Z', venue: 'MetLife Stadium',         city: 'East Rutherford, NJ' },
+  'FRA_vs_SEN':         { matchday: 1, date: '2026-06-16T19:00:00Z', venue: 'MetLife Stadium',         city: 'East Rutherford, NJ' },
   'NOR_vs_IC_PO_2':     { matchday: 1, date: '2026-06-16T19:00:00Z', venue: 'Gillette Stadium',        city: 'Foxborough, MA' },
-  'FRA_vs_NOR':         { matchday: 2, date: '2026-06-22T02:00:00Z', venue: 'Lincoln Financial Field', city: 'Philadelphia, PA' },
   'SEN_vs_IC_PO_2':     { matchday: 2, date: '2026-06-22T04:00:00Z', venue: 'BMO Field',               city: 'Toronto, CAN' },
+  'SEN_vs_NOR':         { matchday: 2, date: '2026-06-23T00:00:00Z', venue: 'Gillette Stadium',        city: 'Foxborough, MA' },
+  'FRA_vs_NOR':         { matchday: 3, date: '2026-06-26T19:00:00Z', venue: 'Lincoln Financial Field', city: 'Philadelphia, PA' },
   'FRA_vs_IC_PO_2':     { matchday: 3, date: '2026-06-27T23:00:00Z', venue: 'MetLife Stadium',         city: 'East Rutherford, NJ' },
-  'SEN_vs_NOR':         { matchday: 3, date: '2026-06-27T23:00:00Z', venue: 'Gillette Stadium',        city: 'Foxborough, MA' },
 
   // ── Group J (ARG · AUT · ALG · JOR) ──────────────────────────
   'ARG_vs_ALG':         { matchday: 1, date: '2026-06-16T22:00:00Z', venue: 'Arrowhead Stadium',       city: 'Kansas City, MO' },
@@ -285,11 +285,11 @@ export const MATCH_SCHEDULE = {
 
   // ── Group K (POR · COL · UZB · IC_PO_1) ──────────────────────
   'POR_vs_IC_PO_1':     { matchday: 1, date: '2026-06-17T16:00:00Z', venue: 'NRG Stadium',             city: 'Houston, TX' },
-  'COL_vs_UZB':         { matchday: 1, date: '2026-06-17T19:00:00Z', venue: "Levi's Stadium",          city: 'Santa Clara, CA' },
-  'POR_vs_COL':         { matchday: 2, date: '2026-06-23T22:00:00Z', venue: 'NRG Stadium',             city: 'Houston, TX' },
+  'COL_vs_UZB':         { matchday: 1, date: '2026-06-18T02:00:00Z', venue: "Levi's Stadium",          city: 'Santa Clara, CA' },
   'UZB_vs_IC_PO_1':     { matchday: 2, date: '2026-06-23T04:00:00Z', venue: 'Estadio Guadalajara',     city: 'Guadalajara, MEX' },
-  'POR_vs_UZB':         { matchday: 3, date: '2026-06-27T02:00:00Z', venue: 'NRG Stadium',             city: 'Houston, TX' },
+  'POR_vs_UZB':         { matchday: 2, date: '2026-06-23T17:00:00Z', venue: 'NRG Stadium',             city: 'Houston, TX' },
   'COL_vs_IC_PO_1':     { matchday: 3, date: '2026-06-27T02:00:00Z', venue: 'Estadio Guadalajara',     city: 'Guadalajara, MEX' },
+  'POR_vs_COL':         { matchday: 3, date: '2026-06-27T23:30:00Z', venue: 'NRG Stadium',             city: 'Houston, TX' },
 
   // ── Group L (ENG · CRO · GHA · PAN) ──────────────────────────
   'GHA_vs_PAN':         { matchday: 1, date: '2026-06-17T22:00:00Z', venue: 'Gillette Stadium',        city: 'Foxborough, MA' },
