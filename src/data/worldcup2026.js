@@ -318,9 +318,9 @@ export const FIFA_RANKINGS_DRAW = {
   AUT: 24, AUS: 26,
   // ── Pot 3 ────────────────────────────────────────────────────
   NOR: 29, PAN: 30, EGY: 34, ALG: 35, SCO: 36,
-  PAR: 39, TUN: 40, CIV: 42,
-  // TODO: Pot 3 나머지 4팀 랭킹 미확인
-  UZB: 999, SAU: 999, RSA: 999, QAT: 999,
+  PAR: 39, TUN: 40, CIV: 42, UZB: 50, QAT: 51,
+  SAU: 60,
+  RSA: 999, // TODO: RSA 랭킹 미확인 (데이터 잘림)
   // ── Pot 4 ────────────────────────────────────────────────────
   JOR: 66, CPV: 68, GHA: 72, CUW: 82, HTI: 84, NZL: 86,
   // 미확정 플레이오프
