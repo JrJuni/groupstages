@@ -31,7 +31,22 @@ Phase 9: SEO / AdSense 최적화   ⬜ 다음 단계
 
 ## 최근 완료된 작업 (2026-03-17)
 
-### [DONE] Cloudflare Pages 프로덕션 배포 완료 (최신)
+### [DONE] FIFA 랭킹 시스템 및 Pot 재배정 (최신)
+- **FIFA 랭킹 DB 저장**: PostgreSQL + D1 SQLite (42팀)
+- **2-column 시스템**: `fifa_rank_current` (현재 랭킹) + `fifa_rank_draw` (조추첨 시점 랭킹)
+- **Pot 재배정**: FIFA 랭킹 기준 재구성
+  - Pot 1: Morocco 추가 (8위)
+  - Pot 2: Germany 추가 (10위), Algeria → Pot 3
+  - Pot 3: Panama 유지 (33위), Jordan → Pot 4
+  - Pot 4: Jordan 추가 (70위)
+- **타이브레이커 표시 수정**: "FIFA 시드" → "페어플레이 → FIFA 랭킹"
+
+### [DONE] 전체 조별 일정 DB 동기화 완료
+- **10개 불일치 수정**: Group C, E, F, I, K
+- **API-Football DB와 100% 일치**: 72/72 경기 검증 완료
+- **자동 검증 스크립트**: verify_schedule.js 생성
+
+### [DONE] Cloudflare Pages 프로덕션 배포 완료
 - **Production URL**: https://groupstages.com/wc2026/
 - **Preview URL**: https://af738676.groupstages.pages.dev
 - **Workers API**: https://groupstages-api.behomely0409.workers.dev
@@ -89,18 +104,20 @@ Phase 9: SEO / AdSense 최적화   ⬜ 다음 단계
 ## 다음 단계 (Next Steps)
 
 ### 우선순위 HIGH
-- [ ] **카드 데이터 영속성**: team_statistics API 엔드포인트 추가 (1-2시간)
+- [ ] **FIFA 랭킹 타이브레이커 추가**: 페어플레이 다음 순위로 현재 FIFA 랭킹 적용
+- [ ] **3위 테이블 FIFA 랭킹 표시**: 국가명(랭킹) 형식으로 표시 (ex. 이집트(31))
+- [ ] **카드 데이터 영속성**: team_statistics API 엔드포인트 추가
 - [x] **미매핑 팀 해결**: CUW(5530), CPV(1533) API ID 확인 및 매핑 추가 ✅ 완료
-- [ ] **동기화 UI**: Admin 페이지에서 수동 동기화 버튼 + Rate Limit 표시
 
 ### 우선순위 MEDIUM
+- [ ] **조추첨 시뮬레이터 랭킹 전환**: 조추첨 전에는 current, 후에는 draw 랭킹 사용
 - [ ] **경우의 수 분석 고도화**: 각 팀별 16강 진출 확률 계산기
+- [ ] **동기화 UI**: Admin 페이지에서 수동 동기화 버튼 + Rate Limit 표시
 - [ ] **자동 동기화**: Cron job 또는 WebSocket 실시간 업데이트
-- [ ] **실제 경기 일정 데이터 완성**: 나머지 24경기(R1 일부, R3 전체) 날짜 정확도 검증
 
 ### 우선순위 LOW
-- [ ] **배포**: Cloudflare Pages (프론트) + 별도 API 서버 (백엔드)
 - [ ] **SEO**: 메타태그, OG 이미지, sitemap.xml
+- [ ] **32팀 버전 (wc2022)**: 새 브랜치로 2022 월드컵 버전 개발
 
 ---
 

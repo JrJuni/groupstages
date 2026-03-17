@@ -116,7 +116,7 @@ export default function ThirdPlaceTable({ best8, allThirds, loading = false, api
         </div>
         <div className="flex items-center gap-1">
           <TrendingUp size={12} />
-          <span>승점 → 득실차 → 다득점 → FIFA 시드 순으로 결정</span>
+          <span>승점 → 득실차 → 다득점 → 페어플레이 → FIFA 랭킹 순으로 결정</span>
         </div>
       </div>
     </div>
