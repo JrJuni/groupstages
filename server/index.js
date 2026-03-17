@@ -1,6 +1,7 @@
 import express from 'express';
 import pg from 'pg';
 import cors from 'cors';
+import { createSyncRoutes } from './routes/syncRoutes.js';
 
 const { Pool } = pg;
 
@@ -12,6 +13,9 @@ const pool = new Pool({
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+// API-Football 동기화 라우트
+app.use('/api/sync', createSyncRoutes(pool));
 
 // GET /api/matches - 모든 경기 결과 조회
 // API-Football 호환 컬럼: fixture_id (fixture.id), match_date (fixture.date),

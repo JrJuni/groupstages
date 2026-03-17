@@ -6,7 +6,9 @@
 ## Tech Stack
 - **Frontend**: React 18 + Vite 5 + Tailwind CSS 3
 - **Backend**: Node.js + Express (ESM) - port 3001
-- **Database**: PostgreSQL (Replit built-in) via `pg` driver
+- **Database**: PostgreSQL (로컬 또는 Replit) via `pg` driver
+- **External API**: API-Football (RapidAPI) - 7500 requests/day
+- **Caching**: JSON 파일 기반 (1시간 TTL)
 - **Icons**: Lucide React
 - **Image Export**: html2canvas
 - **Dev Process**: concurrently (API + Vite)
@@ -16,6 +18,8 @@
 - Vite dev server proxies `/api` → `localhost:3001`
 - React frontend fetches/saves match results from/to PostgreSQL via API
 - `src/hooks/useMatches.js` manages DB sync (graceful fallback to local mode)
+- API-Football 연동: `apiFootballService.js` + `cacheService.js`
+- 양방향 경기 매칭: 홈/어웨이 순서 무관 (48/54 경기 동기화 성공)
 - Hosted on Cloudflare Pages (planned; needs separate API deploy for DB)
 
 ## Database Schema
@@ -27,17 +31,41 @@ CREATE TABLE match_results (
   away_id    VARCHAR(30)  NOT NULL,
   home_score INTEGER,
   away_score INTEGER,
-  -- 경기 일정 관련 (API-Football 호환)
-  matchday   SMALLINT,                  -- 1/2/3  ← API: league.round 숫자
-  match_date TIMESTAMPTZ,               -- UTC 킥오프 ← API: fixture.date
-  status     VARCHAR(10)  DEFAULT 'NS', -- NS/FT/1H/HT/2H ← API: fixture.status.short
-  fixture_id INTEGER,                   -- API-Football fixture.id (연동 전 NULL)
+  matchday   SMALLINT,                  -- 1/2/3
+  match_date TIMESTAMPTZ,               -- UTC 킥오프
+  status     VARCHAR(10)  DEFAULT 'NS', -- NS/FT/1H/HT/2H
+  fixture_id INTEGER,                   -- API-Football fixture.id
   updated_at TIMESTAMP    DEFAULT NOW()
 );
--- 인덱스
-CREATE INDEX idx_match_results_group      ON match_results (group_key);
-CREATE INDEX idx_match_results_match_date ON match_results (match_date);
-CREATE INDEX idx_match_results_fixture_id ON match_results (fixture_id);
+
+CREATE TABLE team_mapping (
+  our_team_id   VARCHAR(30) PRIMARY KEY, -- e.g. "MEX"
+  api_team_id   INTEGER NOT NULL UNIQUE, -- API-Football team ID
+  api_team_name VARCHAR(100),
+  api_team_code VARCHAR(10)
+);
+
+CREATE TABLE team_statistics (
+  team_id         VARCHAR(30) NOT NULL,
+  group_key       CHAR(1)     NOT NULL,
+  yellow_cards    INTEGER DEFAULT 0,
+  two_yellow_red  INTEGER DEFAULT 0,
+  direct_red      INTEGER DEFAULT 0,
+  fair_play_points INTEGER DEFAULT 0,
+  updated_at      TIMESTAMP DEFAULT NOW(),
+  PRIMARY KEY (team_id, group_key)
+);
+
+CREATE TABLE api_sync_log (
+  id               SERIAL PRIMARY KEY,
+  sync_type        VARCHAR(50) NOT NULL,
+  status           VARCHAR(20) NOT NULL,
+  fixtures_synced  INTEGER DEFAULT 0,
+  teams_synced     INTEGER DEFAULT 0,
+  error_message    TEXT,
+  sync_duration_ms INTEGER,
+  synced_at        TIMESTAMP DEFAULT NOW()
+);
 ```
 
 ### API-Football (RapidAPI) 호환성 분석
@@ -72,33 +100,49 @@ CREATE INDEX idx_match_results_fixture_id ON match_results (fixture_id);
 ## Project Structure
 ```
 server/
-  index.js             - Express API (matches CRUD + third-place query)
+  index.js                    - Express API (matches CRUD + third-place query)
+  routes/
+    syncRoutes.js             - API-Football 동기화 엔드포인트
+  services/
+    apiFootballService.js     - API-Football 래퍼 (캐싱 포함)
+    cacheService.js           - JSON 파일 기반 캐시 (TTL 지원)
+scripts/
+  init_schema.sql             - PostgreSQL 스키마
+  generateTeamMapping.js      - 팀 ID 자동 매핑
+  seedMatches.js              - 경기 일정 seed
 src/
-  App.jsx              - 메인 앱 (탭 네비게이션, useMatches 훅 사용)
-  main.jsx             - React 진입점
-  index.css            - Tailwind + 글로벌 스타일
+  App.jsx                     - 메인 앱 (탭 네비게이션, useMatches 훅 사용)
   hooks/
-    useMatches.js      - API 연동 훅 (로드/저장/초기화)
+    useMatches.js             - API 연동 훅 (로드/저장/초기화)
   data/
-    worldcup2026.js    - 48팀 데이터 (실제 2026 WC 조추첨), Pot 구성
+    worldcup2026.js           - 48팀 데이터 + MATCH_SCHEDULE
   utils/
-    rankings.js        - 순위 계산 알고리즘 (헤드투헤드 포함)
-    draw.js            - 조추첨 로직 (feasibility 체크 포함)
+    rankings.js               - 순위 계산 알고리즘 (헤드투헤드 포함)
+    draw.js                   - 조추첨 로직 (feasibility 체크 포함)
   components/
-    GroupTable.jsx     - 개별 조 순위표 + 경기 결과 입력
-    ThirdPlaceTable.jsx - 3위팀 비교 테이블 (DB 상태 표시)
-    DrawSimulator.jsx  - 조추첨 시뮬레이터 UI
-    ShareButtons.jsx   - 공유 버튼 (MD/HTML/이미지)
+    GroupTable.jsx            - 개별 조 순위표 + 경기 결과 입력
+    ThirdPlaceTable.jsx       - 3위팀 비교 테이블 (DB 상태 표시)
+    DrawSimulator.jsx         - 조추첨 시뮬레이터 UI
+    ShareButtons.jsx          - 공유 버튼 (MD/HTML/이미지)
+cache/                        - API 응답 캐시 (gitignored)
+logs/                         - 프로젝트 문서 및 상태 추적
 public/
-  flags/               - 42개국 국기 PNG 파일 (flagcdn.com)
+  flags/                      - 42개국 국기 PNG 파일
 ```
 
 ## API Endpoints
+
+### Match CRUD
 - `GET  /api/matches`       - 모든 경기 결과 조회
 - `POST /api/matches`       - 경기 결과 upsert
 - `DELETE /api/matches/:id` - 특정 경기 초기화
 - `DELETE /api/matches`     - 전체 초기화
 - `GET  /api/third-place`   - DB에서 3위팀 집계 쿼리
+
+### API-Football 동기화
+- `POST /api/sync/fixtures`                  - 경기 일정/결과 동기화
+- `POST /api/sync/card-statistics/:fixtureId` - 특정 경기 카드 통계 동기화
+- `GET  /api/sync/status`                    - Rate Limit 및 동기화 이력 조회
 
 ## Running the App
 ```

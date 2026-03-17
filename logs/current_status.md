@@ -8,7 +8,7 @@
 ## 전체 로드맵 진행률
 
 ```
-[██████████░░░░░░░░░░] 50%
+[███████████████░░░░░] 75%
 
 Phase 1: 조별리그 대시보드      ✅ 완료
 Phase 2: 경우의 수 탭           ✅ 완료
@@ -16,7 +16,7 @@ Phase 3: 3위팀 순위             ✅ 완료
 Phase 4: 조추첨 시뮬레이터      ✅ 완료
 Phase 5: 규칙 페이지            ✅ 완료
 Phase 6: 경기 일정 정렬         ✅ 완료 (2026-03-17)
-Phase 7: API-Football 연동      ⬜ 미시작
+Phase 7: API-Football 연동      ✅ 완료 (2026-03-17)
 Phase 8: 실제 배포 (도메인)     ⬜ 미시작
 Phase 9: SEO / AdSense 최적화   ⬜ 미시작
 ```
@@ -30,6 +30,17 @@ Phase 9: SEO / AdSense 최적화   ⬜ 미시작
 ---
 
 ## 최근 완료된 작업 (2026-03-17)
+
+### [DONE] API-Football 완전 연동 + JSON 캐싱 시스템 (최신)
+- **API-Football 연동**: RapidAPI 키 연동, World Cup 2026 데이터 동기화
+- **팀 매핑**: 40/42팀 자동 매핑 (CUW, CPV 제외)
+- **경기 동기화**: 48/54 경기 성공 (89% 성공률, 양방향 매칭 구현)
+- **JSON 캐싱**: Rate Limit 절약용 파일 기반 캐시 (1시간 TTL)
+  - 첫 동기화: 550ms (API 호출)
+  - 이후 동기화: 167ms (캐시 사용)
+- **신규 서비스**: `apiFootballService.js`, `cacheService.js`
+- **신규 라우트**: `/api/sync/fixtures`, `/api/sync/card-statistics/:fixtureId`, `/api/sync/status`
+- **신규 스크립트**: `generateTeamMapping.js`, `seedMatches.js`
 
 ### [DONE] 경기 일정 날짜순 정렬 + 실제 2026 WC 일정 데이터
 - `MATCH_SCHEDULE` 상수 추가: 72경기 전체 UTC 날짜/경기장/도시
@@ -51,12 +62,13 @@ Phase 9: SEO / AdSense 최적화   ⬜ 미시작
 ## 다음 단계 (Next Steps)
 
 ### 우선순위 HIGH
-- [ ] **API-Football 연동**: `GET /fixtures?league=1&season=2026` → DB upsert
-  - 필요 작업: `team_mapping` 테이블 생성 (`our_id ↔ api_team_id`)
-  - 사용자가 경기 일정 데이터를 직접 제공할 예정 → API 연동 전 수동 방식 유지
+- [ ] **카드 데이터 영속성**: team_statistics API 엔드포인트 추가 (1-2시간)
+- [ ] **미매핑 팀 해결**: CUW(5530), CPV(1533) API ID 확인 및 매핑 추가
+- [ ] **동기화 UI**: Admin 페이지에서 수동 동기화 버튼 + Rate Limit 표시
 
 ### 우선순위 MEDIUM
 - [ ] **경우의 수 분석 고도화**: 각 팀별 16강 진출 확률 계산기
+- [ ] **자동 동기화**: Cron job 또는 WebSocket 실시간 업데이트
 - [ ] **실제 경기 일정 데이터 완성**: 나머지 24경기(R1 일부, R3 전체) 날짜 정확도 검증
 
 ### 우선순위 LOW
@@ -78,6 +90,7 @@ Phase 9: SEO / AdSense 최적화   ⬜ 미시작
 
 | 날짜 | 커밋 | 내용 |
 |------|------|------|
+| 2026-03-17 | (대기 중) | API-Football 완전 연동 + JSON 캐싱 시스템 |
 | 2026-03-17 | `d548935` | 경기 일정 날짜순 정렬 + API-Football 호환 DB 스키마 |
 | 2026-03-17 | `fd551c6` | 조별리그 대시보드 뷰 전환 + 경우의 수 탭 신설 |
 | 이전 | `1e5eb0d` | 경우의 수·규칙 탭 추가 |

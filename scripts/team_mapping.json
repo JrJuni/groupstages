@@ -1,0 +1,242 @@
+[
+  {
+    "our_team_id": "MEX",
+    "api_team_id": 16,
+    "api_team_name": "Mexico",
+    "api_team_code": "MEX"
+  },
+  {
+    "our_team_id": "KOR",
+    "api_team_id": 17,
+    "api_team_name": "South Korea",
+    "api_team_code": "SOU"
+  },
+  {
+    "our_team_id": "RSA",
+    "api_team_id": 1531,
+    "api_team_name": "South Africa",
+    "api_team_code": "SOU"
+  },
+  {
+    "our_team_id": "CAN",
+    "api_team_id": 5529,
+    "api_team_name": "Canada",
+    "api_team_code": "CAN"
+  },
+  {
+    "our_team_id": "CHE",
+    "api_team_id": 15,
+    "api_team_name": "Switzerland",
+    "api_team_code": "SWI"
+  },
+  {
+    "our_team_id": "QAT",
+    "api_team_id": 1569,
+    "api_team_name": "Qatar",
+    "api_team_code": "QAT"
+  },
+  {
+    "our_team_id": "BRA",
+    "api_team_id": 6,
+    "api_team_name": "Brazil",
+    "api_team_code": "BRA"
+  },
+  {
+    "our_team_id": "MAR",
+    "api_team_id": 31,
+    "api_team_name": "Morocco",
+    "api_team_code": "MOR"
+  },
+  {
+    "our_team_id": "SCO",
+    "api_team_id": 1108,
+    "api_team_name": "Scotland",
+    "api_team_code": "SCO"
+  },
+  {
+    "our_team_id": "HTI",
+    "api_team_id": 2386,
+    "api_team_name": "Haiti",
+    "api_team_code": "HAI"
+  },
+  {
+    "our_team_id": "USA",
+    "api_team_id": 2384,
+    "api_team_name": "USA",
+    "api_team_code": "USA"
+  },
+  {
+    "our_team_id": "AUS",
+    "api_team_id": 20,
+    "api_team_name": "Australia",
+    "api_team_code": "AUS"
+  },
+  {
+    "our_team_id": "PAR",
+    "api_team_id": 2380,
+    "api_team_name": "Paraguay",
+    "api_team_code": "PAR"
+  },
+  {
+    "our_team_id": "GER",
+    "api_team_id": 25,
+    "api_team_name": "Germany",
+    "api_team_code": "GER"
+  },
+  {
+    "our_team_id": "ECU",
+    "api_team_id": 2382,
+    "api_team_name": "Ecuador",
+    "api_team_code": "ECU"
+  },
+  {
+    "our_team_id": "CIV",
+    "api_team_id": 1501,
+    "api_team_name": "Ivory Coast",
+    "api_team_code": "IVO"
+  },
+  {
+    "our_team_id": "NED",
+    "api_team_id": 1118,
+    "api_team_name": "Netherlands",
+    "api_team_code": "NET"
+  },
+  {
+    "our_team_id": "JPN",
+    "api_team_id": 12,
+    "api_team_name": "Japan",
+    "api_team_code": "JAP"
+  },
+  {
+    "our_team_id": "TUN",
+    "api_team_id": 28,
+    "api_team_name": "Tunisia",
+    "api_team_code": "TUN"
+  },
+  {
+    "our_team_id": "BEL",
+    "api_team_id": 1,
+    "api_team_name": "Belgium",
+    "api_team_code": "BEL"
+  },
+  {
+    "our_team_id": "IRN",
+    "api_team_id": 22,
+    "api_team_name": "Iran",
+    "api_team_code": "IRA"
+  },
+  {
+    "our_team_id": "EGY",
+    "api_team_id": 32,
+    "api_team_name": "Egypt",
+    "api_team_code": "EGY"
+  },
+  {
+    "our_team_id": "NZL",
+    "api_team_id": 4673,
+    "api_team_name": "New Zealand",
+    "api_team_code": "ZEA"
+  },
+  {
+    "our_team_id": "ESP",
+    "api_team_id": 9,
+    "api_team_name": "Spain",
+    "api_team_code": "SPA"
+  },
+  {
+    "our_team_id": "URU",
+    "api_team_id": 7,
+    "api_team_name": "Uruguay",
+    "api_team_code": "URU"
+  },
+  {
+    "our_team_id": "SAU",
+    "api_team_id": 23,
+    "api_team_name": "Saudi Arabia",
+    "api_team_code": "SAU"
+  },
+  {
+    "our_team_id": "FRA",
+    "api_team_id": 2,
+    "api_team_name": "France",
+    "api_team_code": "FRA"
+  },
+  {
+    "our_team_id": "SEN",
+    "api_team_id": 13,
+    "api_team_name": "Senegal",
+    "api_team_code": "SEN"
+  },
+  {
+    "our_team_id": "NOR",
+    "api_team_id": 1090,
+    "api_team_name": "Norway",
+    "api_team_code": "NOR"
+  },
+  {
+    "our_team_id": "ARG",
+    "api_team_id": 26,
+    "api_team_name": "Argentina",
+    "api_team_code": "ARG"
+  },
+  {
+    "our_team_id": "AUT",
+    "api_team_id": 775,
+    "api_team_name": "Austria",
+    "api_team_code": "AUS"
+  },
+  {
+    "our_team_id": "ALG",
+    "api_team_id": 1532,
+    "api_team_name": "Algeria",
+    "api_team_code": "ALG"
+  },
+  {
+    "our_team_id": "JOR",
+    "api_team_id": 1548,
+    "api_team_name": "Jordan",
+    "api_team_code": "JOR"
+  },
+  {
+    "our_team_id": "POR",
+    "api_team_id": 27,
+    "api_team_name": "Portugal",
+    "api_team_code": "POR"
+  },
+  {
+    "our_team_id": "COL",
+    "api_team_id": 8,
+    "api_team_name": "Colombia",
+    "api_team_code": "COL"
+  },
+  {
+    "our_team_id": "UZB",
+    "api_team_id": 1568,
+    "api_team_name": "Uzbekistan",
+    "api_team_code": "UZB"
+  },
+  {
+    "our_team_id": "ENG",
+    "api_team_id": 10,
+    "api_team_name": "England",
+    "api_team_code": "ENG"
+  },
+  {
+    "our_team_id": "CRO",
+    "api_team_id": 3,
+    "api_team_name": "Croatia",
+    "api_team_code": "CRO"
+  },
+  {
+    "our_team_id": "GHA",
+    "api_team_id": 1504,
+    "api_team_name": "Ghana",
+    "api_team_code": "GHA"
+  },
+  {
+    "our_team_id": "PAN",
+    "api_team_id": 11,
+    "api_team_name": "Panama",
+    "api_team_code": "PAN"
+  }
+]
