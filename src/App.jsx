@@ -246,16 +246,6 @@ export default function App() {
 
                 {/* 중간 광고 */}
                 <AdSlot slot="중간 배너 728×90" className="h-[90px]" />
-
-                {/* 설명 박스 */}
-                <div className="card p-4 text-sm text-fifa-muted space-y-2">
-                  <h3 className="text-white font-semibold">🏆 3위팀 진출 규칙</h3>
-                  <ul className="space-y-1 list-disc list-inside">
-                    <li>12개 조 각 3위팀 중 <strong className="text-white">상위 8팀</strong>이 16강 진출</li>
-                    <li>우선순위: <strong className="text-white">승점 → 득실차 → 다득점 → 페어플레이</strong></li>
-                    <li>동점 시 FIFA 규정에 따른 추가 기준 적용</li>
-                  </ul>
-                </div>
               </div>
             )}
 
