@@ -229,7 +229,12 @@ function MatchList({ matches, standings, groupKey, onScoreChange }) {
 
 export default function ScenarioPage({ selectedGroupKey, onSelectGroup, groups, onScoreChange }) {
   const [selectorOpen, setSelectorOpen] = useState(true);
+  const [matchOpen, setMatchOpen] = useState(false);
   const groupEntries = Object.entries(groups);
+
+  React.useEffect(() => {
+    setMatchOpen(false);
+  }, [selectedGroupKey]);
 
   return (
     <div className="space-y-4">
@@ -311,26 +316,36 @@ export default function ScenarioPage({ selectedGroupKey, onSelectGroup, groups, 
                 <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-green-500 inline-block" />16강 진출</span>
                 <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-yellow-500 inline-block" />3위 경쟁</span>
               </div>
-              {onCardChange && (
-                <span className="inline-flex items-center gap-1.5 text-[10px] text-fifa-muted/60">
-                  <YellowCard /> <span>-1</span>
-                  <DoubleYellowCard /> <span>-3</span>
-                  <RedCard /> <span>-4</span>
-                  <span>페어플레이</span>
-                </span>
-              )}
+              <span className="inline-flex items-center gap-1.5 text-[10px] text-fifa-muted/60">
+                <YellowCard /> <span>-1</span>
+                <DoubleYellowCard /> <span>-3</span>
+                <RedCard /> <span>-4</span>
+                <span>페어플레이</span>
+              </span>
             </div>
           </div>
 
-          {/* 경기 일정 / 결과 (전체 너비) */}
-          <div>
-            <p className="text-xs text-fifa-muted font-medium mb-2">경기 일정 · 결과</p>
-            <MatchList
-              matches={groups[selectedGroupKey].matches}
-              standings={groups[selectedGroupKey].standings}
-              groupKey={selectedGroupKey}
-              onScoreChange={onScoreChange}
-            />
+          {/* 경기 일정 / 결과 (접기 가능) */}
+          <div className="card overflow-hidden">
+            <button
+              onClick={() => setMatchOpen((v) => !v)}
+              className="w-full flex items-center justify-between px-4 py-2.5 hover:bg-white/5 transition-colors"
+            >
+              <span className="text-xs font-medium text-fifa-muted">
+                {matchOpen ? '경기 일정 · 결과' : '경기 일정 · 결과 보기'}
+              </span>
+              {matchOpen
+                ? <ChevronUp size={14} className="text-fifa-muted" />
+                : <ChevronDown size={14} className="text-fifa-muted" />}
+            </button>
+            {matchOpen && (
+              <MatchList
+                matches={groups[selectedGroupKey].matches}
+                standings={groups[selectedGroupKey].standings}
+                groupKey={selectedGroupKey}
+                onScoreChange={onScoreChange}
+              />
+            )}
           </div>
         </div>
       ) : (
