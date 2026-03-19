@@ -3,6 +3,84 @@ import { ChevronRight, MapPin, ChevronDown, ChevronUp, Users } from 'lucide-reac
 import { getFairPlayPoints } from '../utils/rankings.js';
 import { runBruteForce } from '../utils/scenarioComputer.js';
 import { BASE_URL } from '../config.js';
+import ShareButtons from './ShareButtons.jsx';
+
+// ── 공유용 텍스트 생성 헬퍼 ───────────────────────────────
+function makeStandingsMd(groupKey, standings) {
+  let md = `## 조 ${groupKey} 순위표\n\n`;
+  md += '| # | 팀 | 경 | 승 | 무 | 패 | 득실 | 승점 |\n|---|---|---|---|---|---|---|---|\n';
+  standings.forEach((t, i) => {
+    const gd = t.gd > 0 ? `+${t.gd}` : `${t.gd}`;
+    md += `| ${i + 1} | ${t.flag || ''} ${t.name} | ${t.played} | ${t.won} | ${t.drawn} | ${t.lost} | ${gd} | **${t.pts}** |\n`;
+  });
+  return md;
+}
+
+function makeStandingsHtml(groupKey, standings) {
+  let html = `<h3>조 ${groupKey} 순위표</h3><table border="1">`;
+  html += '<tr><th>#</th><th>팀</th><th>경기</th><th>승</th><th>무</th><th>패</th><th>득실</th><th>승점</th></tr>';
+  standings.forEach((t, i) => {
+    const gd = t.gd >= 0 ? `+${t.gd}` : `${t.gd}`;
+    html += `<tr><td>${i + 1}</td><td>${t.flag || ''} ${t.name}</td><td>${t.played}</td><td>${t.won}</td><td>${t.drawn}</td><td>${t.lost}</td><td>${gd}</td><td><b>${t.pts}</b></td></tr>`;
+  });
+  return html + '</table>';
+}
+
+function makeScenarioPanelMd(team, rank, bruteForce, standings) {
+  const WDL = { W: '승', D: '무', L: '패' };
+  const gd = team.gd >= 0 ? `+${team.gd}` : `${team.gd}`;
+  let md = `## ${team.name} — 16강 진출 경우의 수\n\n`;
+  md += `현재 **${rank}위** | ${team.played}경기 | **${team.pts}점** | 득실 ${gd} | 득점 ${team.gf}\n\n`;
+  if (!bruteForce) { md += '모든 경기 완료\n'; return md; }
+
+  const { rankProbabilities, topTwoProbability, thirdPlaceAdvancingProbability, matrix, otherMatch, teamIsHome } = bruteForce;
+  md += '### 순위 확률\n\n| 순위 | 확률 |\n|---|---|\n';
+  [1, 2, 3, 4].forEach(r => { if (rankProbabilities[r] > 0) md += `| ${r}위 | ${rankProbabilities[r]}% |\n`; });
+  md += `\n1·2위 직접 진출: **${topTwoProbability}%**`;
+  if (thirdPlaceAdvancingProbability > 0) md += ` | 3위 진출 가능: **${thirdPlaceAdvancingProbability}%**`;
+  md += '\n\n';
+
+  const hasOther = otherMatch !== null;
+  const otherHomeTeam = otherMatch ? standings.find(t => t.id === otherMatch.home) : null;
+  const otherAwayTeam = otherMatch ? standings.find(t => t.id === otherMatch.away) : null;
+  const getOL = (o) => o === 'W' ? `${otherHomeTeam?.name} 승` : o === 'D' ? '다른 경기 무승부' : `${otherAwayTeam?.name} 승`;
+  const cells = hasOther ? matrix : matrix.filter(c => c.otherWDL === 'W');
+
+  const byTWDL = {};
+  for (const c of cells.filter(c => c.definitive !== null)) {
+    if (!byTWDL[c.definitive]) byTWDL[c.definitive] = {};
+    if (!byTWDL[c.definitive][c.teamWDL]) byTWDL[c.definitive][c.teamWDL] = [];
+    if (hasOther) byTWDL[c.definitive][c.teamWDL].push(c.otherWDL);
+  }
+  const condLines = [];
+  for (const r of [1, 2, 3, 4]) {
+    const m = byTWDL[r]; if (!m) continue;
+    const parts = ['W', 'D', 'L'].filter(t => m[t]).map(twdl => {
+      const myT = `${team.name} ${WDL[twdl]}`;
+      if (!hasOther || m[twdl].length === 3) return hasOther ? `${myT} (결과 무관)` : myT;
+      return `${myT} & ${m[twdl].map(o => getOL(o)).join(' 또는 ')}`;
+    });
+    if (parts.length) condLines.push(`**${r}위 확정**: ${parts.join(', 또는 ')}`);
+  }
+  if (condLines.length) {
+    md += '### 조건별 예상 순위\n\n' + condLines.join('\n\n') + '\n';
+    if (cells.some(c => c.definitive === null)) md += '\n*(득실차 따라 결정되는 경우 있음)*\n';
+  }
+  return md;
+}
+
+function makeScenarioPanelHtml(team, rank, bruteForce) {
+  const gd = team.gd >= 0 ? `+${team.gd}` : `${team.gd}`;
+  let html = `<h3>${team.name} — 16강 진출 경우의 수</h3>`;
+  html += `<p>현재 <b>${rank}위</b> | ${team.played}경기 | <b>${team.pts}점</b> | 득실 ${gd} | 득점 ${team.gf}</p>`;
+  if (!bruteForce) { return html + '<p>모든 경기 완료</p>'; }
+  const { rankProbabilities, topTwoProbability, thirdPlaceAdvancingProbability } = bruteForce;
+  html += '<h4>순위 확률</h4><table border="1"><tr><th>순위</th><th>확률</th></tr>';
+  [1, 2, 3, 4].forEach(r => { if (rankProbabilities[r] > 0) html += `<tr><td>${r}위</td><td>${rankProbabilities[r]}%</td></tr>`; });
+  html += `</table><p>1·2위 직접 진출: <b>${topTwoProbability}%</b>`;
+  if (thirdPlaceAdvancingProbability > 0) html += ` | 3위 진출 가능: <b>${thirdPlaceAdvancingProbability}%</b>`;
+  return html + '</p>';
+}
 
 const YellowCard = () => (
   <svg width="10" height="14" viewBox="0 0 10 14" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ display: 'inline-block' }}>
@@ -276,6 +354,119 @@ function RankCell({ breakdown, definitive }) {
   );
 }
 
+// ── 조건별 예상 순위 요약 ──────────────────────────────
+function QualConditionSummary({ matrix, hasOther, otherHomeTeam, otherAwayTeam, teamName, currentStandings, teamId }) {
+  const MY_LABEL = { W: '승', D: '무', L: '패' };
+  // W/D/L별 팀 결과 하이라이트 색상
+  const WDL_COLOR = { W: 'text-emerald-300', D: 'text-yellow-300', L: 'text-red-400' };
+  const fmtGD = (gd) => gd >= 0 ? `+${gd}` : `${gd}`;
+
+  const getOtherLabel = (owdl) => {
+    if (owdl === 'W') return `${otherHomeTeam?.name} 승`;
+    if (owdl === 'D') return '다른 경기 무승부';  // "무승부"만 쓰면 내 팀 결과로 오해 가능
+    return `${otherAwayTeam?.name} 승`;
+  };
+
+  // 타 경기 없을 때: otherWDL별 셀이 동일 → 'W'만 대표로 사용
+  const cells = hasOther ? matrix : matrix.filter(c => c.otherWDL === 'W');
+  const myStats = currentStandings?.find(t => t.id === teamId);
+
+  // 랭크별 조건 목록 — { teamWDL, otherText } 형태로 분리 저장
+  const byRank = { 1: [], 2: [], 3: [], 4: [] };
+
+  // 1) 확정 셀: teamWDL별로 묶어서 단순화
+  const byTWDLDef = {};
+  for (const c of cells.filter(c => c.definitive !== null)) {
+    const key = c.definitive;
+    if (!byTWDLDef[key]) byTWDLDef[key] = {};
+    if (!byTWDLDef[key][c.teamWDL]) byTWDLDef[key][c.teamWDL] = [];
+    if (hasOther) byTWDLDef[key][c.teamWDL].push(c.otherWDL);
+  }
+  for (const rank of [1, 2, 3, 4]) {
+    const twdlMap = byTWDLDef[rank];
+    if (!twdlMap) continue;
+    for (const twdl of ['W', 'D', 'L']) {
+      const owdls = twdlMap[twdl];
+      if (!owdls && hasOther) continue;
+      let otherText = null;
+      if (hasOther && owdls.length === 3) otherText = '결과 무관';
+      else if (hasOther) otherText = owdls.map(o => getOtherLabel(o)).join(' 또는 ');
+      byRank[rank].push({ type: 'definitive', teamWDL: twdl, otherText });
+    }
+  }
+
+  // 2) 혼조 셀: 세부 랭크별로 타이브레이커 정보 포함
+  for (const cell of cells.filter(c => c.definitive === null)) {
+    const otherText = hasOther ? getOtherLabel(cell.otherWDL) : null;
+    const competitorId = cell.mixedCondition?.competitorId;
+    const competitor = competitorId ? currentStandings?.find(t => t.id === competitorId) : null;
+    const bestRank = Math.min(...cell.breakdown.map(b => b.rank));
+
+    for (const { rank, pct } of cell.breakdown) {
+      const isBetter = rank === bestRank;
+      const tiebreaker = isBetter ? '득실차/다득점 우위 시' : '득실차/다득점 열세 시';
+      const statsNote = (isBetter && competitor && myStats)
+        ? `현재 ${teamName} 득실 ${fmtGD(myStats.gd)}, 득점 ${myStats.gf} / ${competitor.name} 득실 ${fmtGD(competitor.gd)}, 득점 ${competitor.gf}`
+        : null;
+      byRank[rank].push({ type: 'mixed', teamWDL: cell.teamWDL, otherText, tiebreaker, statsNote, pct });
+    }
+  }
+
+  const RANK_COLOR = { 1: 'text-emerald-400', 2: 'text-green-400', 3: 'text-yellow-400', 4: 'text-red-400' };
+  const RANK_LABEL = { 1: '1위', 2: '2위', 3: '3위', 4: '탈락' };
+
+  const hasAny = Object.values(byRank).some(v => v.length > 0);
+  if (!hasAny) return null;
+
+  const renderCondLine = (cond, i) => {
+    const teamPart = (
+      <span className={`font-medium ${WDL_COLOR[cond.teamWDL]}`}>
+        {teamName} {MY_LABEL[cond.teamWDL]}
+      </span>
+    );
+    const otherPart = cond.otherText
+      ? <span className="text-white/60"> & {cond.otherText}</span>
+      : null;
+
+    if (cond.type === 'definitive') {
+      return (
+        <div key={i} className="text-[11px]">
+          {teamPart}{otherPart}
+          {cond.otherText === '결과 무관' && null /* already appended */}
+        </div>
+      );
+    }
+    return (
+      <div key={i} className="text-[11px]">
+        {teamPart}{otherPart}
+        <span className="text-white/50">, </span>
+        <span className="text-sky-300/80">{cond.tiebreaker}</span>
+        {cond.statsNote && (
+          <div className="text-[10px] text-fifa-muted/60 mt-0.5 pl-1">{cond.statsNote}</div>
+        )}
+      </div>
+    );
+  };
+
+  return (
+    <div className="mt-2 pt-2 border-t border-fifa-border/20 space-y-2">
+      <p className="text-[10px] text-fifa-muted/80 font-medium">조건별 예상 순위</p>
+      {[1, 2, 3, 4].map(rank => {
+        const conditions = byRank[rank];
+        if (!conditions.length) return null;
+        return (
+          <div key={rank} className="flex items-start gap-2">
+            <span className={`text-[11px] font-bold w-8 shrink-0 pt-0.5 ${RANK_COLOR[rank]}`}>{RANK_LABEL[rank]}</span>
+            <div className="space-y-1 flex-1 min-w-0">
+              {conditions.map((cond, i) => renderCondLine(cond, i))}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 // ── 브루트포스 시나리오 매트릭스 ──────────────────────
 function ScenarioMatrix({ data, standings }) {
   const {
@@ -287,6 +478,7 @@ function ScenarioMatrix({ data, standings }) {
   const awayTeam = standings.find(t => t.id === teamMatch.away);
   const otherHomeTeam = otherMatch ? standings.find(t => t.id === otherMatch.home) : null;
   const otherAwayTeam = otherMatch ? standings.find(t => t.id === otherMatch.away) : null;
+  const analyzedTeam = standings.find(t => t.id === data.teamId);
 
   const teamRows = ['W', 'D', 'L'];
   const hasOther = otherMatch !== null;
@@ -406,6 +598,16 @@ function ScenarioMatrix({ data, standings }) {
           </div>
         )}
       </div>
+
+      <QualConditionSummary
+        matrix={matrix}
+        hasOther={hasOther}
+        otherHomeTeam={otherHomeTeam}
+        otherAwayTeam={otherAwayTeam}
+        teamName={analyzedTeam?.name ?? ''}
+        currentStandings={data.currentStandings}
+        teamId={data.teamId}
+      />
     </div>
   );
 }
@@ -454,7 +656,7 @@ function TeamScenarioPanel({ team, standings, matches, teams }) {
   const rankColor = rank <= 2 ? 'text-green-400' : rank === 3 ? 'text-yellow-400' : 'text-red-400';
 
   return (
-    <div className="card overflow-hidden">
+    <div id={`scenario-panel-${team.id}`} className="card overflow-hidden">
       {/* 팀 헤더 */}
       <div className="px-4 py-3 bg-sky-400/10 border-b border-fifa-border flex items-center gap-3">
         <TeamFlag team={team} size="lg" />
@@ -470,6 +672,11 @@ function TeamScenarioPanel({ team, standings, matches, teams }) {
             <span>득점 {team.gf}</span>
           </div>
         </div>
+        <ShareButtons
+          targetId={`scenario-panel-${team.id}`}
+          generateMarkdown={() => makeScenarioPanelMd(team, rank, bruteForce, standings)}
+          generateHtmlTable={() => makeScenarioPanelHtml(team, rank, bruteForce)}
+        />
       </div>
 
       {/* 잔여 경기 */}
@@ -516,25 +723,41 @@ function TeamScenarioPanel({ team, standings, matches, teams }) {
             <Users size={11} />
             16강 진출 경우의 수
           </p>
-          {scenarioActive ? (
-            <>
-              {isGuaranteedTop2 && !isEliminated && (
-                <span className="text-[11px] font-bold px-2 py-0.5 rounded bg-green-900/50 text-green-300 border border-green-700/50">
-                  진출 확정
-                </span>
-              )}
-              {isEliminated && (
-                <span className="text-[11px] font-bold px-2 py-0.5 rounded bg-red-900/50 text-red-300 border border-red-700/50">
-                  탈락 확정
-                </span>
-              )}
-              {!isGuaranteedTop2 && !isEliminated && (
-                <span className="text-[11px] px-2 py-0.5 rounded bg-yellow-900/40 text-yellow-300 border border-yellow-700/40">
-                  진출 미확정
-                </span>
-              )}
-            </>
-          ) : (
+          {scenarioActive ? (() => {
+            // bruteForce가 있으면 정확한 확률 기준, 없으면(전경기 완료) 기존 논리
+            const isConfirmedTop2 = bruteForce
+              ? bruteForce.topTwoProbability === 100
+              : isGuaranteedTop2;
+            // 잔여경기에 스코어가 이미 입력됐으면 live 중 → 유력 배지 숨김
+            const teamRemaining = remaining.find(m => m.home === team.id || m.away === team.id);
+            const isMatchLive = teamRemaining &&
+              teamRemaining.homeScore !== null && teamRemaining.homeScore !== '';
+            const isLikelyAdvancing = !isConfirmedTop2 && !isEliminated && team.pts >= 4 && !!bruteForce && !isMatchLive;
+            return (
+              <>
+                {isConfirmedTop2 && !isEliminated && (
+                  <span className="text-[11px] font-bold px-2 py-0.5 rounded bg-green-900/50 text-green-300 border border-green-700/50">
+                    진출 확정
+                  </span>
+                )}
+                {isEliminated && (
+                  <span className="text-[11px] font-bold px-2 py-0.5 rounded bg-red-900/50 text-red-300 border border-red-700/50">
+                    탈락 확정
+                  </span>
+                )}
+                {isLikelyAdvancing && (
+                  <span className="text-[11px] font-bold px-2 py-0.5 rounded bg-sky-900/50 text-sky-300 border border-sky-700/50">
+                    진출 유력
+                  </span>
+                )}
+                {!isConfirmedTop2 && !isEliminated && !isLikelyAdvancing && (
+                  <span className="text-[11px] px-2 py-0.5 rounded bg-yellow-900/40 text-yellow-300 border border-yellow-700/40">
+                    진출 미확정
+                  </span>
+                )}
+              </>
+            );
+          })() : (
             <span className="text-[10px] text-fifa-muted/60 bg-white/5 px-1.5 py-0.5 rounded">
               조별 2경기 이후 활성화
             </span>
@@ -687,13 +910,21 @@ export default function ScenarioPage({ selectedGroupKey, onSelectGroup, selected
 
           {/* 순위표 */}
           <div>
-            <p className="text-xs text-fifa-muted font-medium mb-2">순위표</p>
+            <div className="flex items-center justify-between mb-2">
+              <p className="text-xs text-fifa-muted font-medium">순위표</p>
+              <ShareButtons
+                targetId="scenario-standings-box"
+                generateMarkdown={() => makeStandingsMd(selectedGroupKey, selectedGroup.standings)}
+                generateHtmlTable={() => makeStandingsHtml(selectedGroupKey, selectedGroup.standings)}
+              />
+            </div>
+            <div id="scenario-standings-box" className="bg-fifa-dark rounded-lg">
             <GroupStandingsTable
               standings={selectedGroup.standings}
               highlightId={selectedTeamId}
               onTeamClick={(teamId) => onSelectTeam(teamId)}
             />
-            <div className="flex items-center justify-between mt-2 text-xs text-fifa-muted flex-wrap gap-y-1">
+            <div className="flex items-center justify-between mt-2 px-1 text-xs text-fifa-muted flex-wrap gap-y-1">
               <div className="flex gap-4">
                 <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-green-500 inline-block" />16강 진출</span>
                 <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-yellow-500 inline-block" />3위 경쟁</span>
@@ -704,6 +935,7 @@ export default function ScenarioPage({ selectedGroupKey, onSelectGroup, selected
                 <RedCard /> <span>-4</span>
                 <span>페어플레이</span>
               </span>
+            </div>
             </div>
           </div>
 

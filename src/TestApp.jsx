@@ -43,16 +43,32 @@ function computeThirdPtsRange({ teams, matches }) {
 
 export default function TestApp() {
   const { groups, loading, apiAvailable, handleScoreChange, handleCardChange, resetAll } = useTestMatches();
-  const [activeTab, setActiveTab] = useState('groups');
+  const [activeTab, setActiveTab] = useState(() => localStorage.getItem('gs_activeTab') || 'groups');
   const [menuOpen, setMenuOpen] = useState(false);
-  const [scenarioGroupKey, setScenarioGroupKey] = useState(null);
-  const [scenarioTeamId, setScenarioTeamId] = useState(null);
+  const [scenarioGroupKey, setScenarioGroupKey] = useState(() => localStorage.getItem('gs_scenarioGroup') || null);
+  const [scenarioTeamId, setScenarioTeamId] = useState(() => localStorage.getItem('gs_scenarioTeam') || null);
   const [scenarioFromNav, setScenarioFromNav] = useState(false);
 
+  const handleTabClick = (id) => {
+    localStorage.setItem('gs_activeTab', id);
+    if (id === 'scenarios') {
+      localStorage.removeItem('gs_scenarioGroup');
+      localStorage.removeItem('gs_scenarioTeam');
+      setScenarioGroupKey(null);
+      setScenarioTeamId(null);
+      setScenarioFromNav(false);
+    }
+    setActiveTab(id);
+  };
+
   const navigateToScenario = (groupKey, teamId = null) => {
+    localStorage.setItem('gs_scenarioGroup', groupKey);
+    if (teamId) localStorage.setItem('gs_scenarioTeam', teamId);
+    else localStorage.removeItem('gs_scenarioTeam');
     setScenarioGroupKey(groupKey);
     setScenarioTeamId(teamId);
     setScenarioFromNav(true);
+    localStorage.setItem('gs_activeTab', 'scenarios');
     setActiveTab('scenarios');
   };
 
@@ -64,7 +80,10 @@ export default function TestApp() {
       if (!standings || standings.length < 3) return null;
       const t = standings[2];
       const { min: ptsMin, max: ptsMax } = computeThirdPtsRange(groups[group]);
-      return { group, ...t, fifaRank: FIFA_RANKINGS_CURRENT[t.id] ?? null, ptsMin, ptsMax };
+      const nextMatch = (groups[group].matches ?? []).find(m => !m.played && (m.home === t.id || m.away === t.id));
+      const nextOppId = nextMatch ? (nextMatch.home === t.id ? nextMatch.away : nextMatch.home) : null;
+      const nextOpponent = nextOppId ? (standings.find(s => s.id === nextOppId) ?? null) : null;
+      return { group, ...t, fifaRank: FIFA_RANKINGS_CURRENT[t.id] ?? null, ptsMin, ptsMax, nextOpponent };
     })
     .filter((t) => t !== null)
     .sort((a, b) => {
@@ -120,7 +139,7 @@ export default function TestApp() {
             {TABS.map(({ id, label, icon: Icon }) => (
               <button
                 key={id}
-                onClick={() => setActiveTab(id)}
+                onClick={() => handleTabClick(id)}
                 className={`flex items-center gap-1.5 px-4 py-2 text-sm font-medium transition-colors rounded-lg
                   ${activeTab === id
                     ? 'bg-amber-500/20 text-amber-300'
@@ -161,7 +180,7 @@ export default function TestApp() {
             {TABS.map(({ id, label, icon: Icon }) => (
               <button
                 key={id}
-                onClick={() => { setActiveTab(id); setMenuOpen(false); }}
+                onClick={() => { handleTabClick(id); setMenuOpen(false); }}
                 className={`w-full flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium
                   ${activeTab === id ? 'bg-amber-500/20 text-amber-300' : 'text-fifa-muted hover:text-white'}`}
               >
@@ -223,9 +242,9 @@ export default function TestApp() {
           {activeTab === 'scenarios' && (
             <ScenarioPage
               selectedGroupKey={scenarioGroupKey}
-              onSelectGroup={(key) => { setScenarioGroupKey(key); setScenarioTeamId(null); setScenarioFromNav(false); }}
+              onSelectGroup={(key) => { localStorage.setItem('gs_scenarioGroup', key); localStorage.removeItem('gs_scenarioTeam'); setScenarioGroupKey(key); setScenarioTeamId(null); setScenarioFromNav(false); }}
               selectedTeamId={scenarioTeamId}
-              onSelectTeam={setScenarioTeamId}
+              onSelectTeam={(id) => { if (id) localStorage.setItem('gs_scenarioTeam', id); else localStorage.removeItem('gs_scenarioTeam'); setScenarioTeamId(id); }}
               fromNavigation={scenarioFromNav}
               groups={groups}
               onScoreChange={handleScoreChange}

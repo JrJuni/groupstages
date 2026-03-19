@@ -43,18 +43,19 @@ export default function ThirdPlaceTable({ best8, allThirds, loading = false, api
               <th className="px-2 py-2 text-center text-red-400" title="이 조 3위가 될 수 있는 최소 승점">최소</th>
               <th className="px-2 py-2 text-center" title="FIFA 랭킹">FIFA</th>
               <th className="px-2 py-2 text-center">상태</th>
+              <th className="px-2 py-2 text-left">다음 경기</th>
             </tr>
           </thead>
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan={13} className="text-center py-8 text-fifa-muted animate-pulse">
+                <td colSpan={14} className="text-center py-8 text-fifa-muted animate-pulse">
                   DB에서 데이터 로딩 중...
                 </td>
               </tr>
             ) : allThirds.length === 0 ? (
               <tr>
-                <td colSpan={13} className="text-center py-8 text-fifa-muted animate-pulse">
+                <td colSpan={14} className="text-center py-8 text-fifa-muted animate-pulse">
                   데이터 로딩 중...
                 </td>
               </tr>
@@ -62,6 +63,25 @@ export default function ThirdPlaceTable({ best8, allThirds, loading = false, api
               allThirds.map((team, idx) => {
                 const isQualified = qualifiedIds.has(team.id);
                 const ptsLocked = team.ptsMin === team.ptsMax;
+                // 확정적으로 아래: 해당 조 3위 최대 승점이 우리 현재 승점 미만
+                // (잔여 경기 다 이겨도 우리 현재 승점에 못 미침)
+                const definitelyBelowCount = allThirds.filter(other =>
+                  other.group !== team.group &&
+                  other.ptsMax != null &&
+                  other.ptsMax < team.pts
+                ).length;
+                const isConfirmed = isQualified && (
+                  (team.played >= 3 && team.pts >= 5) ||
+                  definitelyBelowCount >= 4
+                );
+                // 확정적으로 위: 해당 팀 현재 승점이 우리 최대 가능 승점 초과
+                // (우리가 잔여 경기 다 이겨도 그 팀 현재 승점에 못 미침)
+                const myPtsMax = team.ptsMax ?? team.pts;
+                const definitelyAboveCount = allThirds.filter(other =>
+                  other.group !== team.group &&
+                  other.pts > myPtsMax
+                ).length;
+                const isEliminated = definitelyAboveCount >= 8;
                 return (
                   <tr
                     key={`${team.group}_${team.id}`}
@@ -110,15 +130,29 @@ export default function ThirdPlaceTable({ best8, allThirds, loading = false, api
                       {team.fifaRank ?? '—'}
                     </td>
                     <td className="px-2 py-2 text-center">
-                      {isQualified ? (
-                        <span className="text-xs bg-green-900/40 text-green-400 px-2 py-0.5 rounded-full">
-                          ✓ 진출
+                      {isConfirmed ? (
+                        <span className="text-xs bg-green-900/50 text-green-300 px-2 py-0.5 rounded-full font-bold border border-green-700/50">
+                          진출 확정
                         </span>
-                      ) : (
-                        <span className="text-xs text-red-400/70">
-                          탈락
+                      ) : isEliminated ? (
+                        <span className="text-xs bg-red-900/50 text-red-300 px-2 py-0.5 rounded-full font-bold border border-red-700/50">
+                          탈락 확정
                         </span>
-                      )}
+                      ) : isQualified ? (
+                        <span className="text-xs bg-sky-900/40 text-sky-300 px-2 py-0.5 rounded-full">
+                          진출 유력
+                        </span>
+                      ) : null}
+                    </td>
+                    <td className="px-2 py-2">
+                      {team.nextOpponent ? (
+                        <div className="flex items-center gap-1.5">
+                          {team.nextOpponent.flagImg
+                            ? <img src={`${BASE_URL}${team.nextOpponent.flagImg}`} alt={team.nextOpponent.name} className="w-5 h-3.5 object-cover rounded-sm shrink-0" />
+                            : <span className="text-sm leading-none">{team.nextOpponent.flag}</span>}
+                          <span className="text-xs text-white whitespace-nowrap">{team.nextOpponent.name}</span>
+                        </div>
+                      ) : null}
                     </td>
                   </tr>
                 );

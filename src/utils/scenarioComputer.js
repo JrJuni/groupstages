@@ -45,6 +45,9 @@ export function runBruteForce(teamId, teams, matches, thirdMinPts = THIRD_PLACE_
   const otherMatch = remaining.find(m => m.id !== teamMatch.id) ?? null;
   const teamIsHome = teamMatch.home === teamId;
 
+  // 현재 순위표 (경기 전 기준) — 혼조 분석에 사용
+  const currentStandings = calculateStandings(teams, matches);
+
   const matrix = [];
 
   // 전체 가중치 누산기
@@ -63,6 +66,8 @@ export function runBruteForce(teamId, teams, matches, thirdMinPts = THIRD_PLACE_
       const oPairs = otherMatch ? PAIRS[otherWDL] : [[0, 0, 1]];
       const weightedRankCounts = { 1: 0, 2: 0, 3: 0, 4: 0 };
       let cellWeight = 0;
+      // 혼조 분석: 이 셀에서 승점이 동률인 경쟁 팀 추적
+      const ptsAdjCount = {};
 
       for (const [th, ta, tw] of tPairs) {
         for (const [oh, oa, ow] of oPairs) {
@@ -79,6 +84,7 @@ export function runBruteForce(teamId, teams, matches, thirdMinPts = THIRD_PLACE_
           const finalStandings = calculateStandings(teams, testMatches);
           const rank = finalStandings.findIndex(t => t.id === teamId) + 1;
           const clampedRank = Math.max(1, Math.min(4, rank));
+          const myPts = finalStandings.find(t => t.id === teamId)?.pts ?? 0;
 
           weightedRankCounts[clampedRank] += scenarioWeight;
           cellWeight += scenarioWeight;
@@ -106,6 +112,13 @@ export function runBruteForce(teamId, teams, matches, thirdMinPts = THIRD_PLACE_
               rank: clampedRank,
             };
           }
+
+          // 혼조 분석: 승점 동률 팀 카운트
+          for (const other of finalStandings) {
+            if (other.id !== teamId && other.pts === myPts) {
+              ptsAdjCount[other.id] = (ptsAdjCount[other.id] || 0) + 1;
+            }
+          }
         }
       }
 
@@ -118,6 +131,13 @@ export function runBruteForce(teamId, teams, matches, thirdMinPts = THIRD_PLACE_
           pct: cellWeight > 0 ? Math.round(v / cellWeight * 100) : 0,
         }));
 
+      // 혼조 셀: 주요 경쟁 팀 (승점 동률 가장 빈번한 팀)
+      let mixedCondition = null;
+      if (breakdown.length > 1 && Object.keys(ptsAdjCount).length > 0) {
+        const competitorId = Object.entries(ptsAdjCount).sort((a, b) => b[1] - a[1])[0][0];
+        mixedCondition = { competitorId };
+      }
+
       matrix.push({
         teamWDL,
         otherWDL,
@@ -125,6 +145,7 @@ export function runBruteForce(teamId, teams, matches, thirdMinPts = THIRD_PLACE_
         cellWeight,
         breakdown,
         definitive: breakdown.length === 1 ? breakdown[0].rank : null,
+        mixedCondition,
       });
     }
   }
@@ -156,5 +177,6 @@ export function runBruteForce(teamId, teams, matches, thirdMinPts = THIRD_PLACE_
     totalAdvancingProbability,
     mostLikelyScenario,
     totalWeight,
+    currentStandings,
   };
 }

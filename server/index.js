@@ -2,6 +2,7 @@ import express from 'express';
 import pg from 'pg';
 import cors from 'cors';
 import { createSyncRoutes } from './routes/syncRoutes.js';
+import { getEloCached, getCacheStatus } from './services/eloService.js';
 
 const { Pool } = pg;
 
@@ -16,6 +17,29 @@ app.use(express.json());
 
 // API-Football 동기화 라우트
 app.use('/api/sync', createSyncRoutes(pool));
+
+// GET /api/elo - ELO 캐시 데이터 반환 (API 호출 없음, 캐시 파일만 읽음)
+// 응답: { data: { "KOR": { elo, apiTeamId, teamName }, ... }, fetchedAt, expired, ageHours }
+app.get('/api/elo', async (req, res) => {
+  try {
+    const status = await getCacheStatus();
+    if (!status.cache) {
+      return res.status(404).json({
+        success: false,
+        error: 'ELO 캐시 없음. POST /api/sync/elo 로 먼저 fetch 하세요.',
+      });
+    }
+    res.json({
+      success: true,
+      data: status.cache.data,
+      fetchedAt: status.cache.fetchedAt,
+      ageHours: status.ageSeconds != null ? +(status.ageSeconds / 3600).toFixed(1) : null,
+      todayFetchCount: status.todayCount,
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
 
 // GET /api/matches - 모든 경기 결과 조회
 // API-Football 호환 컬럼: fixture_id (fixture.id), match_date (fixture.date),

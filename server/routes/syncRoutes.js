@@ -1,6 +1,8 @@
 import express from 'express';
 import apiFootballService from '../services/apiFootballService.js';
 import cacheService from '../services/cacheService.js';
+import { getCacheStatus, getEloCached, saveEloFromTsv } from '../services/eloService.js';
+import https from 'https';
 
 export function createSyncRoutes(pool) {
   const router = express.Router();
@@ -219,6 +221,109 @@ export function createSyncRoutes(pool) {
         success: false,
         error: error.message
       });
+    }
+  });
+
+  /**
+   * POST /api/sync/elo
+   * api-football에서 ELO를 가져와 cache/elo_worldcup_2026.json에 저장
+   *
+   * Query params:
+   *   ?force=true  → 하루 4회 제한 무시하고 강제 fetch
+   *
+   * 응답:
+   *   { success, source: "api"|"cache", todayFetchCount, mapped, unmapped, fetchedAt }
+   */
+  /**
+   * eloratings.net/World.tsv 를 fetch 하는 헬퍼 (Node 내장 https 모듈 사용)
+   */
+  function fetchEloTsv() {
+    return new Promise((resolve, reject) => {
+      const req = https.get(
+        'https://eloratings.net/World.tsv',
+        { headers: { 'User-Agent': 'Mozilla/5.0 (GroupStages/1.0)' } },
+        (res) => {
+          if (res.statusCode !== 200) {
+            return reject(new Error(`eloratings.net HTTP ${res.statusCode}`));
+          }
+          let body = '';
+          res.on('data', chunk => { body += chunk; });
+          res.on('end', () => resolve(body));
+        }
+      );
+      req.on('error', reject);
+      req.setTimeout(10000, () => { req.destroy(); reject(new Error('eloratings.net 타임아웃')); });
+    });
+  }
+
+  /**
+   * POST /api/sync/elo
+   * eloratings.net/World.tsv 에서 ELO를 가져와 cache/elo_worldcup_2026.json 에 저장
+   *
+   * Query: ?force=true → 하루 10회 제한 무시하고 강제 fetch
+   */
+  router.post('/elo', async (req, res) => {
+    const force = req.query.force === 'true';
+
+    try {
+      const status = await getCacheStatus();
+
+      // 하루 10회 제한 (force=true 시 우회)
+      if (!force && !status.canFetchToday) {
+        const cached = status.cache;
+        console.log(`[ELO] 오늘 fetch 횟수 초과 (${status.todayCount}/10). 캐시 반환.`);
+        return res.json({
+          success: true,
+          source: 'cache',
+          reason: `오늘 최대 fetch 횟수(10회) 초과 (${status.todayCount}회 완료)`,
+          todayFetchCount: status.todayCount,
+          fetchedAt: cached?.fetchedAt ?? null,
+          mapped: Object.keys(cached?.data ?? {}).length,
+          unmapped: cached?.unmapped?.length ?? 0,
+        });
+      }
+
+      console.log('[ELO] eloratings.net/World.tsv fetch 시작...');
+      const tsv = await fetchEloTsv();
+      const saved = await saveEloFromTsv(tsv);
+
+      res.json({
+        success: true,
+        source: 'eloratings.net',
+        todayFetchCount: saved.todayFetchCount,
+        fetchedAt: saved.fetchedAt,
+        mapped: Object.keys(saved.data).length,
+        unmapped: saved.unmapped.length,
+        unmappedTeams: saved.unmapped.slice(0, 20), // 최대 20개만 반환
+        data: saved.data,
+      });
+
+    } catch (error) {
+      console.error('[ELO] fetch 실패:', error.message);
+      res.status(500).json({ success: false, error: error.message });
+    }
+  });
+
+  /**
+   * GET /api/sync/elo/status
+   * 현재 ELO 캐시 상태 확인 (네트워크 호출 없음)
+   */
+  router.get('/elo/status', async (req, res) => {
+    try {
+      const status = await getCacheStatus();
+      res.json({
+        hasCachedData: !!status.cache,
+        fetchedAt: status.cache?.fetchedAt ?? null,
+        ageSeconds: status.ageSeconds,
+        ageHours: status.ageSeconds != null ? (status.ageSeconds / 3600).toFixed(1) : null,
+        todayFetchCount: status.todayCount,
+        remainingFetchesToday: Math.max(0, 10 - status.todayCount),
+        canFetchToday: status.canFetchToday,
+        mappedTeams: Object.keys(status.cache?.data ?? {}).length,
+        unmappedTeams: status.cache?.unmapped?.length ?? 0,
+      });
+    } catch (error) {
+      res.status(500).json({ success: false, error: error.message });
     }
   });
 
