@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Globe, Shuffle, Trophy, Share2, Menu, X, Database, RotateCcw, Wifi, WifiOff, GitBranch, BookOpen } from 'lucide-react';
-import { getBest8ThirdPlace, getFairPlayPoints } from './utils/rankings.js';
+import { getBest8ThirdPlace, getFairPlayPoints, calculateStandings } from './utils/rankings.js';
 import { TEAM_SEEDS, FIFA_RANKINGS, FIFA_RANKINGS_CURRENT } from './data/worldcup2026.js';
 import { useMatches } from './hooks/useMatches.js';
 import GroupTable from './components/GroupTable.jsx';
@@ -71,6 +71,30 @@ function makeHtmlTable(groups) {
   return html;
 }
 
+// ── 3위 최종 승점 범위 계산 (W/D/L 9조합 브루트포스) ──────
+function computeThirdPtsRange({ teams, matches }) {
+  const remaining = matches.filter(m => !m.played);
+  if (remaining.length === 0) {
+    const pts = calculateStandings(teams, matches)[2]?.pts ?? 0;
+    return { min: pts, max: pts };
+  }
+  let minPts = Infinity, maxPts = -Infinity;
+  function iter(idx, ms) {
+    if (idx === remaining.length) {
+      const pts = calculateStandings(teams, ms)[2]?.pts ?? 0;
+      if (pts < minPts) minPts = pts;
+      if (pts > maxPts) maxPts = pts;
+      return;
+    }
+    const m = remaining[idx];
+    for (const [h, a] of [['1','0'],['0','0'],['0','1']]) {
+      iter(idx + 1, ms.map(x => x.id === m.id ? { ...x, homeScore: h, awayScore: a, played: true } : x));
+    }
+  }
+  iter(0, matches);
+  return { min: minPts === Infinity ? 0 : minPts, max: maxPts === -Infinity ? 0 : maxPts };
+}
+
 // ── 광고 슬롯 컴포넌트 ────────────────────────────────────
 function AdSlot({ slot, className = '' }) {
   return (
@@ -87,9 +111,13 @@ export default function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [resetting, setResetting] = useState(false);
   const [scenarioGroupKey, setScenarioGroupKey] = useState(null);
+  const [scenarioTeamId, setScenarioTeamId] = useState(null);
+  const [scenarioFromNav, setScenarioFromNav] = useState(false);
 
-  const navigateToScenario = (groupKey) => {
+  const navigateToScenario = (groupKey, teamId = null) => {
     setScenarioGroupKey(groupKey);
+    setScenarioTeamId(teamId);
+    setScenarioFromNav(true);
     setActiveTab('scenarios');
   };
 
@@ -101,7 +129,8 @@ export default function App() {
     .map(([group, standings]) => {
       if (!standings || standings.length < 3) return null;
       const t = standings[2];
-      return { group, ...t, fifaRank: FIFA_RANKINGS_CURRENT[t.id] ?? null };
+      const { min: ptsMin, max: ptsMax } = computeThirdPtsRange(groups[group]);
+      return { group, ...t, fifaRank: FIFA_RANKINGS_CURRENT[t.id] ?? null, ptsMin, ptsMax };
     })
     .filter((t) => t !== null)
     .sort((a, b) => {
@@ -263,7 +292,7 @@ export default function App() {
                     groupKey={key}
                     standings={standings}
                     onGroupClick={navigateToScenario}
-                    onTeamClick={(teamId, groupKey) => navigateToScenario(groupKey)}
+                    onTeamClick={(teamId, groupKey) => navigateToScenario(groupKey, teamId)}
                   />
                 ))}
               </div>
@@ -277,6 +306,7 @@ export default function App() {
                   allThirds={allThirds}
                   loading={loading}
                   apiAvailable={apiAvailable}
+                  onTeamClick={(team) => navigateToScenario(team.group, team.id)}
                 />
 
                 {/* 중간 광고 */}
@@ -288,7 +318,10 @@ export default function App() {
             {activeTab === 'scenarios' && (
               <ScenarioPage
                 selectedGroupKey={scenarioGroupKey}
-                onSelectGroup={setScenarioGroupKey}
+                onSelectGroup={(key) => { setScenarioGroupKey(key); setScenarioTeamId(null); setScenarioFromNav(false); }}
+                selectedTeamId={scenarioTeamId}
+                onSelectTeam={setScenarioTeamId}
+                fromNavigation={scenarioFromNav}
                 groups={groups}
                 onScoreChange={handleScoreChange}
               />

@@ -2,7 +2,7 @@ import React from 'react';
 import { Trophy, TrendingUp, Database, WifiOff } from 'lucide-react';
 import { BASE_URL } from '../config.js';
 
-export default function ThirdPlaceTable({ best8, allThirds, loading = false, apiAvailable = true }) {
+export default function ThirdPlaceTable({ best8, allThirds, loading = false, apiAvailable = true, onTeamClick }) {
   const qualifiedIds = new Set(best8.map((t) => t.id));
 
   return (
@@ -39,6 +39,8 @@ export default function ThirdPlaceTable({ best8, allThirds, loading = false, api
               <th className="px-2 py-2 text-center">패</th>
               <th className="px-2 py-2 text-center">득실</th>
               <th className="px-2 py-2 text-center font-bold">승점</th>
+              <th className="px-2 py-2 text-center text-emerald-400" title="이 조 3위가 될 수 있는 최대 승점">최대</th>
+              <th className="px-2 py-2 text-center text-red-400" title="이 조 3위가 될 수 있는 최소 승점">최소</th>
               <th className="px-2 py-2 text-center" title="FIFA 랭킹">FIFA</th>
               <th className="px-2 py-2 text-center">상태</th>
             </tr>
@@ -46,19 +48,20 @@ export default function ThirdPlaceTable({ best8, allThirds, loading = false, api
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan={11} className="text-center py-8 text-fifa-muted animate-pulse">
+                <td colSpan={13} className="text-center py-8 text-fifa-muted animate-pulse">
                   DB에서 데이터 로딩 중...
                 </td>
               </tr>
             ) : allThirds.length === 0 ? (
               <tr>
-                <td colSpan={11} className="text-center py-8 text-fifa-muted animate-pulse">
+                <td colSpan={13} className="text-center py-8 text-fifa-muted animate-pulse">
                   데이터 로딩 중...
                 </td>
               </tr>
             ) : (
               allThirds.map((team, idx) => {
                 const isQualified = qualifiedIds.has(team.id);
+                const ptsLocked = team.ptsMin === team.ptsMax;
                 return (
                   <tr
                     key={`${team.group}_${team.id}`}
@@ -70,12 +73,15 @@ export default function ThirdPlaceTable({ best8, allThirds, loading = false, api
                   >
                     <td className="px-3 py-2 text-fifa-muted">{idx + 1}</td>
                     <td className="px-3 py-2">
-                      <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => onTeamClick?.(team)}
+                        className="flex items-center gap-2 text-left hover:opacity-80 transition-opacity group cursor-pointer"
+                      >
                         {team.flagImg
-                          ? <img src={`${BASE_URL}${team.flagImg}`} alt={team.name} className="w-6 h-4 object-cover rounded-sm" />
+                          ? <img src={`${BASE_URL}${team.flagImg}`} alt={team.name} className="w-6 h-4 object-cover rounded-sm shrink-0" />
                           : <span>{team.flag}</span>}
-                        <span className="font-medium text-white">{team.name}</span>
-                      </div>
+                        <span className="font-medium text-white group-hover:text-sky-300 transition-colors">{team.name}</span>
+                      </button>
                     </td>
                     <td className="px-2 py-2 text-center">
                       <span className="bg-fifa-blue/30 text-white text-xs px-2 py-0.5 rounded font-bold">
@@ -90,6 +96,16 @@ export default function ThirdPlaceTable({ best8, allThirds, loading = false, api
                       {team.gd > 0 ? `+${team.gd}` : team.gd}
                     </td>
                     <td className="px-2 py-2 text-center font-bold text-white">{team.pts}</td>
+                    <td className="px-2 py-2 text-center text-xs">
+                      {team.ptsMax != null
+                        ? <span className={ptsLocked ? 'text-fifa-muted' : 'text-emerald-400 font-medium'}>{team.ptsMax}</span>
+                        : <span className="text-fifa-muted">—</span>}
+                    </td>
+                    <td className="px-2 py-2 text-center text-xs">
+                      {team.ptsMin != null
+                        ? <span className={ptsLocked ? 'text-fifa-muted' : 'text-red-400 font-medium'}>{team.ptsMin}</span>
+                        : <span className="text-fifa-muted">—</span>}
+                    </td>
                     <td className="px-2 py-2 text-center text-fifa-muted text-xs">
                       {team.fifaRank ?? '—'}
                     </td>
