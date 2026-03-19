@@ -5,18 +5,56 @@
 npm run dev    # API(3001) + Vite(5000) 동시 실행
 ```
 
+## 🚀 Production 배포 구조 (groupstages.com)
+
+### 아키텍처
+```
+groupstages.com
+├── Frontend: Cloudflare Pages (프로젝트명: groupstages)
+│   └── 정적 React 빌드 → dist/ 폴더 배포
+└── Backend:  Cloudflare Workers (프로젝트명: groupstages-api)
+    └── workers/index.js → D1 (SQLite) DB 사용
+```
+
+### 배포 명령어 (프로덕션 반영 시)
+```bash
+# 1. 프론트엔드 빌드 (VITE_API_URL 필수)
+VITE_API_URL=https://groupstages-api.behomely0409.workers.dev npm run build
+
+# 2. Cloudflare Pages 배포
+npx wrangler pages deploy dist --project-name groupstages --branch main
+
+# (필요 시) Workers API 배포
+npx wrangler deploy
+```
+
+### 주요 URL
+- **프로덕션**: https://groupstages.com/wc2026/
+- **Workers API**: https://groupstages-api.behomely0409.workers.dev
+- **Cloudflare Account**: behomely0409@gmail.com
+
+### 중요 주의사항
+- **Git push ≠ 자동배포** — GitHub 연동 없음, 수동으로 위 명령어 실행 필요
+- **Workers vs Express**: 로컬 개발은 `server/index.js` (Node+PostgreSQL), 프로덕션은 `workers/index.js` (D1+SQLite)
+- **ELO/sync 기능**: `server/` 의 sync 라우트는 로컬 전용. Workers에는 미구현 (추후 작업 필요)
+- **D1 Database ID**: `13ee6163-ca10-40cf-8df2-b770146d80f3`
+
+---
+
 ## Tech Stack
 - **Frontend**: React 18 + Vite 5 + Tailwind CSS 3
-- **Backend**: Node.js + Express (ESM) - port 3001
-- **Database**: PostgreSQL (로컬) via `pg` driver
+- **Backend (로컬)**: Node.js + Express (ESM) - port 3001
+- **Backend (프로덕션)**: Cloudflare Workers + D1 (SQLite)
+- **Database (로컬)**: PostgreSQL via `pg` driver
+- **Database (프로덕션)**: Cloudflare D1 (SQLite)
 - **External API**: API-Football (RapidAPI) - 7500 requests/day
-- **Caching**: JSON 파일 기반 (1시간 TTL)
+- **Caching**: JSON 파일 기반 (ELO: cache/elo_worldcup_2026.json)
 
 ## Core Architecture
-- Express REST API (`server/index.js`) on port 3001
-- Vite dev server proxies `/api` → `localhost:3001`
+- 로컬: Express REST API (`server/index.js`) on port 3001
+- 로컬: Vite dev server proxies `/api` → `localhost:3001`
+- 프로덕션: Workers API (`workers/index.js`) — D1 SQLite
 - API-Football 연동: 양방향 경기 매칭 (48/54 경기 동기화)
-- JSON 캐싱으로 Rate Limit 절약 (550ms → 167ms)
 
 ## Database Schema (PostgreSQL)
 ```sql
