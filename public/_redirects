@@ -1,5 +1,2 @@
 # Cloudflare Pages Redirects
-# /wc2026 경로를 루트로 프록시
-
-/wc2026/* /:splat 200
-/wc2026 /index.html 200
+# 나중에 랜딩 페이지 준비 후 추가 예정
