@@ -115,39 +115,58 @@ CREATE TABLE api_sync_log (
 - `GET  /api/third-place` - 3위팀 집계 쿼리
 
 ### API-Football 동기화
-- `POST /api/sync/fixtures` - 경기 일정/결과 동기화 (48/54 성공)
+- `POST /api/sync/fixtures` - 경기 일정/결과 동기화 (54/54 성공)
 - `POST /api/sync/card-statistics/:fixtureId` - 카드 통계 동기화
 - `GET  /api/sync/status` - Rate Limit 및 동기화 이력
 
+### ELO (로컬 전용)
+- `POST /api/sync/elo` - eloratings.net에서 ELO 가져오기 (하루 10회 제한, `?force=true`)
+- `GET  /api/elo` - 캐시된 ELO 반환
+- `GET  /api/sync/elo/status` - ELO 캐시 상태
+
 ## Key Features
 1. **조별리그 순위 계산**: FIFA 공식 규칙 (승점 → 득실차 → 다득점 → 헤드투헤드)
-2. **3위팀 상위 8팀**: DB 쿼리 자동 집계
-3. **조추첨 시뮬레이터**: Pot 1-4, 지리적 제약조건
-4. **API-Football 연동**: 실시간 경기 결과 (캐싱 적용)
-5. **공유 기능**: Reddit Markdown, HTML 표, 이미지 저장
+2. **3위팀 상위 8팀**: DB 쿼리 자동 집계 + 진출확정/탈락확정 판정
+3. **경우의 수 시나리오**: 포아송 λ=1.4 가중 브루트포스 엔진 (6,561 조합)
+4. **조추첨 시뮬레이터**: Pot 1-4, 지리적 제약조건
+5. **API-Football 연동**: 실시간 경기 결과 (캐싱 적용)
+6. **ELO 캐시**: eloratings.net 기반, 42개 확정팀 매핑
+7. **공유 기능**: Reddit Markdown, HTML 표, 이미지 저장
+8. **세션 유지**: 탭 + 시나리오 선택 localStorage 저장
 
 ## Project Structure
 ```
-server/
-  index.js                    - Express API
-  routes/syncRoutes.js        - API-Football 동기화
+server/                         # 로컬 개발 전용
+  index.js                    - Express API (GET /api/elo 포함)
+  routes/syncRoutes.js        - API-Football + ELO 동기화
   services/
-    apiFootballService.js     - API 래퍼 (캐싱)
+    apiFootballService.js     - API-Football 래퍼 (캐싱)
     cacheService.js           - JSON 캐시 (TTL)
+    eloService.js             - eloratings.net ELO 캐시 (코드 매핑 내장)
+workers/                        # 프로덕션 (Cloudflare Workers)
+  index.js                    - Workers API (D1 SQLite)
+  schema.sql                  - D1 스키마
 scripts/
-  init_schema.sql             - DB 스키마
+  init_schema.sql             - PostgreSQL 스키마
   generateTeamMapping.js      - 팀 ID 매핑
   seedMatches.js              - 경기 일정 seed
 src/
   hooks/useMatches.js         - API 연동 훅
+  hooks/useTestMatches.js     - 테스트 모드 로컬 훅
   data/worldcup2026.js        - 48팀 + 경기 일정
   utils/rankings.js           - 순위 계산
+  utils/scenarioComputer.js   - 포아송 가중 브루트포스 엔진
+  config.js                   - API URL 설정 (로컬/프로덕션 분기)
   components/
     GroupTable.jsx            - 조 순위표
-    ThirdPlaceTable.jsx       - 3위팀 비교
+    ThirdPlaceTable.jsx       - 3위팀 비교 (진출확정/탈락확정)
+    ScenarioPage.jsx          - 경우의 수 (매트릭스 + 조건 텍스트)
     DrawSimulator.jsx         - 조추첨 시뮬레이터
-cache/                        - API 응답 캐시 (gitignored)
-logs/                         - 프로젝트 문서
+    ShareButtons.jsx          - 공유 (Reddit MD / HTML / 이미지)
+  App.jsx                     - 메인 앱 (DB 연동)
+  TestApp.jsx                 - 테스트 앱 (로컬 데이터)
+cache/                        - ELO + API 응답 캐시 (gitignored)
+logs/                         - 프로젝트 문서 + 상태 대시보드
 ```
 
 ## Environment Variables (.env)
@@ -161,13 +180,17 @@ API_PORT=3001
 ```
 
 ## Known Issues
-- **미매핑 팀**: CUW (5530), CPV (1533) - 6개 경기 동기화 실패
+- **Workers 미동기**: ELO, sync 라우트는 로컬 Express 전용. Workers 포팅 필요
+- **ELO 미반영**: 시나리오 가중치에 ELO 미적용 (캐시만 구축됨)
 - **카드 데이터**: 아직 영속성 없음 (team_statistics API 필요)
+- **3위 커트라인**: `THIRD_PLACE_MIN_PTS = 4` 고정 (대회 진행 후 변동 가능)
 
 ## Next Steps
-1. 카드 데이터 API 엔드포인트 추가
-2. 미매핑 팀 해결
-3. 동기화 UI (Admin 페이지)
+1. ELO를 시나리오 확률 가중치에 반영
+2. Workers에 ELO/sync 기능 포팅
+3. 카드 데이터 API 엔드포인트 추가
+4. 랜딩 페이지 디자인
+5. SEO / AdSense 최적화
 
 ## GitHub
 - Repository: https://github.com/JrJuni/groupstages.git

@@ -1,6 +1,6 @@
 # 👤 memory_user.md — 사용자 철학 & 프로젝트 North Star
 
-> **마지막 업데이트**: 2026-03-17
+> **마지막 업데이트**: 2026-03-23
 > **수정 규칙**: 사용자와의 대화에서 새롭게 확립된 방향성이 있을 때만, 사용자 승인 후 수정
 
 ---
@@ -38,9 +38,12 @@
 |------|------|
 | React + Vite | 빠른 개발 속도 |
 | Tailwind CSS | 유틸리티 클래스 기반 빠른 스타일링 |
-| PostgreSQL (Replit 내장) | DB 연동 즉시 가능, 별도 설정 불필요 |
-| Express REST API | 단순하고 명확한 엔드포인트 구조 |
-| API-Football (RapidAPI) | 향후 실시간 데이터 소스 |
+| PostgreSQL (로컬) | 로컬 개발 DB |
+| Cloudflare D1 (프로덕션) | SQLite 기반, Workers와 네이티브 통합 |
+| Express REST API (로컬) | 로컬 개발 서버 |
+| Cloudflare Workers (프로덕션) | 프로덕션 백엔드, D1 직접 접근 |
+| API-Football (RapidAPI) | 실시간 경기 데이터 |
+| eloratings.net | ELO 데이터 (api-football에 ELO 없음) |
 
 ---
 
@@ -48,5 +51,6 @@
 
 - 큰 그림 먼저, 세부 조정은 나중에
 - 에이전트가 판단할 수 있는 부분은 알아서 결정해도 됨
-- 경기 일정 데이터는 사용자가 직접 제공할 예정 (API 연동 전까지)
 - 커밋은 기능 단위로, GitHub push까지 포함
+- 배포가 필요할 때 명시적으로 요청함 (자동배포 아님)
+- 랜딩 페이지 별도 제작 예정이므로 루트 리다이렉트 불필요

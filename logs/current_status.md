@@ -1,25 +1,26 @@
 # 📊 current_status.md — 프로젝트 공유 대시보드
 
-> **마지막 업데이트**: 2026-03-19
-> **업데이트 규칙**: 모든 에이전트는 작업 완료 후 반드시 이 파일을 갱신하고 커밋한다
+> **마지막 업데이트**: 2026-03-23
 
 ---
 
 ## 전체 로드맵 진행률
 
 ```
-[████████████████████] 100%
-
-Phase 1: 조별리그 대시보드      ✅ 완료
-Phase 2: 경우의 수 탭           ✅ 완료 (브루트포스 시나리오 엔진 포함)
-Phase 3: 3위팀 순위             ✅ 완료 (승점 범위 + 팀 클릭 내비게이션)
-Phase 4: 조추첨 시뮬레이터      ✅ 완료
-Phase 5: 규칙 페이지            ✅ 완료
-Phase 6: 경기 일정 정렬         ✅ 완료 (2026-03-17)
-Phase 7: API-Football 연동      ✅ 완료 (2026-03-17)
-Phase 8: Cloudflare 배포        ✅ 완료 (2026-03-17)
-Phase 9: 경우의 수 시나리오 엔진 ✅ 완료 (2026-03-19)
-Phase 10: SEO / AdSense 최적화  ⬜ 다음 단계
+Phase 1:  조별리그 대시보드        ✅ 완료
+Phase 2:  경우의 수 탭             ✅ 완료 (브루트포스 시나리오 엔진)
+Phase 3:  3위팀 순위               ✅ 완료 (승점 범위 + 진출확정/탈락확정 + 다음 경기)
+Phase 4:  조추첨 시뮬레이터        ✅ 완료
+Phase 5:  규칙 페이지              ✅ 완료
+Phase 6:  경기 일정 정렬           ✅ 완료
+Phase 7:  API-Football 연동        ✅ 완료 (54/54 동기화)
+Phase 8:  Cloudflare 배포          ✅ 완료 (Pages + Workers + D1)
+Phase 9:  시나리오 엔진 고도화     ✅ 완료 (조건 텍스트, 혼조 분석, 배지 로직)
+Phase 10: ELO 캐시 시스템          ✅ 완료 (eloratings.net 기반)
+Phase 11: 세션 유지                ✅ 완료 (탭 + 시나리오 선택 localStorage)
+Phase 12: 공유 기능 확장           ✅ 완료 (ScenarioPage ShareButtons)
+Phase 13: SEO / AdSense 최적화    ⬜ 다음 단계
+Phase 14: 랜딩 페이지             ⬜ 다음 단계
 ```
 
 ---
@@ -30,81 +31,68 @@ Phase 10: SEO / AdSense 최적화  ⬜ 다음 단계
 
 ---
 
-## 최근 완료된 작업 (2026-03-19)
+## 최근 완료된 작업 (2026-03-19 ~ 03-23)
 
-### [DONE] 경우의 수 탭 — 포아송 가중 브루트포스 시나리오 엔진
+### 경우의 수 탭 — 조건 텍스트 & 혼조 분석
+- **순위별 조건 표시**: "1위: 대한민국 승 & 다른 경기 무승부" 형태
+- **혼조 셀 분석**: `ptsAdjCount`로 승점 동률 경쟁팀 추적 → 득실차/다득점 조건 표시
+- **WDL 색상 하이라이트**: W=emerald, D=yellow, L=red
+- **팀명 사용**: "내" → 선택한 팀의 실제 이름
 
-**파일**: `src/utils/scenarioComputer.js`, `src/components/ScenarioPage.jsx`
+### 배지 로직 개선
+- **진출 확정**: `topTwoProbability === 100%` 일 때만
+- **진출 유력**: MD3 시작 전(스코어 미입력) + 승점 4 이상
+- **3위 테이블**: ptsMax 기반 진출확정/탈락확정 판정
 
-#### 핵심 알고리즘
-- **포아송 λ=1.4 가중치**: `GOAL_W = [0.25, 0.35, 0.24, 0.10, 0.04, 0.005×4]`
-- 각 스코어 조합 weight = `GOAL_W[h] * GOAL_W[a]`, 시나리오 weight = `tw * ow`
-- 0~8 범위 81×81 = 6,561 조합, 전체 가중합으로 정규화
-- **3×3 매트릭스**: 내 경기(행) × 다른 경기(열) 결과 조합별 순위 분포
+### 3위 테이블 업데이트
+- **다음 경기 컬럼**: 국기 + 나라명, 3경기 완료 시 공란
+- **상태 표시**: 진출 확정(green) / 탈락 확정(red) / 진출 유력(sky)
 
-#### 출력값
-- `rankProbabilities` — `{1:%, 2:%, 3:%, 4:%}` 가중 확률
-- `topTwoProbability` — 1·2위 직접 진출 확률
-- `thirdPlaceAdvancingProbability` — 3위 진출 가능 확률 (커트라인 승점 4)
-- `matrix` — 9개 셀 (definitive or 혼합 분포)
+### ELO 캐시 시스템
+- **소스**: eloratings.net/World.tsv (api-football에 ELO 엔드포인트 없음)
+- **캐시**: `cache/elo_worldcup_2026.json` — 44팀 매핑 (42 실팀 + NGA, DEN)
+- **엔드포인트**: `POST /api/sync/elo` (하루 10회), `GET /api/elo`
+- **코드 매핑**: eloratings.net 독자 2자리 코드 → 우리 팀 ID (서버 하드코딩)
 
-#### UI
-- 매트릭스 컬럼 헤더: 팀명+국기로 "팀A 승 / 무 / 팀B 승" 표시
-- 행 헤더: bg-white/5 박스 하이라이트
-- 진출 확률 요약: 1·2위 / 3위 분리 표시 (ELO 미반영 단계라 "가장 유력한 시나리오" 비표시)
+### 세션 유지 (localStorage)
+- `gs_activeTab`: 탭 새로고침 유지
+- `gs_scenarioGroup`, `gs_scenarioTeam`: 시나리오 선택 유지
+- 경우의 수 탭 직접 클릭 시 그룹/팀 초기화
 
-### [DONE] 테스트 페이지 (`/wctest`) 신설
+### 공유 기능 확장
+- ScenarioPage: 순위표 옆 + 팀 패널 헤더에 ShareButtons 추가
+- Reddit MD / HTML / 이미지 저장
 
-**파일**: `src/TestApp.jsx`, `src/hooks/useTestMatches.js`, `src/data/mockResults.js`
-
-- API 없이 순수 로컬 상태 사용 (새로고침 시 초기화)
-- MD1+MD2 완료된 가상 결과 사전 입력 (48경기)
-  - 무승부 25% (12/48), 업셋 ~17% (6건): QAT>CAN, CIV>ECU, NZL>EGY, SAU>URU, NOR>SEN, UZB>COL
-- 앰버 색상 TEST MODE 배너, 탭 스타일 구분
-
-### [DONE] 경우의 수 탭 UX 개선
-
-- **조/팀 선택기**: 국기 크기 확대, 팀명 클릭으로 선택 가능
-- **진입 방식별 토글 상태**:
-  - 직접 탭 클릭 → 선택박스 열림
-  - 다른 탭에서 팀 클릭 내비게이션 → 선택박스 닫힘
-  - 경기 일정은 항상 닫힘이 기본값
-- **진출확정/탈락확정/진출미확정 배지**: 조 2경기 이후 활성화
-
-### [DONE] 3위 순위 탭 개선
-
-**파일**: `src/components/ThirdPlaceTable.jsx`, `src/App.jsx`, `src/TestApp.jsx`
-
-- **팀명 클릭**: 경우의 수 탭으로 해당 팀 바로 이동
-- **최대/최소 승점 컬럼**: 잔여 경기 W/D/L 3^n 브루트포스로 이 조에서 최종 3위가 될 수 있는 승점 범위 계산
-  - MD3 완료 후 min=max로 고정, 미완료 시 emerald/red 컬러로 강조
+### Cloudflare 배포 정비
+- `_redirects` 복구: `/wc2026/* /:splat 200` (Vite base path 매핑 필수)
+- 배포 절차 CLAUDE.md에 기록
 
 ---
 
 ## 다음 단계 (Next Steps)
 
 ### 우선순위 HIGH
-- [ ] **ELO 반영**: 팀 강도(ELO 또는 FIFA 랭킹)를 스코어 가중치에 반영하면 "가장 유력한 시나리오"가 의미있어짐
+- [ ] **ELO 반영**: 스코어 가중치에 ELO 반영하여 시나리오 확률 정밀화
 - [ ] **카드 데이터 영속성**: team_statistics API 엔드포인트 추가
-- [ ] **FIFA 랭킹 타이브레이커**: 페어플레이 다음 순위로 현재 FIFA 랭킹 적용
+- [ ] **Workers 동기화**: `server/` 신규 기능(ELO 등)을 `workers/index.js`에도 구현
 
 ### 우선순위 MEDIUM
-- [ ] **조추첨 시뮬레이터 랭킹 전환**: 조추첨 전에는 current, 후에는 draw 랭킹 사용
-- [ ] **동기화 UI**: Admin 페이지에서 수동 동기화 버튼 + Rate Limit 표시
-- [ ] **자동 동기화**: Cron job 또는 WebSocket 실시간 업데이트
+- [ ] **랜딩 페이지**: groupstages.com 루트 페이지 디자인
+- [ ] **동기화 UI**: Admin 페이지에서 수동 동기화 + Rate Limit 표시
+- [ ] **SEO**: 메타태그, OG 이미지, sitemap.xml
 
 ### 우선순위 LOW
-- [ ] **SEO**: 메타태그, OG 이미지, sitemap.xml
-- [ ] **32팀 버전 (wc2022)**: 새 브랜치로 2022 월드컵 버전 개발
+- [ ] **32팀 버전 (wc2022)**: 새 브랜치로 2022 월드컵 버전
 
 ---
 
-## 알려진 이슈 / 블로커
+## 알려진 이슈
 
 | 이슈 | 상태 | 비고 |
 |------|------|------|
-| ELO 미반영 | ⚠️ 인지됨 | ELO 없이는 "가장 유력한 시나리오"가 항상 1:1. UI에서 비표시 처리. 장기 개선 항목 |
-| 3위 진출 커트라인 고정값 | ⚠️ 근사치 | `THIRD_PLACE_MIN_PTS = 4` 고정. 실제 커트라인은 대회 진행 후 결정됨 |
+| ELO 미반영 (시나리오 가중치) | ⚠️ 인지됨 | 캐시 구축 완료, 가중치 적용은 미구현 |
+| 3위 진출 커트라인 고정값 | ⚠️ 근사치 | `THIRD_PLACE_MIN_PTS = 4` 고정 |
+| Workers에 ELO/sync 미구현 | ⚠️ 인지됨 | 로컬 Express 전용, Workers 포팅 필요 |
 
 ---
 
@@ -112,8 +100,9 @@ Phase 10: SEO / AdSense 최적화  ⬜ 다음 단계
 
 | 날짜 | 커밋 | 내용 |
 |------|------|------|
-| 2026-03-19 | (이번 커밋) | 경우의 수 시나리오 엔진 + 3위 탭 개선 + 테스트 페이지 |
-| 2026-03-17 | `b39ad7a` | DRAW_POTS 2025-11-19 FIFA 랭킹 기준 포트 재배정 |
-| 2026-03-17 | `b57c669` | Cloudflare 풀스택 아키텍처 구축 (Workers + D1) |
-| 2026-03-17 | `22d7b61` | API-Football 완전 연동 + JSON 캐싱 시스템 (54/54 동기화) |
-| 2026-03-17 | `d548935` | 경기 일정 날짜순 정렬 + API-Football 호환 DB 스키마 |
+| 2026-03-23 | `9e38143` | _redirects 복구 (루트 리다이렉트 제거) |
+| 2026-03-23 | `77bd1d9` | 배포 구조 CLAUDE.md 기록 |
+| 2026-03-19 | `9a262a6` | 경우의 수 개선, 3위 테이블, ELO 캐시, 세션 유지 |
+| 2026-03-19 | `d583281` | 포아송 브루트포스 엔진 + 테스트 페이지 |
+| 2026-03-17 | `b39ad7a` | DRAW_POTS FIFA 랭킹 기준 포트 재배정 |
+| 2026-03-17 | `b57c669` | Cloudflare 풀스택 아키텍처 (Workers + D1) |

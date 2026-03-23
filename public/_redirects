@@ -1,2 +1,6 @@
 # Cloudflare Pages Redirects
-# 나중에 랜딩 페이지 준비 후 추가 예정
+# Vite base: '/wc2026/' → dist 파일은 /assets/ 에 있으므로
+# /wc2026/* 요청을 /* 로 rewrite 해야 정적 파일이 서빙됨
+
+/wc2026/* /:splat 200
+/wc2026 /index.html 200
