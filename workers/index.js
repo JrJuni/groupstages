@@ -9,9 +9,18 @@ export default {
     const path = url.pathname;
     const method = request.method;
 
-    // CORS 헤더
+    // CORS: 허용된 Origin만 허용
+    const allowedOrigins = [
+      'https://groupstages.com',
+      'https://www.groupstages.com',
+      'http://localhost:5000',
+      'http://localhost:5173',
+    ];
+    const origin = request.headers.get('Origin') || '';
+    const corsOrigin = allowedOrigins.includes(origin) ? origin : allowedOrigins[0];
+
     const corsHeaders = {
-      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Origin': corsOrigin,
       'Access-Control-Allow-Methods': 'GET, POST, DELETE, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type',
     };
@@ -19,6 +28,16 @@ export default {
     // OPTIONS 요청 처리 (CORS preflight)
     if (method === 'OPTIONS') {
       return new Response(null, { headers: corsHeaders });
+    }
+
+    // POST/DELETE 요청은 허용된 Origin에서만 가능
+    if (method === 'POST' || method === 'DELETE') {
+      if (!allowedOrigins.includes(origin)) {
+        return Response.json(
+          { error: 'Forbidden' },
+          { status: 403, headers: corsHeaders }
+        );
+      }
     }
 
     try {
@@ -114,7 +133,7 @@ export default {
     } catch (error) {
       console.error('[Workers API Error]', error);
       return Response.json(
-        { error: error.message },
+        { error: 'Internal server error' },
         { status: 500, headers: corsHeaders }
       );
     }
