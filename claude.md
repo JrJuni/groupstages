@@ -50,6 +50,21 @@ npx wrangler deploy
 - **External API**: API-Football (RapidAPI) - 7500 requests/day
 - **Caching**: JSON 파일 기반 (ELO: cache/elo_worldcup_2026.json)
 
+## Asset Conventions
+
+### 국기 이미지
+- **위치**: `public/flags/{iso2}.png` (예: `kr.png`, `br.png`, `gb-sct.png`)
+- **소스**: https://flagcdn.com/w80/{iso2}.png (폭 80px PNG)
+- **사용**: `src/data/worldcup2026.js`에서 `flagImg: 'flags/{iso2}.png'` → 컴포넌트에서 `${BASE_URL}${team.flagImg}`로 참조
+- **Fallback**: `flagImg`가 null이면 이모지(`team.flag`) 표시, 이미지 로드 실패 시에도 이모지로 폴백
+- **ISO 코드**: 2자리 소문자 (예외: Scotland = `gb-sct`)
+
+### 팀 데이터 구조 (`src/data/worldcup2026.js`)
+- **INITIAL_GROUPS**: 48팀 조편성 (A~L, 각 4팀) — `id`, `name`, `flag`, `flagImg`, `confederation`, `yc/twoYR/dr`
+- **DRAW_POTS**: Pot 1~4 조추첨용 — `id`, `name`, `flag`, `flagImg`, `confederation`
+- **MATCH_SCHEDULE**: 72경기 일정 — 팀 ID로 참조
+- **FIFA_RANKINGS_DRAW / FIFA_RANKINGS_CURRENT**: 팀 ID → 랭킹 숫자
+
 ## Core Architecture
 - 로컬: Express REST API (`server/index.js`) on port 3001
 - 로컬: Vite dev server proxies `/api` → `localhost:3001`

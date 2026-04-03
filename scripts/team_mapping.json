@@ -18,6 +18,12 @@
     "api_team_code": "SOU"
   },
   {
+    "our_team_id": "CZE",
+    "api_team_id": 770,
+    "api_team_name": "Czech Republic",
+    "api_team_code": "CZE"
+  },
+  {
     "our_team_id": "CAN",
     "api_team_id": 5529,
     "api_team_name": "Canada",
@@ -78,6 +84,12 @@
     "api_team_code": "PAR"
   },
   {
+    "our_team_id": "TUR",
+    "api_team_id": 777,
+    "api_team_name": "Türkiye",
+    "api_team_code": "TUR"
+  },
+  {
     "our_team_id": "GER",
     "api_team_id": 25,
     "api_team_name": "Germany",
@@ -112,6 +124,12 @@
     "api_team_id": 28,
     "api_team_name": "Tunisia",
     "api_team_code": "TUN"
+  },
+  {
+    "our_team_id": "SWE",
+    "api_team_id": 5,
+    "api_team_name": "Sweden",
+    "api_team_code": "SWE"
   },
   {
     "our_team_id": "BEL",
@@ -174,6 +192,12 @@
     "api_team_code": "NOR"
   },
   {
+    "our_team_id": "IRQ",
+    "api_team_id": 1567,
+    "api_team_name": "Iraq",
+    "api_team_code": "IRA"
+  },
+  {
     "our_team_id": "ARG",
     "api_team_id": 26,
     "api_team_name": "Argentina",
@@ -214,6 +238,12 @@
     "api_team_id": 1568,
     "api_team_name": "Uzbekistan",
     "api_team_code": "UZB"
+  },
+  {
+    "our_team_id": "COD",
+    "api_team_id": 1508,
+    "api_team_name": "Congo DR",
+    "api_team_code": "CON"
   },
   {
     "our_team_id": "ENG",

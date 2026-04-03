@@ -16,7 +16,7 @@ export const INITIAL_GROUPS = {
       { id: 'MEX', name: '멕시코', flag: '🇲🇽', flagImg: 'flags/mx.png', confederation: 'CONCACAF', host: true, yc: 0, twoYR: 0, dr: 0 },
       { id: 'KOR', name: '대한민국', flag: '🇰🇷', flagImg: 'flags/kr.png', confederation: 'AFC', yc: 0, twoYR: 0, dr: 0 },
       { id: 'RSA', name: '남아프리카공화국', flag: '🇿🇦', flagImg: 'flags/za.png', confederation: 'CAF', yc: 0, twoYR: 0, dr: 0 },
-      { id: 'UEFA_PO_D', name: 'UEFA PO-D', flag: '🏴', flagImg: null, confederation: 'UEFA', playoff: 'UEFA 플레이오프 D (덴마크/체코/아일랜드/북마케도니아)', yc: 0, twoYR: 0, dr: 0 },
+      { id: 'CZE', name: '체코', flag: '🇨🇿', flagImg: 'flags/cz.png', confederation: 'UEFA', yc: 0, twoYR: 0, dr: 0 },
     ],
   },
   B: {
@@ -24,7 +24,7 @@ export const INITIAL_GROUPS = {
       { id: 'CAN', name: '캐나다', flag: '🇨🇦', flagImg: 'flags/ca.png', confederation: 'CONCACAF', host: true, yc: 0, twoYR: 0, dr: 0 },
       { id: 'CHE', name: '스위스', flag: '🇨🇭', flagImg: 'flags/ch.png', confederation: 'UEFA', yc: 0, twoYR: 0, dr: 0 },
       { id: 'QAT', name: '카타르', flag: '🇶🇦', flagImg: 'flags/qa.png', confederation: 'AFC', yc: 0, twoYR: 0, dr: 0 },
-      { id: 'UEFA_PO_A', name: 'UEFA PO-A', flag: '🏴', flagImg: null, confederation: 'UEFA', playoff: 'UEFA 플레이오프 A (이탈리아/웨일스/보스니아/북아일랜드)', yc: 0, twoYR: 0, dr: 0 },
+      { id: 'BIH', name: '보스니아', flag: '🇧🇦', flagImg: 'flags/ba.png', confederation: 'UEFA', yc: 0, twoYR: 0, dr: 0 },
     ],
   },
   C: {
@@ -40,7 +40,7 @@ export const INITIAL_GROUPS = {
       { id: 'USA', name: '미국', flag: '🇺🇸', flagImg: 'flags/us.png', confederation: 'CONCACAF', host: true, yc: 0, twoYR: 0, dr: 0 },
       { id: 'AUS', name: '호주', flag: '🇦🇺', flagImg: 'flags/au.png', confederation: 'AFC', yc: 0, twoYR: 0, dr: 0 },
       { id: 'PAR', name: '파라과이', flag: '🇵🇾', flagImg: 'flags/py.png', confederation: 'CONMEBOL', yc: 0, twoYR: 0, dr: 0 },
-      { id: 'UEFA_PO_C', name: 'UEFA PO-C', flag: '🏴', flagImg: null, confederation: 'UEFA', playoff: 'UEFA 플레이오프 C (튀르키예/루마니아/슬로바키아/코소보)', yc: 0, twoYR: 0, dr: 0 },
+      { id: 'TUR', name: '튀르키예', flag: '🇹🇷', flagImg: 'flags/tr.png', confederation: 'UEFA', yc: 0, twoYR: 0, dr: 0 },
     ],
   },
   E: {
@@ -56,7 +56,7 @@ export const INITIAL_GROUPS = {
       { id: 'NED', name: '네덜란드', flag: '🇳🇱', flagImg: 'flags/nl.png', confederation: 'UEFA', yc: 0, twoYR: 0, dr: 0 },
       { id: 'JPN', name: '일본', flag: '🇯🇵', flagImg: 'flags/jp.png', confederation: 'AFC', yc: 0, twoYR: 0, dr: 0 },
       { id: 'TUN', name: '튀니지', flag: '🇹🇳', flagImg: 'flags/tn.png', confederation: 'CAF', yc: 0, twoYR: 0, dr: 0 },
-      { id: 'UEFA_PO_B', name: 'UEFA PO-B', flag: '🏴', flagImg: null, confederation: 'UEFA', playoff: 'UEFA 플레이오프 B (우크라이나/스웨덴/폴란드/알바니아)', yc: 0, twoYR: 0, dr: 0 },
+      { id: 'SWE', name: '스웨덴', flag: '🇸🇪', flagImg: 'flags/se.png', confederation: 'UEFA', yc: 0, twoYR: 0, dr: 0 },
     ],
   },
   G: {
@@ -80,7 +80,7 @@ export const INITIAL_GROUPS = {
       { id: 'FRA', name: '프랑스', flag: '🇫🇷', flagImg: 'flags/fr.png', confederation: 'UEFA', yc: 0, twoYR: 0, dr: 0 },
       { id: 'SEN', name: '세네갈', flag: '🇸🇳', flagImg: 'flags/sn.png', confederation: 'CAF', yc: 0, twoYR: 0, dr: 0 },
       { id: 'NOR', name: '노르웨이', flag: '🇳🇴', flagImg: 'flags/no.png', confederation: 'UEFA', yc: 0, twoYR: 0, dr: 0 },
-      { id: 'IC_PO_2', name: 'IC PO-2', flag: '🏆', flagImg: null, confederation: 'AFC', playoff: '대륙간 플레이오프 2 (미확정)', yc: 0, twoYR: 0, dr: 0 },
+      { id: 'IRQ', name: '이라크', flag: '🇮🇶', flagImg: 'flags/iq.png', confederation: 'AFC', yc: 0, twoYR: 0, dr: 0 },
     ],
   },
   J: {
@@ -96,7 +96,7 @@ export const INITIAL_GROUPS = {
       { id: 'POR', name: '포르투갈', flag: '🇵🇹', flagImg: 'flags/pt.png', confederation: 'UEFA', yc: 0, twoYR: 0, dr: 0 },
       { id: 'COL', name: '콜롬비아', flag: '🇨🇴', flagImg: 'flags/co.png', confederation: 'CONMEBOL', yc: 0, twoYR: 0, dr: 0 },
       { id: 'UZB', name: '우즈베키스탄', flag: '🇺🇿', flagImg: 'flags/uz.png', confederation: 'AFC', yc: 0, twoYR: 0, dr: 0 },
-      { id: 'IC_PO_1', name: 'IC PO-1', flag: '🏆', flagImg: null, confederation: 'CONCACAF', playoff: '대륙간 플레이오프 1 (미확정)', yc: 0, twoYR: 0, dr: 0 },
+      { id: 'COD', name: 'DR 콩고', flag: '🇨🇩', flagImg: 'flags/cd.png', confederation: 'CAF', yc: 0, twoYR: 0, dr: 0 },
     ],
   },
   L: {
@@ -183,12 +183,12 @@ export const DRAW_POTS = {
     { id: 'CUW', name: '퀴라소', flag: '🇨🇼', flagImg: 'flags/cw.png', confederation: 'CONCACAF' },
     { id: 'HTI', name: '아이티', flag: '🇭🇹', flagImg: 'flags/ht.png', confederation: 'CONCACAF' },
     { id: 'NZL', name: '뉴질랜드', flag: '🇳🇿', flagImg: 'flags/nz.png', confederation: 'OFC' },
-    { id: 'UEFA_PO_A', name: 'UEFA PO-A', flag: '🏴', flagImg: null, confederation: 'UEFA' },
-    { id: 'UEFA_PO_B', name: 'UEFA PO-B', flag: '🏴', flagImg: null, confederation: 'UEFA' },
-    { id: 'UEFA_PO_C', name: 'UEFA PO-C', flag: '🏴', flagImg: null, confederation: 'UEFA' },
-    { id: 'UEFA_PO_D', name: 'UEFA PO-D', flag: '🏴', flagImg: null, confederation: 'UEFA' },
-    { id: 'IC_PO_1', name: 'IC PO-1', flag: '🏆', flagImg: null, confederation: 'CONCACAF' },
-    { id: 'IC_PO_2', name: 'IC PO-2', flag: '🏆', flagImg: null, confederation: 'AFC' },
+    { id: 'BIH', name: '보스니아', flag: '🇧🇦', flagImg: 'flags/ba.png', confederation: 'UEFA' },
+    { id: 'SWE', name: '스웨덴', flag: '🇸🇪', flagImg: 'flags/se.png', confederation: 'UEFA' },
+    { id: 'TUR', name: '튀르키예', flag: '🇹🇷', flagImg: 'flags/tr.png', confederation: 'UEFA' },
+    { id: 'CZE', name: '체코', flag: '🇨🇿', flagImg: 'flags/cz.png', confederation: 'UEFA' },
+    { id: 'COD', name: 'DR 콩고', flag: '🇨🇩', flagImg: 'flags/cd.png', confederation: 'CAF' },
+    { id: 'IRQ', name: '이라크', flag: '🇮🇶', flagImg: 'flags/iq.png', confederation: 'AFC' },
   ],
 };
 
@@ -200,24 +200,24 @@ export const DRAW_POTS = {
 // API-Football (RapidAPI) 연동 시 fixture_id 필드를 통해 매핑됩니다.
 // ──────────────────────────────────────────────────────────────────
 export const MATCH_SCHEDULE = {
-  // ── Group A (MEX · KOR · RSA · UEFA_PO_D) ────────────────────
-  // R1: MEX vs RSA (Jun 11), KOR vs UEFA_PO_D (Jun 12)
-  // R2: MEX vs KOR (Jun 18/19), RSA vs UEFA_PO_D (Jun 18)
-  // R3: MEX vs UEFA_PO_D · KOR vs RSA (Jun 24/25 동시)
+  // ── Group A (MEX · KOR · RSA · CZE) ────────────────────
+  // R1: MEX vs RSA (Jun 11), KOR vs CZE (Jun 12)
+  // R2: MEX vs KOR (Jun 18/19), RSA vs CZE (Jun 18)
+  // R3: MEX vs CZE · KOR vs RSA (Jun 24/25 동시)
   'MEX_vs_RSA':         { matchday: 1, date: '2026-06-11T19:00:00Z', venue: 'Estadio Azteca',          city: 'Mexico City, MEX' },
-  'KOR_vs_UEFA_PO_D':   { matchday: 1, date: '2026-06-12T16:00:00Z', venue: 'Estadio Guadalajara',     city: 'Guadalajara, MEX' },
+  'KOR_vs_CZE':   { matchday: 1, date: '2026-06-12T16:00:00Z', venue: 'Estadio Guadalajara',     city: 'Guadalajara, MEX' },
   'MEX_vs_KOR':         { matchday: 2, date: '2026-06-19T01:00:00Z', venue: 'Estadio Guadalajara',     city: 'Guadalajara, MEX' },
-  'RSA_vs_UEFA_PO_D':   { matchday: 2, date: '2026-06-18T22:00:00Z', venue: 'Mercedes-Benz Stadium',   city: 'Atlanta, GA' },
+  'RSA_vs_CZE':   { matchday: 2, date: '2026-06-18T22:00:00Z', venue: 'Mercedes-Benz Stadium',   city: 'Atlanta, GA' },
   'KOR_vs_RSA':         { matchday: 3, date: '2026-06-24T22:00:00Z', venue: 'NRG Stadium',             city: 'Houston, TX' },
-  'MEX_vs_UEFA_PO_D':   { matchday: 3, date: '2026-06-25T01:00:00Z', venue: 'Estadio Azteca',          city: 'Mexico City, MEX' },
+  'MEX_vs_CZE':   { matchday: 3, date: '2026-06-25T01:00:00Z', venue: 'Estadio Azteca',          city: 'Mexico City, MEX' },
 
-  // ── Group B (CAN · CHE · QAT · UEFA_PO_A) ────────────────────
-  'CAN_vs_UEFA_PO_A':   { matchday: 1, date: '2026-06-12T19:00:00Z', venue: 'BMO Field',               city: 'Toronto, CAN' },
+  // ── Group B (CAN · CHE · QAT · BIH) ────────────────────
+  'CAN_vs_BIH':   { matchday: 1, date: '2026-06-12T19:00:00Z', venue: 'BMO Field',               city: 'Toronto, CAN' },
   'CHE_vs_QAT':         { matchday: 1, date: '2026-06-12T22:00:00Z', venue: "Levi's Stadium",          city: 'Santa Clara, CA' },
-  'CHE_vs_UEFA_PO_A':   { matchday: 2, date: '2026-06-18T22:00:00Z', venue: 'SoFi Stadium',            city: 'Inglewood, CA' },
+  'CHE_vs_BIH':   { matchday: 2, date: '2026-06-18T22:00:00Z', venue: 'SoFi Stadium',            city: 'Inglewood, CA' },
   'CAN_vs_QAT':         { matchday: 2, date: '2026-06-19T01:00:00Z', venue: 'BC Place',                city: 'Vancouver, CAN' },
   'CAN_vs_CHE':         { matchday: 3, date: '2026-06-25T04:00:00Z', venue: 'BC Place',                city: 'Vancouver, CAN' },
-  'QAT_vs_UEFA_PO_A':   { matchday: 3, date: '2026-06-25T04:00:00Z', venue: 'Lumen Field',             city: 'Seattle, WA' },
+  'QAT_vs_BIH':   { matchday: 3, date: '2026-06-25T04:00:00Z', venue: 'Lumen Field',             city: 'Seattle, WA' },
 
   // ── Group C (BRA · MAR · SCO · HTI) ──────────────────────────
   'BRA_vs_MAR':         { matchday: 1, date: '2026-06-13T22:00:00Z', venue: 'SoFi Stadium',            city: 'Inglewood, CA' },
@@ -227,13 +227,13 @@ export const MATCH_SCHEDULE = {
   'BRA_vs_SCO':         { matchday: 3, date: '2026-06-24T22:00:00Z', venue: 'Mercedes-Benz Stadium',   city: 'Atlanta, GA' },
   'MAR_vs_HTI':         { matchday: 3, date: '2026-06-24T22:00:00Z', venue: 'Lincoln Financial Field', city: 'Philadelphia, PA' },
 
-  // ── Group D (USA · AUS · PAR · UEFA_PO_C) ────────────────────
+  // ── Group D (USA · AUS · PAR · TUR) ────────────────────
   'USA_vs_PAR':         { matchday: 1, date: '2026-06-13T01:00:00Z', venue: 'SoFi Stadium',            city: 'Inglewood, CA' },
-  'AUS_vs_UEFA_PO_C':   { matchday: 1, date: '2026-06-13T04:00:00Z', venue: 'BC Place',                city: 'Vancouver, CAN' },
+  'AUS_vs_TUR':   { matchday: 1, date: '2026-06-13T04:00:00Z', venue: 'BC Place',                city: 'Vancouver, CAN' },
   'USA_vs_AUS':         { matchday: 2, date: '2026-06-19T19:00:00Z', venue: 'Lumen Field',             city: 'Seattle, WA' },
-  'PAR_vs_UEFA_PO_C':   { matchday: 2, date: '2026-06-19T04:00:00Z', venue: "Levi's Stadium",          city: 'Santa Clara, CA' },
+  'PAR_vs_TUR':   { matchday: 2, date: '2026-06-19T04:00:00Z', venue: "Levi's Stadium",          city: 'Santa Clara, CA' },
   'AUS_vs_PAR':         { matchday: 3, date: '2026-06-26T02:00:00Z', venue: "Levi's Stadium",          city: 'Santa Clara, CA' },
-  'USA_vs_UEFA_PO_C':   { matchday: 3, date: '2026-06-26T02:00:00Z', venue: 'SoFi Stadium',            city: 'Inglewood, CA' },
+  'USA_vs_TUR':   { matchday: 3, date: '2026-06-26T02:00:00Z', venue: 'SoFi Stadium',            city: 'Inglewood, CA' },
 
   // ── Group E (GER · ECU · CIV · CUW) ──────────────────────────
   'GER_vs_CUW':         { matchday: 1, date: '2026-06-14T17:00:00Z', venue: 'BMO Field',               city: 'Toronto, CAN' },
@@ -243,13 +243,13 @@ export const MATCH_SCHEDULE = {
   'GER_vs_ECU':         { matchday: 3, date: '2026-06-25T20:00:00Z', venue: 'Lincoln Financial Field', city: 'Philadelphia, PA' },
   'CIV_vs_CUW':         { matchday: 3, date: '2026-06-25T20:00:00Z', venue: 'Arrowhead Stadium',       city: 'Kansas City, MO' },
 
-  // ── Group F (NED · JPN · TUN · UEFA_PO_B) ────────────────────
-  'NED_vs_UEFA_PO_B':   { matchday: 1, date: '2026-06-14T16:00:00Z', venue: 'AT&T Stadium',            city: 'Arlington, TX' },
+  // ── Group F (NED · JPN · TUN · SWE) ────────────────────
+  'NED_vs_SWE':   { matchday: 1, date: '2026-06-14T16:00:00Z', venue: 'AT&T Stadium',            city: 'Arlington, TX' },
   'NED_vs_JPN':         { matchday: 1, date: '2026-06-14T20:00:00Z', venue: 'Estadio Akron',           city: 'Guadalajara, MEX' },
-  'TUN_vs_UEFA_PO_B':   { matchday: 2, date: '2026-06-20T07:00:00Z', venue: 'Estadio Monterrey',       city: 'Monterrey, MEX' },
+  'TUN_vs_SWE':   { matchday: 2, date: '2026-06-20T07:00:00Z', venue: 'Estadio Monterrey',       city: 'Monterrey, MEX' },
   'JPN_vs_TUN':         { matchday: 2, date: '2026-06-21T04:00:00Z', venue: 'Arrowhead Stadium',       city: 'Kansas City, MO' },
   'NED_vs_TUN':         { matchday: 3, date: '2026-06-25T23:00:00Z', venue: 'AT&T Stadium',            city: 'Arlington, TX' },
-  'JPN_vs_UEFA_PO_B':   { matchday: 3, date: '2026-06-26T22:00:00Z', venue: 'Estadio Monterrey',       city: 'Monterrey, MEX' },
+  'JPN_vs_SWE':   { matchday: 3, date: '2026-06-26T22:00:00Z', venue: 'Estadio Monterrey',       city: 'Monterrey, MEX' },
 
   // ── Group G (BEL · IRN · EGY · NZL) ──────────────────────────
   'BEL_vs_EGY':         { matchday: 1, date: '2026-06-15T19:00:00Z', venue: 'Lumen Field',             city: 'Seattle, WA' },
@@ -267,13 +267,13 @@ export const MATCH_SCHEDULE = {
   'ESP_vs_URU':         { matchday: 3, date: '2026-06-27T19:00:00Z', venue: 'Hard Rock Stadium',       city: 'Miami, FL' },
   'SAU_vs_CPV':         { matchday: 3, date: '2026-06-27T19:00:00Z', venue: 'Mercedes-Benz Stadium',   city: 'Atlanta, GA' },
 
-  // ── Group I (FRA · SEN · NOR · IC_PO_2) ──────────────────────
+  // ── Group I (FRA · SEN · NOR · IRQ) ──────────────────────
   'FRA_vs_SEN':         { matchday: 1, date: '2026-06-16T19:00:00Z', venue: 'MetLife Stadium',         city: 'East Rutherford, NJ' },
-  'NOR_vs_IC_PO_2':     { matchday: 1, date: '2026-06-16T19:00:00Z', venue: 'Gillette Stadium',        city: 'Foxborough, MA' },
-  'SEN_vs_IC_PO_2':     { matchday: 2, date: '2026-06-22T04:00:00Z', venue: 'BMO Field',               city: 'Toronto, CAN' },
+  'NOR_vs_IRQ':     { matchday: 1, date: '2026-06-16T19:00:00Z', venue: 'Gillette Stadium',        city: 'Foxborough, MA' },
+  'SEN_vs_IRQ':     { matchday: 2, date: '2026-06-22T04:00:00Z', venue: 'BMO Field',               city: 'Toronto, CAN' },
   'SEN_vs_NOR':         { matchday: 2, date: '2026-06-23T00:00:00Z', venue: 'Gillette Stadium',        city: 'Foxborough, MA' },
   'FRA_vs_NOR':         { matchday: 3, date: '2026-06-26T19:00:00Z', venue: 'Lincoln Financial Field', city: 'Philadelphia, PA' },
-  'FRA_vs_IC_PO_2':     { matchday: 3, date: '2026-06-27T23:00:00Z', venue: 'MetLife Stadium',         city: 'East Rutherford, NJ' },
+  'FRA_vs_IRQ':     { matchday: 3, date: '2026-06-27T23:00:00Z', venue: 'MetLife Stadium',         city: 'East Rutherford, NJ' },
 
   // ── Group J (ARG · AUT · ALG · JOR) ──────────────────────────
   'ARG_vs_ALG':         { matchday: 1, date: '2026-06-16T22:00:00Z', venue: 'Arrowhead Stadium',       city: 'Kansas City, MO' },
@@ -283,12 +283,12 @@ export const MATCH_SCHEDULE = {
   'ARG_vs_JOR':         { matchday: 3, date: '2026-06-28T00:00:00Z', venue: "Levi's Stadium",          city: 'Santa Clara, CA' },
   'AUT_vs_ALG':         { matchday: 3, date: '2026-06-28T00:00:00Z', venue: 'AT&T Stadium',            city: 'Arlington, TX' },
 
-  // ── Group K (POR · COL · UZB · IC_PO_1) ──────────────────────
-  'POR_vs_IC_PO_1':     { matchday: 1, date: '2026-06-17T16:00:00Z', venue: 'NRG Stadium',             city: 'Houston, TX' },
+  // ── Group K (POR · COL · UZB · COD) ──────────────────────
+  'POR_vs_COD':     { matchday: 1, date: '2026-06-17T16:00:00Z', venue: 'NRG Stadium',             city: 'Houston, TX' },
   'COL_vs_UZB':         { matchday: 1, date: '2026-06-18T02:00:00Z', venue: "Levi's Stadium",          city: 'Santa Clara, CA' },
-  'UZB_vs_IC_PO_1':     { matchday: 2, date: '2026-06-23T04:00:00Z', venue: 'Estadio Guadalajara',     city: 'Guadalajara, MEX' },
+  'UZB_vs_COD':     { matchday: 2, date: '2026-06-23T04:00:00Z', venue: 'Estadio Guadalajara',     city: 'Guadalajara, MEX' },
   'POR_vs_UZB':         { matchday: 2, date: '2026-06-23T17:00:00Z', venue: 'NRG Stadium',             city: 'Houston, TX' },
-  'COL_vs_IC_PO_1':     { matchday: 3, date: '2026-06-27T02:00:00Z', venue: 'Estadio Guadalajara',     city: 'Guadalajara, MEX' },
+  'COL_vs_COD':     { matchday: 3, date: '2026-06-27T02:00:00Z', venue: 'Estadio Guadalajara',     city: 'Guadalajara, MEX' },
   'POR_vs_COL':         { matchday: 3, date: '2026-06-27T23:30:00Z', venue: 'NRG Stadium',             city: 'Houston, TX' },
 
   // ── Group L (ENG · CRO · GHA · PAN) ──────────────────────────
@@ -304,7 +304,7 @@ export const MATCH_SCHEDULE = {
 // FIFA 공식 랭킹 - 고정값 (2025년 11월 기준 — 조추첨 기준점)
 // 출처: FIFA 공식 랭킹 (2025년 11월 발표)
 // 3위팀 상위 8팀 선별 타이브레이커 최종 기준으로 사용 (낮을수록 상위)
-// 미확정 플레이오프 팀(UEFA PO, 대륙간 PO)은 999 처리
+// 모든 48팀 확정 (2026년 3월 대륙간 플레이오프 완료)
 // ⚠️ TODO: 실제 2025년 11월 랭킹으로 교체 필요
 // ──────────────────────────────────────────────────────────────────
 export const FIFA_RANKINGS_DRAW = {
@@ -322,9 +322,8 @@ export const FIFA_RANKINGS_DRAW = {
   SAU: 60, RSA: 61,
   // ── Pot 4 ────────────────────────────────────────────────────
   JOR: 66, CPV: 68, GHA: 72, CUW: 82, HTI: 84, NZL: 86,
-  // 미확정 플레이오프
-  UEFA_PO_A: 999, UEFA_PO_B: 999, UEFA_PO_C: 999, UEFA_PO_D: 999,
-  IC_PO_1:   999, IC_PO_2:   999,
+  BIH: 55, SWE: 25, TUR: 28, CZE: 43,
+  COD: 63, IRQ: 56,
 };
 
 // ──────────────────────────────────────────────────────────────────
@@ -348,9 +347,8 @@ export const FIFA_RANKINGS_CURRENT = {
   RSA: 58, JOR: 70,
   // Pot 4
   QAT: 75, CPV: 80, HTI: 82, NZL: 85, CUW: 88,
-  // 미확정 플레이오프
-  UEFA_PO_A: 999, UEFA_PO_B: 999, UEFA_PO_C: 999, UEFA_PO_D: 999,
-  IC_PO_1:   999, IC_PO_2:   999,
+  BIH: 56, SWE: 26, TUR: 30, CZE: 45,
+  COD: 64, IRQ: 57,
 };
 
 // 하위 호환 alias (기존 import 유지)

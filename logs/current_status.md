@@ -1,6 +1,6 @@
 # 📊 current_status.md — 프로젝트 공유 대시보드
 
-> **마지막 업데이트**: 2026-03-24
+> **마지막 업데이트**: 2026-04-03
 
 ---
 
@@ -13,7 +13,7 @@ Phase 3:  3위팀 순위               ✅ 완료 (승점 범위 + 진출확정/
 Phase 4:  조추첨 시뮬레이터        ✅ 완료
 Phase 5:  규칙 페이지              ✅ 완료
 Phase 6:  경기 일정 정렬           ✅ 완료
-Phase 7:  API-Football 연동        ✅ 완료 (54/54 동기화)
+Phase 7:  API-Football 연동        ✅ 완료 (72/72 동기화, 48팀 매핑)
 Phase 8:  Cloudflare 배포          ✅ 완료 (Pages + Workers + D1)
 Phase 9:  시나리오 엔진 고도화     ✅ 완료 (조건 텍스트, 혼조 분석, 배지 로직)
 Phase 10: ELO 캐시 시스템          ✅ 완료 (eloratings.net 기반)
@@ -32,7 +32,31 @@ Phase 14: 랜딩 페이지             ⬜ 다음 단계
 
 ---
 
-## 최근 완료된 작업 (2026-03-19 ~ 03-24)
+## 최근 완료된 작업 (2026-04-03)
+
+### 플레이오프 확정팀 업데이트 (2026-04-03)
+- **6개 플레이오프 슬롯 → 확정팀 교체**: UEFA_PO_D→CZE, UEFA_PO_A→BIH, UEFA_PO_C→TUR, UEFA_PO_B→SWE, IC_PO_1→COD, IC_PO_2→IRQ
+- **수정 파일**: `src/data/worldcup2026.js` (INITIAL_GROUPS, DRAW_POTS, MATCH_SCHEDULE, FIFA_RANKINGS), `src/data/mockResults.js`, `scripts/generateTeamMapping.js`
+- **FIFA 랭킹**: 추정값 적용 (SWE:25/26, TUR:28/30, CZE:43/45, BIH:55/56, IRQ:56/57, COD:63/64)
+
+### 국기 이미지 추가 (2026-04-03)
+- **6개 국기 PNG 다운로드**: flagcdn.com/w80 (기존과 동일 소스/포맷)
+- `public/flags/` → cz.png, ba.png, tr.png, se.png, cd.png, iq.png
+- `worldcup2026.js` 12곳 `flagImg: null` → 실제 경로로 수정
+
+### 로컬 개발환경 세팅 (2026-04-03, 새 Windows PC)
+- PostgreSQL 17 설치 + trust 인증 설정
+- DB `groupstages_2026` 생성, 스키마 적용 (match_results, team_mapping, team_statistics, api_sync_log)
+- 48팀 API-Football 매핑 완료 (BIH/CUW/CPV 수동 매핑)
+- 72 fixtures 동기화 (전부 NS 상태)
+- dotenvx 암호화 환경변수 구성
+
+### 프로덕션 배포 (2026-04-03)
+- Cloudflare Pages 배포 (국기 이미지 + 확정팀 반영)
+
+---
+
+## 이전 완료된 작업 (2026-03-19 ~ 03-24)
 
 ### 보안 패치 (2026-03-24)
 - **CORS 화이트리스트**: `*` → `groupstages.com` + localhost만 허용
@@ -108,6 +132,7 @@ Phase 14: 랜딩 페이지             ⬜ 다음 단계
 
 | 날짜 | 커밋 | 내용 |
 |------|------|------|
+| 2026-04-03 | — | 플레이오프 확정팀 6개 교체 + 국기 추가 + 로컬환경 세팅 + 배포 |
 | 2026-03-24 | — | 보안 패치: CORS + Origin 접근제어 + 에러 마스킹 |
 | 2026-03-23 | `9e38143` | _redirects 복구 (루트 리다이렉트 제거) |
 | 2026-03-23 | `77bd1d9` | 배포 구조 CLAUDE.md 기록 |

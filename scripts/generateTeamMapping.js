@@ -12,13 +12,13 @@ const TEAM_NAME_MAPPING = {
   'MEX': 'Mexico',
   'KOR': ['Korea Republic', 'South Korea'],
   'RSA': 'South Africa',
-  'UEFA_PO_D': null, // 미확정
+  'CZE': ['Czech Republic', 'Czechia'],
 
   // Group B
   'CAN': 'Canada',
   'CHE': 'Switzerland',
   'QAT': 'Qatar',
-  'UEFA_PO_A': null, // 미확정
+  'BIH': ['Bosnia and Herzegovina', 'Bosnia'],
 
   // Group C
   'BRA': 'Brazil',
@@ -30,7 +30,7 @@ const TEAM_NAME_MAPPING = {
   'USA': ['USA', 'United States'],
   'AUS': 'Australia',
   'PAR': 'Paraguay',
-  'UEFA_PO_C': null, // 미확정
+  'TUR': ['Turkey', 'Türkiye'],
 
   // Group E
   'GER': 'Germany',
@@ -42,7 +42,7 @@ const TEAM_NAME_MAPPING = {
   'NED': 'Netherlands',
   'JPN': 'Japan',
   'TUN': 'Tunisia',
-  'UEFA_PO_B': null, // 미확정
+  'SWE': 'Sweden',
 
   // Group G
   'BEL': 'Belgium',
@@ -60,7 +60,7 @@ const TEAM_NAME_MAPPING = {
   'FRA': 'France',
   'SEN': 'Senegal',
   'NOR': 'Norway',
-  'IC_PO_2': null, // 미확정
+  'IRQ': 'Iraq',
 
   // Group J
   'ARG': 'Argentina',
@@ -72,7 +72,7 @@ const TEAM_NAME_MAPPING = {
   'POR': 'Portugal',
   'COL': 'Colombia',
   'UZB': 'Uzbekistan',
-  'IC_PO_1': null, // 미확정
+  'COD': ['DR Congo', 'Congo DR', 'Democratic Republic of Congo'],
 
   // Group L
   'ENG': 'England',
