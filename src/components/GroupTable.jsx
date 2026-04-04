@@ -1,13 +1,7 @@
 import React from 'react';
 import { ArrowRight } from 'lucide-react';
 import { BASE_URL } from '../config.js';
-
-const RANK_BG = {
-  1: 'bg-green-900/40 border-l-2 border-green-500',
-  2: 'bg-green-900/20 border-l-2 border-green-700',
-  3: 'bg-yellow-900/20 border-l-2 border-yellow-600',
-  4: 'bg-transparent',
-};
+import { RANK_BG } from './scenario/shared.jsx';
 
 export default function GroupTable({ groupKey, standings, onGroupClick, onTeamClick }) {
   return (

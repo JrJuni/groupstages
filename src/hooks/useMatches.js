@@ -1,11 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
-import { INITIAL_GROUPS } from '../data/worldcup2026.js';
 import { createInitialStandings, createInitialMatches, calculateStandings } from '../utils/rankings.js';
 import { API_BASE } from '../config.js';
 
-function buildEmptyGroups() {
+function buildEmptyGroups(leagueGroups) {
   const groups = {};
-  Object.entries(INITIAL_GROUPS).forEach(([key, { teams }]) => {
+  Object.entries(leagueGroups).forEach(([key, { teams }]) => {
     groups[key] = {
       teams,
       standings: createInitialStandings(teams),
@@ -15,8 +14,13 @@ function buildEmptyGroups() {
   return groups;
 }
 
-export function useMatches() {
-  const [groups, setGroups] = useState(() => buildEmptyGroups());
+/**
+ * @param {Object} [leagueConfig] - LeagueConfig 객체. 없으면 FIFA 2026 기본값 사용.
+ */
+export function useMatches(leagueConfig) {
+  const leagueGroups = leagueConfig.groups;
+
+  const [groups, setGroups] = useState(() => buildEmptyGroups(leagueGroups));
   const [loading, setLoading] = useState(true);
   const [apiAvailable, setApiAvailable] = useState(true);
 
@@ -85,7 +89,6 @@ export function useMatches() {
         return { ...prev, [groupKey]: { ...group, matches: newMatches, standings: newStandings } };
       });
 
-      // API로 저장 (비동기 - 실패해도 UI는 유지)
       if (updatedMatch && apiAvailable) {
         try {
           await fetch(`${API_BASE}/matches`, {
@@ -108,7 +111,7 @@ export function useMatches() {
     [apiAvailable]
   );
 
-  // 카드 변경: 팀의 yc/twoYR/dr 업데이트 후 순위 재계산
+  // 카드 변경
   const handleCardChange = useCallback((groupKey, teamId, field, value) => {
     setGroups((prev) => {
       const group = prev[groupKey];
@@ -122,7 +125,9 @@ export function useMatches() {
 
   // 전체 초기화
   const resetAll = useCallback(async () => {
-    setGroups(buildEmptyGroups());
+    if (leagueGroups) {
+      setGroups(buildEmptyGroups(leagueGroups));
+    }
     if (apiAvailable) {
       try {
         await fetch(`${API_BASE}/matches`, { method: 'DELETE' });
@@ -130,7 +135,7 @@ export function useMatches() {
         console.warn('[useMatches] 초기화 실패:', err.message);
       }
     }
-  }, [apiAvailable]);
+  }, [apiAvailable, leagueGroups]);
 
   return { groups, loading, apiAvailable, handleScoreChange, handleCardChange, resetAll };
 }

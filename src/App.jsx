@@ -1,20 +1,24 @@
-import React, { useState } from 'react';
-import { Globe, Shuffle, Trophy, Share2, Menu, X, Database, RotateCcw, Wifi, WifiOff, GitBranch, BookOpen } from 'lucide-react';
-import { getBest8ThirdPlace, getFairPlayPoints, calculateStandings } from './utils/rankings.js';
-import { TEAM_SEEDS, FIFA_RANKINGS, FIFA_RANKINGS_CURRENT } from './data/worldcup2026.js';
+import React, { useState, useMemo } from 'react';
+import { Globe, Shuffle, Trophy, Share2, Menu, X, Database, RotateCcw, Wifi, WifiOff, GitBranch, BookOpen, Swords } from 'lucide-react';
+import { getBest8ThirdPlace, getFairPlayPoints } from './utils/rankings.js';
+import { analyzeThirdPlaceCombinations, computeThirdRange } from './utils/knockout.js';
+import { leagueConfig } from './leagues/worldcup2026/index.js';
 import { useMatches } from './hooks/useMatches.js';
+import { useLocalStorage, LS_KEYS } from './hooks/useLocalStorage.js';
 import GroupTable from './components/GroupTable.jsx';
 import ThirdPlaceTable from './components/ThirdPlaceTable.jsx';
 import DrawSimulator from './components/DrawSimulator.jsx';
 import ShareButtons from './components/ShareButtons.jsx';
 import RulesPage from './components/RulesPage.jsx';
 import ScenarioPage from './components/ScenarioPage.jsx';
+import BracketPage from './components/knockout/BracketPage.jsx';
 
 // ── 탭 정의 ─────────────────────────────────────────────
 const TABS = [
   { id: 'groups', label: '조별리그', icon: Globe },
   { id: 'scenarios', label: '경우의 수', icon: GitBranch },
   { id: 'thirds', label: '3위 순위', icon: Trophy },
+  { id: 'knockout', label: '토너먼트', icon: Swords },
   { id: 'draw', label: '조추첨', icon: Shuffle },
   { id: 'rules', label: '규칙', icon: BookOpen },
 ];
@@ -71,30 +75,6 @@ function makeHtmlTable(groups) {
   return html;
 }
 
-// ── 3위 최종 승점 범위 계산 (W/D/L 9조합 브루트포스) ──────
-function computeThirdPtsRange({ teams, matches }) {
-  const remaining = matches.filter(m => !m.played);
-  if (remaining.length === 0) {
-    const pts = calculateStandings(teams, matches)[2]?.pts ?? 0;
-    return { min: pts, max: pts };
-  }
-  let minPts = Infinity, maxPts = -Infinity;
-  function iter(idx, ms) {
-    if (idx === remaining.length) {
-      const pts = calculateStandings(teams, ms)[2]?.pts ?? 0;
-      if (pts < minPts) minPts = pts;
-      if (pts > maxPts) maxPts = pts;
-      return;
-    }
-    const m = remaining[idx];
-    for (const [h, a] of [['1','0'],['0','0'],['0','1']]) {
-      iter(idx + 1, ms.map(x => x.id === m.id ? { ...x, homeScore: h, awayScore: a, played: true } : x));
-    }
-  }
-  iter(0, matches);
-  return { min: minPts === Infinity ? 0 : minPts, max: maxPts === -Infinity ? 0 : maxPts };
-}
-
 // ── 광고 슬롯 컴포넌트 ────────────────────────────────────
 function AdSlot({ slot, className = '' }) {
   return (
@@ -106,19 +86,16 @@ function AdSlot({ slot, className = '' }) {
 
 // ── 메인 앱 ─────────────────────────────────────────────
 export default function App() {
-  const { groups, loading, apiAvailable, handleScoreChange, handleCardChange, resetAll } = useMatches();
-  const [activeTab, setActiveTab] = useState(() => localStorage.getItem('gs_activeTab') || 'groups');
+  const { groups, loading, apiAvailable, handleScoreChange, handleCardChange, resetAll } = useMatches(leagueConfig);
+  const [activeTab, setActiveTab] = useLocalStorage(LS_KEYS.ACTIVE_TAB, 'groups');
   const [menuOpen, setMenuOpen] = useState(false);
   const [resetting, setResetting] = useState(false);
-  const [scenarioGroupKey, setScenarioGroupKey] = useState(() => localStorage.getItem('gs_scenarioGroup') || null);
-  const [scenarioTeamId, setScenarioTeamId] = useState(() => localStorage.getItem('gs_scenarioTeam') || null);
+  const [scenarioGroupKey, setScenarioGroupKey] = useLocalStorage(LS_KEYS.SCENARIO_GROUP);
+  const [scenarioTeamId, setScenarioTeamId] = useLocalStorage(LS_KEYS.SCENARIO_TEAM);
   const [scenarioFromNav, setScenarioFromNav] = useState(false);
 
   const handleTabClick = (id) => {
-    localStorage.setItem('gs_activeTab', id);
     if (id === 'scenarios') {
-      localStorage.removeItem('gs_scenarioGroup');
-      localStorage.removeItem('gs_scenarioTeam');
       setScenarioGroupKey(null);
       setScenarioTeamId(null);
       setScenarioFromNav(false);
@@ -127,42 +104,60 @@ export default function App() {
   };
 
   const navigateToScenario = (groupKey, teamId = null) => {
-    localStorage.setItem('gs_scenarioGroup', groupKey);
-    if (teamId) localStorage.setItem('gs_scenarioTeam', teamId);
-    else localStorage.removeItem('gs_scenarioTeam');
     setScenarioGroupKey(groupKey);
     setScenarioTeamId(teamId);
     setScenarioFromNav(true);
-    localStorage.setItem('gs_activeTab', 'scenarios');
     setActiveTab('scenarios');
   };
 
-  // 3위팀 목록
-  const allGroupStandings = Object.fromEntries(
-    Object.entries(groups).map(([k, v]) => [k, v.standings])
+  const allGroupStandings = useMemo(
+    () => Object.fromEntries(Object.entries(groups).map(([k, v]) => [k, v.standings])),
+    [groups]
   );
-  const allThirds = Object.entries(allGroupStandings)
-    .map(([group, standings]) => {
-      if (!standings || standings.length < 3) return null;
-      const t = standings[2];
-      const { min: ptsMin, max: ptsMax } = computeThirdPtsRange(groups[group]);
-      const nextMatch = (groups[group].matches ?? []).find(m => !m.played && (m.home === t.id || m.away === t.id));
-      const nextOppId = nextMatch ? (nextMatch.home === t.id ? nextMatch.away : nextMatch.home) : null;
-      const nextOpponent = nextOppId ? (standings.find(s => s.id === nextOppId) ?? null) : null;
-      return { group, ...t, fifaRank: FIFA_RANKINGS_CURRENT[t.id] ?? null, ptsMin, ptsMax, nextOpponent };
-    })
-    .filter((t) => t !== null)
-    .sort((a, b) => {
-      if (b.pts !== a.pts) return b.pts - a.pts;
-      if (b.gd !== a.gd) return b.gd - a.gd;
-      if (b.gf !== a.gf) return b.gf - a.gf;
-      const fpA = getFairPlayPoints(a), fpB = getFairPlayPoints(b);
-      if (fpB !== fpA) return fpB - fpA;
-      const ra = FIFA_RANKINGS[a.id] ?? 999, rb = FIFA_RANKINGS[b.id] ?? 999;
-      if (ra !== rb) return ra - rb;
-      return (TEAM_SEEDS[a.id] ?? 99) - (TEAM_SEEDS[b.id] ?? 99);
-    });
-  const best8 = getBest8ThirdPlace(allGroupStandings);
+
+  const best8 = useMemo(
+    () => getBest8ThirdPlace(allGroupStandings),
+    [allGroupStandings]
+  );
+
+  // 3위 분석 (단일 소스): 유효 조합 + 확정/탈락 + 슬롯 배정
+  const thirdAnalysis = useMemo(
+    () => analyzeThirdPlaceCombinations(groups),
+    [groups]
+  );
+
+  // 3위팀 목록 (승점 범위는 engine의 computeThirdRange 사용)
+  const allThirds = useMemo(() => {
+    return Object.entries(allGroupStandings)
+      .map(([group, standings]) => {
+        if (!standings || standings.length < 3) return null;
+        const t = standings[2];
+        const { teams, matches } = groups[group];
+        const range = computeThirdRange(teams, matches);
+        const nextMatch = (matches ?? []).find(m => !m.played && (m.home === t.id || m.away === t.id));
+        const nextOppId = nextMatch ? (nextMatch.home === t.id ? nextMatch.away : nextMatch.home) : null;
+        const nextOpponent = nextOppId ? (standings.find(s => s.id === nextOppId) ?? null) : null;
+        return {
+          group, ...t,
+          fifaRank: leagueConfig.rankingsCurrent[t.id] ?? null,
+          ptsMin: range.min, ptsMax: range.max,
+          nextOpponent,
+          qualified: thirdAnalysis.qualifiedGroups.has(group),
+          eliminated: thirdAnalysis.eliminatedGroups.has(group),
+        };
+      })
+      .filter((t) => t !== null)
+      .sort((a, b) => {
+        if (b.pts !== a.pts) return b.pts - a.pts;
+        if (b.gd !== a.gd) return b.gd - a.gd;
+        if (b.gf !== a.gf) return b.gf - a.gf;
+        const fpA = getFairPlayPoints(a), fpB = getFairPlayPoints(b);
+        if (fpB !== fpA) return fpB - fpA;
+        const ra = leagueConfig.rankings[a.id] ?? 999, rb = leagueConfig.rankings[b.id] ?? 999;
+        if (ra !== rb) return ra - rb;
+        return (leagueConfig.seeds[a.id] ?? 99) - (leagueConfig.seeds[b.id] ?? 99);
+      });
+  }, [allGroupStandings, groups, thirdAnalysis]);
 
   const handleReset = async () => {
     if (!window.confirm('모든 경기 결과를 초기화하시겠습니까?')) return;
@@ -279,6 +274,7 @@ export default function App() {
               {activeTab === 'groups' && '12개 조, 48팀 조별 순위 실시간 계산'}
               {activeTab === 'scenarios' && '조별리그 결과에 따른 16강 진출 경우의 수 계산'}
               {activeTab === 'thirds' && '12개 조 3위팀 중 상위 8팀 16강 진출 판별'}
+              {activeTab === 'knockout' && '32강부터 결승까지 토너먼트 대진표'}
               {activeTab === 'draw' && '포트 시스템 및 지리적 제약 조건 조추첨 시뮬레이션'}
               {activeTab === 'rules' && '2026 FIFA 월드컵 조별리그 순위 결정 방식 안내'}
             </p>
@@ -337,12 +333,22 @@ export default function App() {
             {activeTab === 'scenarios' && (
               <ScenarioPage
                 selectedGroupKey={scenarioGroupKey}
-                onSelectGroup={(key) => { localStorage.setItem('gs_scenarioGroup', key); localStorage.removeItem('gs_scenarioTeam'); setScenarioGroupKey(key); setScenarioTeamId(null); setScenarioFromNav(false); }}
+                onSelectGroup={(key) => { setScenarioGroupKey(key); setScenarioTeamId(null); setScenarioFromNav(false); }}
                 selectedTeamId={scenarioTeamId}
-                onSelectTeam={(id) => { if (id) localStorage.setItem('gs_scenarioTeam', id); else localStorage.removeItem('gs_scenarioTeam'); setScenarioTeamId(id); }}
+                onSelectTeam={(id) => setScenarioTeamId(id)}
                 fromNavigation={scenarioFromNav}
                 groups={groups}
                 onScoreChange={handleScoreChange}
+              />
+            )}
+
+            {/* 토너먼트 탭 */}
+            {activeTab === 'knockout' && (
+              <BracketPage
+                groups={groups}
+                allGroupStandings={allGroupStandings}
+                best8={best8}
+                thirdAnalysis={thirdAnalysis}
               />
             )}
 
@@ -353,12 +359,14 @@ export default function App() {
             {activeTab === 'rules' && <RulesPage />}
           </div>
 
-          {/* ── 사이드 광고 (데스크탑) ── */}
-          <aside className="hidden lg:block w-[160px] shrink-0">
-            <div className="sticky top-20 space-y-4">
-              <AdSlot slot="사이드 160×600" className="h-[600px]" />
-            </div>
-          </aside>
+          {/* ── 사이드 광고 (데스크탑, 토너먼트 탭에서는 숨김) ── */}
+          {activeTab !== 'knockout' && (
+            <aside className="hidden lg:block w-[160px] shrink-0">
+              <div className="sticky top-20 space-y-4">
+                <AdSlot slot="사이드 160×600" className="h-[600px]" />
+              </div>
+            </aside>
+          )}
         </div>
 
         {/* 하단 광고 */}

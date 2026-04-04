@@ -10,14 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "axios": "^1.13.6",
-    "cors": "^2.8.6",
-    "dotenv": "^17.3.1",
-    "express": "^5.2.1",
     "html-to-image": "^1.11.13",
-    "html2canvas": "^1.4.1",
     "lucide-react": "^0.454.0",
-    "pg": "^8.20.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^7.13.1"
@@ -26,7 +20,12 @@
     "@dotenvx/dotenvx": "^1.55.1",
     "@vitejs/plugin-react": "^4.7.0",
     "autoprefixer": "^10.4.27",
+    "axios": "^1.13.6",
     "concurrently": "^9.2.1",
+    "cors": "^2.8.6",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "pg": "^8.20.0",
     "postcss": "^8.5.8",
     "tailwindcss": "^3.4.19",
     "vite": "^5.4.21"

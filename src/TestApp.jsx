@@ -1,45 +1,25 @@
 import React, { useState } from 'react';
-import { Globe, Shuffle, Trophy, Menu, X, RotateCcw, GitBranch, BookOpen, FlaskConical, ExternalLink } from 'lucide-react';
-import { getBest8ThirdPlace, getFairPlayPoints, calculateStandings } from './utils/rankings.js';
-import { TEAM_SEEDS, FIFA_RANKINGS, FIFA_RANKINGS_CURRENT } from './data/worldcup2026.js';
+import { Globe, Shuffle, Trophy, Menu, X, RotateCcw, GitBranch, BookOpen, FlaskConical, ExternalLink, Swords } from 'lucide-react';
+import { getBest8ThirdPlace, getFairPlayPoints } from './utils/rankings.js';
+import { analyzeThirdPlaceCombinations, computeThirdRange } from './utils/knockout.js';
+import { TEAM_SEEDS, FIFA_RANKINGS, FIFA_RANKINGS_CURRENT } from './leagues/worldcup2026/data.js';
 import { useTestMatches } from './hooks/useTestMatches.js';
 import GroupTable from './components/GroupTable.jsx';
 import ThirdPlaceTable from './components/ThirdPlaceTable.jsx';
 import ScenarioPage from './components/ScenarioPage.jsx';
 import RulesPage from './components/RulesPage.jsx';
 import DrawSimulator from './components/DrawSimulator.jsx';
+import BracketPage from './components/knockout/BracketPage.jsx';
 import { Link } from 'react-router-dom';
 
 const TABS = [
   { id: 'groups', label: '조별리그', icon: Globe },
   { id: 'scenarios', label: '경우의 수', icon: GitBranch },
   { id: 'thirds', label: '3위 순위', icon: Trophy },
+  { id: 'knockout', label: '토너먼트', icon: Swords },
   { id: 'draw', label: '조추첨', icon: Shuffle },
   { id: 'rules', label: '규칙', icon: BookOpen },
 ];
-
-function computeThirdPtsRange({ teams, matches }) {
-  const remaining = matches.filter(m => !m.played);
-  if (remaining.length === 0) {
-    const pts = calculateStandings(teams, matches)[2]?.pts ?? 0;
-    return { min: pts, max: pts };
-  }
-  let minPts = Infinity, maxPts = -Infinity;
-  function iter(idx, ms) {
-    if (idx === remaining.length) {
-      const pts = calculateStandings(teams, ms)[2]?.pts ?? 0;
-      if (pts < minPts) minPts = pts;
-      if (pts > maxPts) maxPts = pts;
-      return;
-    }
-    const m = remaining[idx];
-    for (const [h, a] of [['1','0'],['0','0'],['0','1']]) {
-      iter(idx + 1, ms.map(x => x.id === m.id ? { ...x, homeScore: h, awayScore: a, played: true } : x));
-    }
-  }
-  iter(0, matches);
-  return { min: minPts === Infinity ? 0 : minPts, max: maxPts === -Infinity ? 0 : maxPts };
-}
 
 export default function TestApp() {
   const { groups, loading, apiAvailable, handleScoreChange, handleCardChange, resetAll } = useTestMatches();
@@ -75,15 +55,27 @@ export default function TestApp() {
   const allGroupStandings = Object.fromEntries(
     Object.entries(groups).map(([k, v]) => [k, v.standings])
   );
+  const best8 = getBest8ThirdPlace(allGroupStandings);
+
+  const thirdAnalysis = analyzeThirdPlaceCombinations(groups);
+
   const allThirds = Object.entries(allGroupStandings)
     .map(([group, standings]) => {
       if (!standings || standings.length < 3) return null;
       const t = standings[2];
-      const { min: ptsMin, max: ptsMax } = computeThirdPtsRange(groups[group]);
-      const nextMatch = (groups[group].matches ?? []).find(m => !m.played && (m.home === t.id || m.away === t.id));
+      const { teams, matches } = groups[group];
+      const range = computeThirdRange(teams, matches);
+      const nextMatch = (matches ?? []).find(m => !m.played && (m.home === t.id || m.away === t.id));
       const nextOppId = nextMatch ? (nextMatch.home === t.id ? nextMatch.away : nextMatch.home) : null;
       const nextOpponent = nextOppId ? (standings.find(s => s.id === nextOppId) ?? null) : null;
-      return { group, ...t, fifaRank: FIFA_RANKINGS_CURRENT[t.id] ?? null, ptsMin, ptsMax, nextOpponent };
+      return {
+        group, ...t,
+        fifaRank: FIFA_RANKINGS_CURRENT[t.id] ?? null,
+        ptsMin: range.min, ptsMax: range.max,
+        nextOpponent,
+        qualified: thirdAnalysis.qualifiedGroups.has(group),
+        eliminated: thirdAnalysis.eliminatedGroups.has(group),
+      };
     })
     .filter((t) => t !== null)
     .sort((a, b) => {
@@ -96,7 +88,6 @@ export default function TestApp() {
       if (ra !== rb) return ra - rb;
       return (TEAM_SEEDS[a.id] ?? 99) - (TEAM_SEEDS[b.id] ?? 99);
     });
-  const best8 = getBest8ThirdPlace(allGroupStandings);
 
   const handleReset = () => {
     if (!window.confirm('테스트 데이터를 초기화하시겠습니까?')) return;
@@ -209,6 +200,7 @@ export default function TestApp() {
             {activeTab === 'groups' && '12개 조, 48팀 — 직접 점수 입력하여 테스트'}
             {activeTab === 'scenarios' && '경우의 수 계산 테스트'}
             {activeTab === 'thirds' && '3위팀 상위 8팀 선별 테스트'}
+            {activeTab === 'knockout' && '32강부터 결승까지 토너먼트 대진표'}
             {activeTab === 'draw' && '조추첨 시뮬레이터'}
             {activeTab === 'rules' && '순위 결정 규칙'}
           </p>
@@ -248,6 +240,15 @@ export default function TestApp() {
               fromNavigation={scenarioFromNav}
               groups={groups}
               onScoreChange={handleScoreChange}
+            />
+          )}
+
+          {activeTab === 'knockout' && (
+            <BracketPage
+              groups={groups}
+              allGroupStandings={allGroupStandings}
+              best8={best8}
+              thirdAnalysis={thirdAnalysis}
             />
           )}
 

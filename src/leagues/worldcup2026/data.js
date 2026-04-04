@@ -111,24 +111,48 @@ export const INITIAL_GROUPS = {
 
 export const THIRD_PLACE_GROUPS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L'];
 
-// 16강 대진 규칙 (FIFA 공식 기준)
-export const R32_MATCHUPS = [
-  { slot: 1, team1: '1A', team2: '2B' },
-  { slot: 2, team1: '1B', team2: '2A' },
-  { slot: 3, team1: '1C', team2: '2D' },
-  { slot: 4, team1: '1D', team2: '2C' },
-  { slot: 5, team1: '1E', team2: '2F' },
-  { slot: 6, team1: '1F', team2: '2E' },
-  { slot: 7, team1: '1G', team2: '2H' },
-  { slot: 8, team1: '1H', team2: '2G' },
-  { slot: 9, team1: '1I', team2: '2J' },
-  { slot: 10, team1: '1J', team2: '2I' },
-  { slot: 11, team1: '1K', team2: '2L' },
-  { slot: 12, team1: '1L', team2: '2K' },
-  { slot: 13, team1: '3rd-1', team2: '3rd-2' },
-  { slot: 14, team1: '3rd-3', team2: '3rd-4' },
-  { slot: 15, team1: '3rd-5', team2: '3rd-6' },
-  { slot: 16, team1: '3rd-7', team2: '3rd-8' },
+// ── 토너먼트 대진표 (FIFA 공식 기준, 2025년 12월 확정) ───────────
+// R32: 8경기 1위 vs 3위, 4경기 1위/2위 교차, 4경기 2위 vs 2위
+// 3위 슬롯: thirdFrom = 해당 슬롯에 배정 가능한 그룹 목록
+export const KNOCKOUT_BRACKET = [
+  // ── R32 (16경기) ──────────────────────────────
+  // Left bracket (8경기)
+  { id: 'M74', round: 'R32', side: 'left', pos: 0, team1: '1E', team2: '3rd', thirdFrom: ['A','B','C','D','F'], next: 'M89' },
+  { id: 'M77', round: 'R32', side: 'left', pos: 1, team1: '1I', team2: '3rd', thirdFrom: ['C','D','F','G','H'], next: 'M89' },
+  { id: 'M73', round: 'R32', side: 'left', pos: 2, team1: '2A', team2: '2B', next: 'M90' },
+  { id: 'M75', round: 'R32', side: 'left', pos: 3, team1: '1F', team2: '2C', next: 'M90' },
+  { id: 'M83', round: 'R32', side: 'left', pos: 4, team1: '2K', team2: '2L', next: 'M93' },
+  { id: 'M84', round: 'R32', side: 'left', pos: 5, team1: '1H', team2: '2J', next: 'M93' },
+  { id: 'M81', round: 'R32', side: 'left', pos: 6, team1: '1D', team2: '3rd', thirdFrom: ['B','E','F','I','J'], next: 'M94' },
+  { id: 'M82', round: 'R32', side: 'left', pos: 7, team1: '1G', team2: '3rd', thirdFrom: ['A','E','H','I','J'], next: 'M94' },
+  // Right bracket (8경기)
+  { id: 'M76', round: 'R32', side: 'right', pos: 0, team1: '1C', team2: '2F', next: 'M91' },
+  { id: 'M78', round: 'R32', side: 'right', pos: 1, team1: '2E', team2: '2I', next: 'M91' },
+  { id: 'M79', round: 'R32', side: 'right', pos: 2, team1: '1A', team2: '3rd', thirdFrom: ['C','E','F','H','I'], next: 'M92' },
+  { id: 'M80', round: 'R32', side: 'right', pos: 3, team1: '1L', team2: '3rd', thirdFrom: ['E','H','I','J','K'], next: 'M92' },
+  { id: 'M86', round: 'R32', side: 'right', pos: 4, team1: '1J', team2: '2H', next: 'M95' },
+  { id: 'M88', round: 'R32', side: 'right', pos: 5, team1: '2D', team2: '2G', next: 'M95' },
+  { id: 'M85', round: 'R32', side: 'right', pos: 6, team1: '1B', team2: '3rd', thirdFrom: ['E','F','G','I','J'], next: 'M96' },
+  { id: 'M87', round: 'R32', side: 'right', pos: 7, team1: '1K', team2: '3rd', thirdFrom: ['D','E','I','J','L'], next: 'M96' },
+  // ── R16 (8경기) ──────────────────────────────
+  { id: 'M89', round: 'R16', side: 'left',  pos: 0, from: ['M74','M77'], next: 'M97' },
+  { id: 'M90', round: 'R16', side: 'left',  pos: 1, from: ['M73','M75'], next: 'M97' },
+  { id: 'M93', round: 'R16', side: 'left',  pos: 2, from: ['M83','M84'], next: 'M98' },
+  { id: 'M94', round: 'R16', side: 'left',  pos: 3, from: ['M81','M82'], next: 'M98' },
+  { id: 'M91', round: 'R16', side: 'right', pos: 0, from: ['M76','M78'], next: 'M99' },
+  { id: 'M92', round: 'R16', side: 'right', pos: 1, from: ['M79','M80'], next: 'M99' },
+  { id: 'M95', round: 'R16', side: 'right', pos: 2, from: ['M86','M88'], next: 'M100' },
+  { id: 'M96', round: 'R16', side: 'right', pos: 3, from: ['M85','M87'], next: 'M100' },
+  // ── QF (4경기) ──────────────────────────────
+  { id: 'M97',  round: 'QF', side: 'left',  pos: 0, from: ['M89','M90'], next: 'M101' },
+  { id: 'M98',  round: 'QF', side: 'left',  pos: 1, from: ['M93','M94'], next: 'M101' },
+  { id: 'M99',  round: 'QF', side: 'right', pos: 0, from: ['M91','M92'], next: 'M102' },
+  { id: 'M100', round: 'QF', side: 'right', pos: 1, from: ['M95','M96'], next: 'M102' },
+  // ── SF (2경기) ──────────────────────────────
+  { id: 'M101', round: 'SF', side: 'left',  pos: 0, from: ['M97','M98'],  next: 'FINAL' },
+  { id: 'M102', round: 'SF', side: 'right', pos: 0, from: ['M99','M100'], next: 'FINAL' },
+  // ── Final ──────────────────────────────────
+  { id: 'FINAL', round: 'FINAL', side: 'center', pos: 0, from: ['M101','M102'] },
 ];
 
 // 실제 2026 WC 조추첨 Pot 시스템

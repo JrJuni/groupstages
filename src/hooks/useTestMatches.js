@@ -3,7 +3,7 @@
  * DB 저장 없음 / 새로고침 시 초기화 / MOCK_RESULTS로 MD1+MD2 사전 입력
  */
 import { useState, useCallback } from 'react';
-import { INITIAL_GROUPS } from '../data/worldcup2026.js';
+import { INITIAL_GROUPS } from '../leagues/worldcup2026/data.js';
 import { MOCK_RESULTS } from '../data/mockResults.js';
 import { createInitialStandings, createInitialMatches, calculateStandings } from '../utils/rankings.js';
 
