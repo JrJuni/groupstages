@@ -1,8 +1,8 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import MatchCard from './MatchCard.jsx';
 
 const ROUND_ORDER = ['R32', 'R16', 'QF', 'SF'];
-const ROUND_LABELS = { R32: '32강', R16: '16강', QF: '8강', SF: '4강' };
 
 /**
  * 매치 쌍을 커넥터로 연결
@@ -39,6 +39,7 @@ export default function BracketSide({
   thirdCandidates,
   confirmedSlots,
 }) {
+  const { t } = useTranslation('bracket');
   const direction = side === 'left' ? 'ltr' : 'rtl';
   const rounds = ROUND_ORDER.map((roundName) =>
     bracket
@@ -66,7 +67,7 @@ export default function BracketSide({
           <div key={roundName} className="flex flex-col flex-1 min-w-0">
             {/* 라운드 라벨 */}
             <div className="text-[10px] text-center text-fifa-muted font-medium mb-1">
-              {ROUND_LABELS[roundName]}
+              {t(`rounds.${roundName}`)}
             </div>
 
             <div className="flex flex-col flex-1 justify-around gap-1">

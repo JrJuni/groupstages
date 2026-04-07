@@ -1,0 +1,54 @@
+{
+  "rounds": {
+    "R32": "1/16",
+    "R16": "Octavos",
+    "QF": "Cuartos",
+    "SF": "Semis",
+    "FINAL": "Final"
+  },
+  "matchLabel": "{{round}} #{{num}}",
+  "roundCountLabel": "{{round}} ({{count}} partidos)",
+  "finalHeader": "🏆 Final",
+  "groupSelector": "Seleccionar grupo:",
+  "validCombinations": "Combinaciones válidas: {{count}}/495",
+  "rankLabels": {
+    "1": "1º",
+    "2": "2º",
+    "3": "3º"
+  },
+  "thirdStatus": {
+    "eliminated": "(eliminado)",
+    "qualified": "(clasificado)",
+    "currentBest": "(actual 3º puesto {{rank}})",
+    "currentOut": "(actualmente fuera)"
+  },
+  "legend": {
+    "first": "Plaza de 1º",
+    "second": "Plaza de 2º",
+    "third": "Posible plaza de 3º",
+    "confirmed": "Plaza confirmada"
+  },
+  "match": {
+    "possibleThirds": "Posibles terceros",
+    "groupSuffix": "Grp {{group}}"
+  },
+  "draw": {
+    "speed": "Velocidad",
+    "speedSlow": "Lenta",
+    "speedNormal": "Normal",
+    "speedFast": "Rápida",
+    "reset": "Reiniciar",
+    "instantDraw": "Sorteo instantáneo",
+    "drawStart": "Iniciar sorteo",
+    "pause": "Pausar",
+    "completed": "Hecho",
+    "drawProgress": "Progreso del sorteo",
+    "lastDrawn": "Último sorteado",
+    "assignedGroup": "Grupo asignado",
+    "groupLabel": "Grupo {{group}}",
+    "drawComplete": "✓ Sorteo completo",
+    "drawResult": "Resultado del sorteo",
+    "groupName": "Grupo {{name}}",
+    "unassigned": "Sin asignar"
+  }
+}

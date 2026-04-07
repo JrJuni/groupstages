@@ -1,0 +1,68 @@
+{
+  "tabs": {
+    "groups": "조별리그",
+    "scenarios": "경우의 수",
+    "thirds": "3위 순위",
+    "knockout": "토너먼트",
+    "draw": "조추첨",
+    "rules": "규칙"
+  },
+  "subtitle": {
+    "groups": "12개 조, 48팀 조별 순위 실시간 계산",
+    "scenarios": "조별리그 결과에 따른 16강 진출 경우의 수 계산",
+    "thirds": "12개 조 3위팀 중 상위 8팀 16강 진출 판별",
+    "knockout": "32강부터 결승까지 토너먼트 대진표",
+    "draw": "포트 시스템 및 지리적 제약 조건 조추첨 시뮬레이션",
+    "rules": "2026 FIFA 월드컵 조별리그 순위 결정 방식 안내"
+  },
+  "header": {
+    "dbConnected": "DB 연결됨",
+    "dbDisconnected": "DB 미연결 (로컬 모드)",
+    "dbLabel": "DB",
+    "localLabel": "Local",
+    "resetTitle": "전체 경기 결과 초기화",
+    "reset": "초기화",
+    "resetAll": "전체 초기화",
+    "loading": "로딩 중..."
+  },
+  "dialog": {
+    "confirmReset": "모든 경기 결과를 초기화하시겠습니까?",
+    "confirmResetTest": "테스트 데이터를 초기화하시겠습니까?"
+  },
+  "footer": {
+    "copyright": "GroupStages © 2026 · 2026 FIFA World Cup 경우의 수 계산기",
+    "disclaimer": "본 사이트는 FIFA와 공식 관련이 없습니다",
+    "testNotice": "TEST MODE · 이 페이지의 데이터는 실제 DB에 저장되지 않습니다"
+  },
+  "test": {
+    "modeBadge": "TEST",
+    "modeBanner": "TEST MODE — API 없이 로컬 데이터 사용 중 · 새로고침 시 초기화",
+    "modeSubtitle": "2026 FIFA World Cup · 테스트 환경",
+    "backToMain": "메인으로",
+    "resetTitle": "테스트 데이터 초기화",
+    "subtitle": {
+      "groups": "12개 조, 48팀 — 직접 점수 입력하여 테스트",
+      "scenarios": "경우의 수 계산 테스트",
+      "thirds": "3위팀 상위 8팀 선별 테스트",
+      "knockout": "32강부터 결승까지 토너먼트 대진표",
+      "draw": "조추첨 시뮬레이터",
+      "rules": "순위 결정 규칙"
+    }
+  },
+  "share": {
+    "redditMd": "Reddit MD",
+    "redditMdTooltip": "Reddit Markdown 표 복사",
+    "htmlTable": "HTML 표",
+    "htmlTableTooltip": "HTML 표 복사 (커뮤니티용)",
+    "saveImage": "이미지 저장",
+    "saveImageTooltip": "이미지로 저장"
+  },
+  "ads": {
+    "slot": "광고 슬롯 ({{name}})",
+    "topBanner": "상단 배너 728×90",
+    "mobileTop": "모바일 상단 320×50",
+    "middleBanner": "중간 배너 728×90",
+    "sideBanner": "사이드 160×600",
+    "bottomBanner": "하단 배너 728×90"
+  }
+}

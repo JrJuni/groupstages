@@ -1,0 +1,57 @@
+{
+  "groups": {
+    "title": "Grupo {{group}}",
+    "viewScenarioGroup": "Ver escenarios del Grupo {{group}}",
+    "viewScenarioTeam": "Ver escenarios de {{team}}",
+    "headers": {
+      "rank": "#",
+      "team": "Equipo",
+      "played": "PJ",
+      "won": "G",
+      "drawn": "E",
+      "lost": "P",
+      "goalsFor": "GF",
+      "goalsAgainst": "GC",
+      "goalDiff": "DG",
+      "points": "Pts"
+    }
+  },
+  "thirds": {
+    "title": "8 mejores terceros (Dieciseisavos)",
+    "dbTooltip": "Consulta en tiempo real desde la BD",
+    "localTooltip": "Cálculo local",
+    "confirmedCount": "{{count}}/8 confirmados",
+    "headers": {
+      "rank": "#",
+      "team": "Equipo",
+      "group": "Grp",
+      "played": "PJ",
+      "won": "G",
+      "drawn": "E",
+      "lost": "P",
+      "goalDiff": "DG",
+      "points": "Pts",
+      "ptsMax": "Máx",
+      "ptsMin": "Mín",
+      "fifa": "FIFA",
+      "status": "Estado",
+      "nextMatch": "Siguiente partido"
+    },
+    "headerTooltips": {
+      "ptsMax": "Puntos máximos posibles para el tercero de este grupo",
+      "ptsMin": "Puntos mínimos posibles para el tercero de este grupo",
+      "fifa": "Ranking FIFA"
+    },
+    "loading": "Cargando datos desde la BD...",
+    "loadingLocal": "Cargando datos...",
+    "status": {
+      "qualified": "Clasificado",
+      "eliminated": "Eliminado",
+      "likely": "Probable"
+    },
+    "legend": {
+      "qualified": "Clasificación a dieciseisavos (8 mejores)",
+      "tiebreaker": "Pts → DG → GF → Juego limpio → Ranking FIFA"
+    }
+  }
+}

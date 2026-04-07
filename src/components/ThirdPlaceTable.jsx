@@ -1,18 +1,22 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Trophy, TrendingUp, Database, WifiOff } from 'lucide-react';
 import { BASE_URL } from '../config.js';
+import { useTeamName } from '../i18n/useTeamName.js';
 
 export default function ThirdPlaceTable({ best8, allThirds, loading = false, apiAvailable = true, onTeamClick }) {
-  const qualifiedIds = new Set(best8.map((t) => t.id));
+  const { t } = useTranslation(['tables', 'common']);
+  const teamName = useTeamName();
+  const qualifiedIds = new Set(best8.map((tm) => tm.id));
 
   return (
     <div className="card overflow-hidden">
       <div className="px-4 py-3 bg-yellow-900/20 border-b border-fifa-border flex items-center gap-2 flex-wrap">
         <Trophy size={16} className="text-fifa-gold" />
-        <span className="font-bold text-white">조 3위 상위 8팀 (16강 진출)</span>
+        <span className="font-bold text-white">{t('thirds.title')}</span>
         <div className="flex items-center gap-2 ml-auto">
           <span
-            title={apiAvailable ? 'DB에서 실시간 쿼리' : '로컬 계산'}
+            title={apiAvailable ? t('thirds.dbTooltip') : t('thirds.localTooltip')}
             className={`flex items-center gap-1 text-xs px-2 py-0.5 rounded-full ${
               apiAvailable
                 ? 'bg-green-900/30 text-green-400'
@@ -20,9 +24,9 @@ export default function ThirdPlaceTable({ best8, allThirds, loading = false, api
             }`}
           >
             {apiAvailable ? <Database size={9} /> : <WifiOff size={9} />}
-            {apiAvailable ? 'DB' : 'Local'}
+            {apiAvailable ? t('common:header.dbLabel') : t('common:header.localLabel')}
           </span>
-          <span className="text-xs text-fifa-muted">{best8.length}/8팀 확정</span>
+          <span className="text-xs text-fifa-muted">{t('thirds.confirmedCount', { count: best8.length })}</span>
         </div>
       </div>
 
@@ -30,33 +34,33 @@ export default function ThirdPlaceTable({ best8, allThirds, loading = false, api
         <table className="w-full text-sm">
           <thead>
             <tr className="text-fifa-muted text-xs border-b border-fifa-border">
-              <th className="px-3 py-2 text-left">#</th>
-              <th className="px-3 py-2 text-left">팀</th>
-              <th className="px-2 py-2 text-center">조</th>
-              <th className="px-2 py-2 text-center">경</th>
-              <th className="px-2 py-2 text-center">승</th>
-              <th className="px-2 py-2 text-center">무</th>
-              <th className="px-2 py-2 text-center">패</th>
-              <th className="px-2 py-2 text-center">득실</th>
-              <th className="px-2 py-2 text-center font-bold">승점</th>
-              <th className="px-2 py-2 text-center text-emerald-400" title="이 조 3위가 될 수 있는 최대 승점">최대</th>
-              <th className="px-2 py-2 text-center text-red-400" title="이 조 3위가 될 수 있는 최소 승점">최소</th>
-              <th className="px-2 py-2 text-center" title="FIFA 랭킹">FIFA</th>
-              <th className="px-2 py-2 text-center">상태</th>
-              <th className="px-2 py-2 text-left">다음 경기</th>
+              <th className="px-3 py-2 text-left">{t('thirds.headers.rank')}</th>
+              <th className="px-3 py-2 text-left">{t('thirds.headers.team')}</th>
+              <th className="px-2 py-2 text-center">{t('thirds.headers.group')}</th>
+              <th className="px-2 py-2 text-center">{t('thirds.headers.played')}</th>
+              <th className="px-2 py-2 text-center">{t('thirds.headers.won')}</th>
+              <th className="px-2 py-2 text-center">{t('thirds.headers.drawn')}</th>
+              <th className="px-2 py-2 text-center">{t('thirds.headers.lost')}</th>
+              <th className="px-2 py-2 text-center">{t('thirds.headers.goalDiff')}</th>
+              <th className="px-2 py-2 text-center font-bold">{t('thirds.headers.points')}</th>
+              <th className="px-2 py-2 text-center text-emerald-400" title={t('thirds.headerTooltips.ptsMax')}>{t('thirds.headers.ptsMax')}</th>
+              <th className="px-2 py-2 text-center text-red-400" title={t('thirds.headerTooltips.ptsMin')}>{t('thirds.headers.ptsMin')}</th>
+              <th className="px-2 py-2 text-center" title={t('thirds.headerTooltips.fifa')}>{t('thirds.headers.fifa')}</th>
+              <th className="px-2 py-2 text-center">{t('thirds.headers.status')}</th>
+              <th className="px-2 py-2 text-left">{t('thirds.headers.nextMatch')}</th>
             </tr>
           </thead>
           <tbody>
             {loading ? (
               <tr>
                 <td colSpan={14} className="text-center py-8 text-fifa-muted animate-pulse">
-                  DB에서 데이터 로딩 중...
+                  {t('thirds.loading')}
                 </td>
               </tr>
             ) : allThirds.length === 0 ? (
               <tr>
                 <td colSpan={14} className="text-center py-8 text-fifa-muted animate-pulse">
-                  데이터 로딩 중...
+                  {t('thirds.loadingLocal')}
                 </td>
               </tr>
             ) : (
@@ -81,9 +85,9 @@ export default function ThirdPlaceTable({ best8, allThirds, loading = false, api
                         className="flex items-center gap-2 text-left hover:opacity-80 transition-opacity group cursor-pointer"
                       >
                         {team.flagImg
-                          ? <img src={`${BASE_URL}${team.flagImg}`} alt={team.name} className="w-6 h-4 object-cover rounded-sm shrink-0" />
+                          ? <img src={`${BASE_URL}${team.flagImg}`} alt={teamName(team)} className="w-6 h-4 object-cover rounded-sm shrink-0" />
                           : <span>{team.flag}</span>}
-                        <span className="font-medium text-white group-hover:text-sky-300 transition-colors">{team.name}</span>
+                        <span className="font-medium text-white group-hover:text-sky-300 transition-colors">{teamName(team)}</span>
                       </button>
                     </td>
                     <td className="px-2 py-2 text-center">
@@ -115,15 +119,15 @@ export default function ThirdPlaceTable({ best8, allThirds, loading = false, api
                     <td className="px-2 py-2 text-center">
                       {isQualifiedConfirmed ? (
                         <span className="text-xs bg-green-900/50 text-green-300 px-2 py-0.5 rounded-full font-bold border border-green-700/50">
-                          진출 확정
+                          {t('thirds.status.qualified')}
                         </span>
                       ) : isEliminated ? (
                         <span className="text-xs bg-red-900/50 text-red-300 px-2 py-0.5 rounded-full font-bold border border-red-700/50">
-                          탈락 확정
+                          {t('thirds.status.eliminated')}
                         </span>
                       ) : isQualified ? (
                         <span className="text-xs bg-sky-900/40 text-sky-300 px-2 py-0.5 rounded-full">
-                          진출 유력
+                          {t('thirds.status.likely')}
                         </span>
                       ) : null}
                     </td>
@@ -131,9 +135,9 @@ export default function ThirdPlaceTable({ best8, allThirds, loading = false, api
                       {team.nextOpponent ? (
                         <div className="flex items-center gap-1.5">
                           {team.nextOpponent.flagImg
-                            ? <img src={`${BASE_URL}${team.nextOpponent.flagImg}`} alt={team.nextOpponent.name} className="w-5 h-3.5 object-cover rounded-sm shrink-0" />
+                            ? <img src={`${BASE_URL}${team.nextOpponent.flagImg}`} alt={teamName(team.nextOpponent)} className="w-5 h-3.5 object-cover rounded-sm shrink-0" />
                             : <span className="text-sm leading-none">{team.nextOpponent.flag}</span>}
-                          <span className="text-xs text-white whitespace-nowrap">{team.nextOpponent.name}</span>
+                          <span className="text-xs text-white whitespace-nowrap">{teamName(team.nextOpponent)}</span>
                         </div>
                       ) : null}
                     </td>
@@ -149,11 +153,11 @@ export default function ThirdPlaceTable({ best8, allThirds, loading = false, api
       <div className="px-4 py-3 border-t border-fifa-border/30 flex flex-wrap gap-4 text-xs text-fifa-muted">
         <div className="flex items-center gap-1">
           <div className="w-3 h-3 bg-green-900/40 border border-green-500 rounded" />
-          <span>16강 진출 (상위 8팀)</span>
+          <span>{t('thirds.legend.qualified')}</span>
         </div>
         <div className="flex items-center gap-1">
           <TrendingUp size={12} />
-          <span>승점 → 득실차 → 다득점 → 페어플레이 → FIFA 랭킹 순으로 결정</span>
+          <span>{t('thirds.legend.tiebreaker')}</span>
         </div>
       </div>
     </div>

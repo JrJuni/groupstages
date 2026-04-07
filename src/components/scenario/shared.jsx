@@ -16,22 +16,27 @@ export const RANK_COLORS = {
   4: { bg: 'bg-red-900/40',     text: 'text-red-300',     border: 'border-red-600/40',     bar: 'bg-red-600' },
 };
 
-export const WDL_KO = { W: '승', D: '무', L: '패' };
-
 // ── 날짜 포맷 ───────────────────────────────────────────
-const kstFormatter = new Intl.DateTimeFormat('ko-KR', {
-  timeZone: 'Asia/Seoul',
-  month: 'numeric',
-  day: 'numeric',
-  weekday: 'short',
-  hour: '2-digit',
-  minute: '2-digit',
-  hour12: false,
-});
+// locale 인자(BCP47)를 받아서 해당 언어로 포맷. KST 표기는 모든 locale에서 유지.
+const formatterCache = {};
+function getFormatter(locale) {
+  if (!formatterCache[locale]) {
+    formatterCache[locale] = new Intl.DateTimeFormat(locale, {
+      timeZone: 'Asia/Seoul',
+      month: 'numeric',
+      day: 'numeric',
+      weekday: 'short',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+    });
+  }
+  return formatterCache[locale];
+}
 
-export function formatKST(iso) {
+export function formatKST(iso, locale = 'ko-KR') {
   if (!iso) return null;
-  return kstFormatter.format(new Date(iso)) + ' KST';
+  return getFormatter(locale).format(new Date(iso)) + ' KST';
 }
 
 // ── 카드 아이콘 ─────────────────────────────────────────
@@ -59,9 +64,13 @@ export const RedCard = () => (
 );
 
 // ── TeamFlag ────────────────────────────────────────────
+// alt 속성은 i18n 팀명을 사용하지 않고 원본 team.name을 그대로 사용해도 무방하지만,
+// 일관성을 위해 team.name (data.js의 한국어 원본) 또는 team.id를 alt로 사용.
+// 사용자에게 보이지 않으므로 별도 useTeamName 훅을 사용하지 않음.
 export function TeamFlag({ team, size = 'sm' }) {
   const imgClass = size === 'sm' ? 'w-5 h-3.5' : 'w-7 h-5';
+  const altText = team.name ?? team.id ?? '';
   return team.flagImg
-    ? <img src={`${BASE_URL}${team.flagImg}`} alt={team.name} className={`${imgClass} object-cover rounded-sm shrink-0`} />
+    ? <img src={`${BASE_URL}${team.flagImg}`} alt={altText} className={`${imgClass} object-cover rounded-sm shrink-0`} />
     : <span className="text-base leading-none">{team.flag}</span>;
 }

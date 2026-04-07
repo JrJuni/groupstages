@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { TeamFlag } from '../scenario/shared.jsx';
+import { useTeamName } from '../../i18n/useTeamName.js';
 
 const HIGHLIGHT_RING = {
   '1st': 'ring-2 ring-green-500',
@@ -13,19 +15,10 @@ const HIGHLIGHT_BG = {
   '3rd': 'bg-yellow-900/20',
 };
 
-// FIFA 경기 번호 → 라운드별 한국어 라벨
+// FIFA 경기 번호 → 라운드별 시작 번호 (라벨은 i18n)
 const ROUND_START = { R32: 73, R16: 89, QF: 97, SF: 101 };
-const ROUND_KR = { R32: '32강', R16: '16강', QF: '8강', SF: '4강' };
 
-function getMatchLabel(match) {
-  if (match.round === 'FINAL') return '결승';
-  const start = ROUND_START[match.round];
-  if (!start) return match.round;
-  const num = parseInt(match.id.replace('M', '')) - start + 1;
-  return `${ROUND_KR[match.round]} ${num}경기`;
-}
-
-// descriptor → 슬롯 라벨 (A1, C2, E3? 등)
+// descriptor → 슬롯 라벨 (A1, C2, E3? 등) — locale-neutral
 function getSlotLabel(descriptor, match, resolvedTeam) {
   if (!descriptor) return '';
   if (descriptor === '3rd') {
@@ -39,6 +32,8 @@ function getSlotLabel(descriptor, match, resolvedTeam) {
 }
 
 function TeamRow({ team, slotLabel, highlight, candidates, side, isThird, confirmed }) {
+  const { t } = useTranslation('bracket');
+  const teamName = useTeamName();
   const [showPopover, setShowPopover] = useState(false);
   const hasMultipleCandidates = candidates && candidates.length > 1;
 
@@ -53,7 +48,7 @@ function TeamRow({ team, slotLabel, highlight, candidates, side, isThird, confir
       {team ? (
         <>
           <TeamFlag team={team} size="sm" />
-          <span className="text-xs font-medium text-white truncate flex-1">{team.name}</span>
+          <span className="text-xs font-medium text-white truncate flex-1">{teamName(team)}</span>
           {/* 슬롯 라벨: A1, C2, E3 */}
           <span className={`text-[10px] font-mono shrink-0 ${isThird ? 'text-yellow-400' : 'text-fifa-muted'}`}>
             {slotLabel}
@@ -68,12 +63,12 @@ function TeamRow({ team, slotLabel, highlight, candidates, side, isThird, confir
       {/* 3위 후보 팝오버 */}
       {showPopover && hasMultipleCandidates && (
         <div className={`absolute z-50 ${side === 'right' ? 'right-full mr-1' : 'left-full ml-1'} top-0 bg-fifa-card border border-fifa-border rounded-lg p-2 shadow-xl min-w-[140px]`}>
-          <p className="text-[10px] text-fifa-muted mb-1">가능한 3위팀</p>
+          <p className="text-[10px] text-fifa-muted mb-1">{t('match.possibleThirds')}</p>
           {candidates.map((c) => (
             <div key={c.id} className="flex items-center gap-1 py-0.5">
               <TeamFlag team={c} size="sm" />
-              <span className="text-xs text-white">{c.name}</span>
-              <span className="text-[10px] text-fifa-muted ml-auto">{c.group}조</span>
+              <span className="text-xs text-white">{teamName(c)}</span>
+              <span className="text-[10px] text-fifa-muted ml-auto">{t('match.groupSuffix', { group: c.group })}</span>
             </div>
           ))}
         </div>
@@ -91,8 +86,18 @@ export default function MatchCard({
   compact = false,
   side = 'left',
 }) {
+  const { t } = useTranslation('bracket');
   const teams = resolvedTeams?.[match.id];
   const isR32 = match.round === 'R32';
+
+  // 경기 라벨 생성 (i18n)
+  const getMatchLabel = (m) => {
+    if (m.round === 'FINAL') return t('rounds.FINAL');
+    const start = ROUND_START[m.round];
+    if (!start) return m.round;
+    const num = parseInt(m.id.replace('M', '')) - start + 1;
+    return t('matchLabel', { round: t(`rounds.${m.round}`), num });
+  };
 
   // 하이라이트 확인
   const t1Highlight = highlights.find((h) => h.matchId === match.id && h.teamSide === 'team1');

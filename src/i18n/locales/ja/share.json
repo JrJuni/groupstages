@@ -1,0 +1,85 @@
+{
+  "groupStandings": {
+    "mdTitle": "## グループ {{group}} 順位表",
+    "htmlTitle": "グループ {{group}} 順位表",
+    "header": {
+      "rank": "#",
+      "team": "チーム",
+      "played": "試",
+      "won": "勝",
+      "drawn": "分",
+      "lost": "敗",
+      "goalDiff": "得失",
+      "points": "勝点",
+      "playedFull": "試合"
+    }
+  },
+  "allGroups": {
+    "mdTitle": "# 2026 FIFAワールドカップ - グループステージ順位",
+    "groupHeader": "## グループ {{group}}",
+    "htmlGroupHeader": "グループ {{group}}",
+    "header": {
+      "rank": "#",
+      "team": "チーム",
+      "played": "試",
+      "won": "勝",
+      "drawn": "分",
+      "lost": "敗",
+      "goalsFor": "得",
+      "goalsAgainst": "失",
+      "goalDiff": "差",
+      "points": "勝点",
+      "playedFull": "試合"
+    }
+  },
+  "thirds": {
+    "mdTitle": "# 2026 FIFAワールドカップ - 3位順位",
+    "htmlTitle": "2026 FIFAワールドカップ - 3位順位",
+    "header": {
+      "rank": "#",
+      "team": "チーム",
+      "group": "組",
+      "played": "試",
+      "won": "勝",
+      "drawn": "分",
+      "lost": "敗",
+      "goalDiff": "得失",
+      "points": "勝点",
+      "fifa": "FIFA",
+      "status": "状態",
+      "playedFull": "試合"
+    },
+    "statusQualified": "✓ 進出",
+    "statusEliminated": "敗退"
+  },
+  "scenario": {
+    "mdTitle": "## {{team}} — 32強進出シナリオ",
+    "htmlTitle": "{{team}} — 32強進出シナリオ",
+    "currentLine": "現在 **{{rank}}位** | {{played}}試合 | **{{pts}}点** | 得失 {{gd}} | 得点 {{gf}}",
+    "currentLineHtml": "現在 <b>{{rank}}位</b> | {{played}}試合 | <b>{{pts}}点</b> | 得失 {{gd}} | 得点 {{gf}}",
+    "allDone": "全試合終了",
+    "rankProbHeader": "### 順位確率",
+    "rankProbHtmlHeader": "順位確率",
+    "rankCol": "順位",
+    "probCol": "確率",
+    "rankRow": "{{rank}}位",
+    "topTwoLine": "1・2位直接進出: **{{pct}}%**",
+    "topTwoLineHtml": "1・2位直接進出: <b>{{pct}}%</b>",
+    "thirdLine": " | 3位進出可能: **{{pct}}%**",
+    "thirdLineHtml": " | 3位進出可能: <b>{{pct}}%</b>",
+    "condTitle": "### 条件別予想順位",
+    "condIgnoreOther": "{{team}} {{wdl}} (結果問わず)",
+    "condFormat": "{{team}} {{wdl}}",
+    "rankConfirmed": "**{{rank}}位確定**",
+    "tiebreakerNote": "*(得失点差により決まる場合あり)*",
+    "wdl": {
+      "W": "勝",
+      "D": "分",
+      "L": "敗"
+    },
+    "otherDraw": "他の試合は引き分け",
+    "otherWin": "{{team}} 勝",
+    "or": " または ",
+    "join": ", または "
+  }
+}

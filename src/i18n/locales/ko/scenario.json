@@ -1,0 +1,125 @@
+{
+  "selector": {
+    "title": "조·팀 선택",
+    "selected": "— 조 {{group}} 선택됨",
+    "selectedTeam": "— 조 {{group}} · {{team}} 선택됨",
+    "groupLabel": "조 {{group}}"
+  },
+  "section": {
+    "standings": "순위표",
+    "matchScheduleOpen": "경기 일정 · 결과",
+    "matchScheduleClosed": "경기 일정 · 결과 보기"
+  },
+  "standings": {
+    "headers": {
+      "rank": "#",
+      "team": "팀",
+      "played": "경기",
+      "won": "승",
+      "drawn": "무",
+      "lost": "패",
+      "goalsFor": "득",
+      "goalsAgainst": "실",
+      "goalDiff": "차",
+      "points": "승점",
+      "fp": "FP"
+    },
+    "cardTooltips": {
+      "yc": "옐로카드 (-1점)",
+      "twoYR": "옐로 누적 퇴장 (-3점)",
+      "dr": "직접 퇴장 레드카드 (-4점)",
+      "fp": "페어플레이 포인트"
+    }
+  },
+  "legend": {
+    "qualified": "16강 진출",
+    "thirdContender": "3위 경쟁",
+    "fairPlay": "페어플레이"
+  },
+  "emptyState": "위에서 조를 선택하거나, 조별리그 탭에서 팀을 클릭하세요",
+  "panel": {
+    "currentRank": "현재 {{rank}}",
+    "rankLabels": {
+      "1": "1위",
+      "2": "2위",
+      "3": "3위",
+      "4": "4위"
+    },
+    "matchesCount": "{{count}}경기",
+    "pointsCount": "{{count}}점",
+    "goalDiff": "득실 {{value}}",
+    "goalsForCount": "득점 {{count}}",
+    "remainingTitle": "잔여 경기",
+    "remainingCount": "{{count}}경기",
+    "maxPoints": "최대 {{count}}점 획득 가능",
+    "allDone": "모든 경기 완료",
+    "matchdayLabel": "경기일 {{md}}",
+    "title16": "16강 진출 경우의 수",
+    "needMore": "조에서 {{count}}경기 더 진행되면 분석이 시작됩니다",
+    "activateNotice": "조별 2경기 이후 활성화",
+    "oppPoints": "({{count}}점)"
+  },
+  "badge": {
+    "qualified": "진출 확정",
+    "eliminated": "탈락 확정",
+    "thirdContender": "3위 경쟁",
+    "uncertain": "진출 미확정"
+  },
+  "matrix": {
+    "myMatch": "내 경기",
+    "otherMatch": "다른 경기",
+    "home": "홈",
+    "away": "원정",
+    "wdl": {
+      "W": "승",
+      "D": "무",
+      "L": "패"
+    },
+    "axisHint": "내↓ 타→",
+    "drawShort": "무",
+    "rankLabel": "{{rank}}위",
+    "topTwoLabel": "1·2위",
+    "thirdLabel": "3위",
+    "winSuffix": "{{team}} 승"
+  },
+  "qualSummary": {
+    "title": "조건별 예상 순위",
+    "wdl": {
+      "W": "승",
+      "D": "무",
+      "L": "패"
+    },
+    "rankLabels": {
+      "1": "1위",
+      "2": "2위",
+      "3": "3위",
+      "4": "탈락"
+    },
+    "otherDraw": "다른 경기 무승부",
+    "otherWin": "{{team}} 승",
+    "ignored": "결과 무관",
+    "or": " 또는 ",
+    "tiebreakerBetter": "득실차/다득점 우위 시",
+    "tiebreakerWorse": "득실차/다득점 열세 시",
+    "statsNote": "현재 {{teamName}} 득실 {{teamGd}}, 득점 {{teamGf}} / {{competitor}} 득실 {{competitorGd}}, 득점 {{competitorGf}}"
+  },
+  "match": {
+    "relevant": "관련 경기"
+  },
+  "r32": {
+    "title": "32강 가능 매치업",
+    "ifAdvance": "조 {{group}} {{rank}}로 진출 시",
+    "oneOf": "— 다음 중 하나",
+    "vs": "vs",
+    "noCandidates": "후보 없음",
+    "slot": {
+      "direct": "{{group}}조 {{rank}}위",
+      "third": "{{groups}} 3위"
+    },
+    "rankLabels": {
+      "1": "1위",
+      "2": "2위",
+      "3": "3위"
+    }
+  }
+}

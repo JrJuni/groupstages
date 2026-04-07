@@ -1,0 +1,125 @@
+{
+  "selector": {
+    "title": "グループ・チーム選択",
+    "selected": "— グループ {{group}} 選択中",
+    "selectedTeam": "— グループ {{group}} · {{team}} 選択中",
+    "groupLabel": "グループ {{group}}"
+  },
+  "section": {
+    "standings": "順位表",
+    "matchScheduleOpen": "試合日程・結果",
+    "matchScheduleClosed": "試合日程・結果を表示"
+  },
+  "standings": {
+    "headers": {
+      "rank": "#",
+      "team": "チーム",
+      "played": "試",
+      "won": "勝",
+      "drawn": "分",
+      "lost": "敗",
+      "goalsFor": "得",
+      "goalsAgainst": "失",
+      "goalDiff": "差",
+      "points": "勝点",
+      "fp": "FP"
+    },
+    "cardTooltips": {
+      "yc": "イエローカード (-1点)",
+      "twoYR": "イエロー2枚退場 (-3点)",
+      "dr": "一発レッドカード (-4点)",
+      "fp": "フェアプレーポイント"
+    }
+  },
+  "legend": {
+    "qualified": "32強進出",
+    "thirdContender": "3位争い",
+    "fairPlay": "フェアプレー"
+  },
+  "emptyState": "上からグループを選択するか、グループステージタブでチームをクリックしてください",
+  "panel": {
+    "currentRank": "現在 {{rank}}",
+    "rankLabels": {
+      "1": "1位",
+      "2": "2位",
+      "3": "3位",
+      "4": "4位"
+    },
+    "matchesCount": "{{count}}試合",
+    "pointsCount": "{{count}}点",
+    "goalDiff": "得失 {{value}}",
+    "goalsForCount": "得点 {{count}}",
+    "remainingTitle": "残り試合",
+    "remainingCount": "{{count}}試合",
+    "maxPoints": "最大 {{count}}点 獲得可能",
+    "allDone": "全試合終了",
+    "matchdayLabel": "節 {{md}}",
+    "title16": "32強進出シナリオ",
+    "needMore": "グループでさらに{{count}}試合進むと分析が始まります",
+    "activateNotice": "グループ2試合終了後に有効化",
+    "oppPoints": "({{count}}点)"
+  },
+  "badge": {
+    "qualified": "進出確定",
+    "eliminated": "敗退確定",
+    "thirdContender": "3位争い",
+    "uncertain": "進出未確定"
+  },
+  "matrix": {
+    "myMatch": "自チームの試合",
+    "otherMatch": "他の試合",
+    "home": "ホーム",
+    "away": "アウェー",
+    "wdl": {
+      "W": "勝",
+      "D": "分",
+      "L": "敗"
+    },
+    "axisHint": "自↓ 他→",
+    "drawShort": "分",
+    "rankLabel": "{{rank}}位",
+    "topTwoLabel": "1・2位",
+    "thirdLabel": "3位",
+    "winSuffix": "{{team}} 勝"
+  },
+  "qualSummary": {
+    "title": "条件別予想順位",
+    "wdl": {
+      "W": "勝",
+      "D": "分",
+      "L": "敗"
+    },
+    "rankLabels": {
+      "1": "1位",
+      "2": "2位",
+      "3": "3位",
+      "4": "敗退"
+    },
+    "otherDraw": "他の試合は引き分け",
+    "otherWin": "{{team}} 勝",
+    "ignored": "結果を問わず",
+    "or": " または ",
+    "tiebreakerBetter": "得失点差/総得点で優位の場合",
+    "tiebreakerWorse": "得失点差/総得点で劣勢の場合",
+    "statsNote": "現在 {{teamName}} 得失 {{teamGd}}, 得点 {{teamGf}} / {{competitor}} 得失 {{competitorGd}}, 得点 {{competitorGf}}"
+  },
+  "match": {
+    "relevant": "関連試合"
+  },
+  "r32": {
+    "title": "32強の対戦相手候補",
+    "ifAdvance": "グループ{{group}} {{rank}}で進出した場合",
+    "oneOf": "— いずれか",
+    "vs": "vs",
+    "noCandidates": "候補なし",
+    "slot": {
+      "direct": "グループ{{group}} {{rank}}",
+      "third": "{{groups}} 3位"
+    },
+    "rankLabels": {
+      "1": "1位",
+      "2": "2位",
+      "3": "3位"
+    }
+  }
+}

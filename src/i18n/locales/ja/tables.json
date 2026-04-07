@@ -1,0 +1,57 @@
+{
+  "groups": {
+    "title": "グループ {{group}}",
+    "viewScenarioGroup": "グループ{{group}}のシナリオを表示",
+    "viewScenarioTeam": "{{team}}のシナリオを表示",
+    "headers": {
+      "rank": "#",
+      "team": "チーム",
+      "played": "試",
+      "won": "勝",
+      "drawn": "分",
+      "lost": "敗",
+      "goalsFor": "得",
+      "goalsAgainst": "失",
+      "goalDiff": "差",
+      "points": "勝点"
+    }
+  },
+  "thirds": {
+    "title": "3位上位8チーム(32強進出)",
+    "dbTooltip": "DBからリアルタイム取得",
+    "localTooltip": "ローカル計算",
+    "confirmedCount": "{{count}}/8チーム確定",
+    "headers": {
+      "rank": "#",
+      "team": "チーム",
+      "group": "組",
+      "played": "試",
+      "won": "勝",
+      "drawn": "分",
+      "lost": "敗",
+      "goalDiff": "得失",
+      "points": "勝点",
+      "ptsMax": "最大",
+      "ptsMin": "最小",
+      "fifa": "FIFA",
+      "status": "状態",
+      "nextMatch": "次戦"
+    },
+    "headerTooltips": {
+      "ptsMax": "このグループの3位がとり得る最大勝点",
+      "ptsMin": "このグループの3位がとり得る最小勝点",
+      "fifa": "FIFAランキング"
+    },
+    "loading": "DBからデータを読み込み中...",
+    "loadingLocal": "データ読み込み中...",
+    "status": {
+      "qualified": "進出確定",
+      "eliminated": "敗退確定",
+      "likely": "進出有力"
+    },
+    "legend": {
+      "qualified": "32強進出(上位8チーム)",
+      "tiebreaker": "勝点 → 得失点差 → 総得点 → フェアプレー → FIFAランキング"
+    }
+  }
+}

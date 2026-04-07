@@ -1,0 +1,85 @@
+{
+  "groupStandings": {
+    "mdTitle": "## 조 {{group}} 순위표",
+    "htmlTitle": "조 {{group}} 순위표",
+    "header": {
+      "rank": "#",
+      "team": "팀",
+      "played": "경",
+      "won": "승",
+      "drawn": "무",
+      "lost": "패",
+      "goalDiff": "득실",
+      "points": "승점",
+      "playedFull": "경기"
+    }
+  },
+  "allGroups": {
+    "mdTitle": "# 2026 FIFA World Cup - 조별리그 순위",
+    "groupHeader": "## 조 {{group}}",
+    "htmlGroupHeader": "조 {{group}}",
+    "header": {
+      "rank": "#",
+      "team": "팀",
+      "played": "경",
+      "won": "승",
+      "drawn": "무",
+      "lost": "패",
+      "goalsFor": "득",
+      "goalsAgainst": "실",
+      "goalDiff": "차",
+      "points": "승점",
+      "playedFull": "경기"
+    }
+  },
+  "thirds": {
+    "mdTitle": "# 2026 FIFA World Cup - 조 3위 순위",
+    "htmlTitle": "2026 FIFA World Cup - 조 3위 순위",
+    "header": {
+      "rank": "#",
+      "team": "팀",
+      "group": "조",
+      "played": "경",
+      "won": "승",
+      "drawn": "무",
+      "lost": "패",
+      "goalDiff": "득실",
+      "points": "승점",
+      "fifa": "FIFA",
+      "status": "상태",
+      "playedFull": "경기"
+    },
+    "statusQualified": "✓ 진출",
+    "statusEliminated": "탈락"
+  },
+  "scenario": {
+    "mdTitle": "## {{team}} — 16강 진출 경우의 수",
+    "htmlTitle": "{{team}} — 16강 진출 경우의 수",
+    "currentLine": "현재 **{{rank}}위** | {{played}}경기 | **{{pts}}점** | 득실 {{gd}} | 득점 {{gf}}",
+    "currentLineHtml": "현재 <b>{{rank}}위</b> | {{played}}경기 | <b>{{pts}}점</b> | 득실 {{gd}} | 득점 {{gf}}",
+    "allDone": "모든 경기 완료",
+    "rankProbHeader": "### 순위 확률",
+    "rankProbHtmlHeader": "순위 확률",
+    "rankCol": "순위",
+    "probCol": "확률",
+    "rankRow": "{{rank}}위",
+    "topTwoLine": "1·2위 직접 진출: **{{pct}}%**",
+    "topTwoLineHtml": "1·2위 직접 진출: <b>{{pct}}%</b>",
+    "thirdLine": " | 3위 진출 가능: **{{pct}}%**",
+    "thirdLineHtml": " | 3위 진출 가능: <b>{{pct}}%</b>",
+    "condTitle": "### 조건별 예상 순위",
+    "condIgnoreOther": "({{team}} {{wdl}}) (결과 무관)",
+    "condFormat": "{{team}} {{wdl}}",
+    "rankConfirmed": "**{{rank}}위 확정**",
+    "tiebreakerNote": "*(득실차 따라 결정되는 경우 있음)*",
+    "wdl": {
+      "W": "승",
+      "D": "무",
+      "L": "패"
+    },
+    "otherDraw": "다른 경기 무승부",
+    "otherWin": "{{team}} 승",
+    "or": " 또는 ",
+    "join": ", 또는 "
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "rounds": {
+    "R32": "32強",
+    "R16": "16強",
+    "QF": "8強",
+    "SF": "準決勝",
+    "FINAL": "決勝"
+  },
+  "matchLabel": "{{round}} 第{{num}}試合",
+  "roundCountLabel": "{{round}} ({{count}}試合)",
+  "finalHeader": "🏆 決勝",
+  "groupSelector": "グループ選択:",
+  "validCombinations": "有効な組み合わせ: {{count}}/495",
+  "rankLabels": {
+    "1": "1位",
+    "2": "2位",
+    "3": "3位"
+  },
+  "thirdStatus": {
+    "eliminated": "(敗退確定)",
+    "qualified": "(進出確定)",
+    "currentBest": "(現在3位 {{rank}}位)",
+    "currentOut": "(現在敗退圏)"
+  },
+  "legend": {
+    "first": "1位の進出枠",
+    "second": "2位の進出枠",
+    "third": "3位の可能枠",
+    "confirmed": "枠確定"
+  },
+  "match": {
+    "possibleThirds": "可能な3位チーム",
+    "groupSuffix": "{{group}}組"
+  },
+  "draw": {
+    "speed": "速度",
+    "speedSlow": "遅い",
+    "speedNormal": "普通",
+    "speedFast": "速い",
+    "reset": "リセット",
+    "instantDraw": "即時抽選",
+    "drawStart": "抽選開始",
+    "pause": "一時停止",
+    "completed": "完了",
+    "drawProgress": "抽選進行",
+    "lastDrawn": "直前に抽選されたチーム",
+    "assignedGroup": "割り当てられたグループ",
+    "groupLabel": "{{group}}組",
+    "drawComplete": "✓ 抽選完了",
+    "drawResult": "抽選結果",
+    "groupName": "グループ {{name}}",
+    "unassigned": "未割当"
+  }
+}

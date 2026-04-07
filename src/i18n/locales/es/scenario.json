@@ -1,0 +1,125 @@
+{
+  "selector": {
+    "title": "Seleccionar grupo / equipo",
+    "selected": "— Grupo {{group}} seleccionado",
+    "selectedTeam": "— Grupo {{group}} · {{team}} seleccionado",
+    "groupLabel": "Grupo {{group}}"
+  },
+  "section": {
+    "standings": "Clasificación",
+    "matchScheduleOpen": "Calendario · resultados",
+    "matchScheduleClosed": "Mostrar calendario · resultados"
+  },
+  "standings": {
+    "headers": {
+      "rank": "#",
+      "team": "Equipo",
+      "played": "PJ",
+      "won": "G",
+      "drawn": "E",
+      "lost": "P",
+      "goalsFor": "GF",
+      "goalsAgainst": "GC",
+      "goalDiff": "DG",
+      "points": "Pts",
+      "fp": "JL"
+    },
+    "cardTooltips": {
+      "yc": "Tarjeta amarilla (-1 pt)",
+      "twoYR": "Doble amarilla / expulsión (-3 pts)",
+      "dr": "Tarjeta roja directa (-4 pts)",
+      "fp": "Puntos de juego limpio"
+    }
+  },
+  "legend": {
+    "qualified": "Dieciseisavos",
+    "thirdContender": "Lucha por tercer puesto",
+    "fairPlay": "Juego limpio"
+  },
+  "emptyState": "Selecciona un grupo arriba o haz clic en un equipo en la pestaña Fase de grupos",
+  "panel": {
+    "currentRank": "Actualmente {{rank}}",
+    "rankLabels": {
+      "1": "1º",
+      "2": "2º",
+      "3": "3º",
+      "4": "4º"
+    },
+    "matchesCount": "{{count}} jugados",
+    "pointsCount": "{{count}} pts",
+    "goalDiff": "DG {{value}}",
+    "goalsForCount": "GF {{count}}",
+    "remainingTitle": "Partidos restantes",
+    "remainingCount": "{{count}}",
+    "maxPoints": "Hasta {{count}} pts posibles",
+    "allDone": "Todos los partidos jugados",
+    "matchdayLabel": "Jornada {{md}}",
+    "title16": "Escenarios para dieciseisavos",
+    "needMore": "El análisis comienza tras {{count}} partido(s) más en el grupo",
+    "activateNotice": "Disponible tras 2 jornadas",
+    "oppPoints": "({{count}} pts)"
+  },
+  "badge": {
+    "qualified": "Clasificado",
+    "eliminated": "Eliminado",
+    "thirdContender": "Lucha por 3º",
+    "uncertain": "Sin definir"
+  },
+  "matrix": {
+    "myMatch": "Mi partido",
+    "otherMatch": "Otro partido",
+    "home": "local",
+    "away": "visitante",
+    "wdl": {
+      "W": "G",
+      "D": "E",
+      "L": "P"
+    },
+    "axisHint": "mío↓ otro→",
+    "drawShort": "E",
+    "rankLabel": "{{rank}}º",
+    "topTwoLabel": "Top 2",
+    "thirdLabel": "3º",
+    "winSuffix": "{{team}} G"
+  },
+  "qualSummary": {
+    "title": "Posición proyectada por condición",
+    "wdl": {
+      "W": "G",
+      "D": "E",
+      "L": "P"
+    },
+    "rankLabels": {
+      "1": "1º",
+      "2": "2º",
+      "3": "3º",
+      "4": "Fuera"
+    },
+    "otherDraw": "empate en el otro partido",
+    "otherWin": "{{team}} G",
+    "ignored": "cualquier resultado",
+    "or": " o ",
+    "tiebreakerBetter": "con ventaja en DG/GF",
+    "tiebreakerWorse": "con desventaja en DG/GF",
+    "statsNote": "Actualmente {{teamName}} DG {{teamGd}}, GF {{teamGf}} / {{competitor}} DG {{competitorGd}}, GF {{competitorGf}}"
+  },
+  "match": {
+    "relevant": "relevante"
+  },
+  "r32": {
+    "title": "Posibles cruces de dieciseisavos",
+    "ifAdvance": "Si avanza como Grupo {{group}} {{rank}}",
+    "oneOf": "— uno de",
+    "vs": "vs",
+    "noCandidates": "sin candidatos",
+    "slot": {
+      "direct": "Grupo {{group}} {{rank}}",
+      "third": "3º de {{groups}}"
+    },
+    "rankLabels": {
+      "1": "1º",
+      "2": "2º",
+      "3": "3º"
+    }
+  }
+}

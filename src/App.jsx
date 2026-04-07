@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Globe, Shuffle, Trophy, Share2, Menu, X, Database, RotateCcw, Wifi, WifiOff, GitBranch, BookOpen, Swords } from 'lucide-react';
 import { getBest8ThirdPlace, getFairPlayPoints } from './utils/rankings.js';
 import { analyzeThirdPlaceCombinations, computeThirdRange } from './utils/knockout.js';
@@ -12,63 +13,73 @@ import ShareButtons from './components/ShareButtons.jsx';
 import RulesPage from './components/RulesPage.jsx';
 import ScenarioPage from './components/ScenarioPage.jsx';
 import BracketPage from './components/knockout/BracketPage.jsx';
+import LanguageSwitcher from './i18n/LanguageSwitcher.jsx';
+import { useDocumentMeta } from './i18n/useDocumentMeta.js';
+import { useTeamName } from './i18n/useTeamName.js';
 
-// ── 탭 정의 ─────────────────────────────────────────────
-const TABS = [
-  { id: 'groups', label: '조별리그', icon: Globe },
-  { id: 'scenarios', label: '경우의 수', icon: GitBranch },
-  { id: 'thirds', label: '3위 순위', icon: Trophy },
-  { id: 'knockout', label: '토너먼트', icon: Swords },
-  { id: 'draw', label: '조추첨', icon: Shuffle },
-  { id: 'rules', label: '규칙', icon: BookOpen },
+// ── 탭 정의 (라벨은 컴포넌트 내부에서 t() 적용) ─────────────────
+const TAB_DEFS = [
+  { id: 'groups', icon: Globe },
+  { id: 'scenarios', icon: GitBranch },
+  { id: 'thirds', icon: Trophy },
+  { id: 'knockout', icon: Swords },
+  { id: 'draw', icon: Shuffle },
+  { id: 'rules', icon: BookOpen },
 ];
 
 // ── 3위 테이블 Markdown 생성 ─────────────────────────────
-function makeThirdsMarkdown(allThirds, best8) {
-  const qualifiedIds = new Set(best8.map((t) => t.id));
-  let md = '# 2026 FIFA World Cup - 조 3위 순위\n\n';
-  md += '| # | 팀 | 조 | 경 | 승 | 무 | 패 | 득실 | 승점 | FIFA | 상태 |\n';
+function makeThirdsMarkdown(allThirds, best8, { t, teamName }) {
+  const qualifiedIds = new Set(best8.map((tm) => tm.id));
+  let md = t('thirds.mdTitle') + '\n\n';
+  const h = t('thirds.header', { returnObjects: true });
+  md += `| ${h.rank} | ${h.team} | ${h.group} | ${h.played} | ${h.won} | ${h.drawn} | ${h.lost} | ${h.goalDiff} | ${h.points} | ${h.fifa} | ${h.status} |\n`;
   md += '|---|---|---|---|---|---|---|---|---|---|---|\n';
-  allThirds.forEach((t, i) => {
-    const gd = t.gd > 0 ? `+${t.gd}` : t.gd;
-    const status = qualifiedIds.has(t.id) ? '✓ 진출' : '탈락';
-    md += `| ${i + 1} | ${t.flag} ${t.name} | ${t.group} | ${t.played} | ${t.won} | ${t.drawn} | ${t.lost} | ${gd} | **${t.pts}** | ${t.fifaRank ?? '—'} | ${status} |\n`;
+  allThirds.forEach((tm, i) => {
+    const gd = tm.gd > 0 ? `+${tm.gd}` : tm.gd;
+    const status = qualifiedIds.has(tm.id) ? t('thirds.statusQualified') : t('thirds.statusEliminated');
+    md += `| ${i + 1} | ${tm.flag} ${teamName(tm)} | ${tm.group} | ${tm.played} | ${tm.won} | ${tm.drawn} | ${tm.lost} | ${gd} | **${tm.pts}** | ${tm.fifaRank ?? '—'} | ${status} |\n`;
   });
   return md;
 }
 
-function makeThirdsHtmlTable(allThirds, best8) {
-  const qualifiedIds = new Set(best8.map((t) => t.id));
-  let html = '<h3>2026 FIFA World Cup - 조 3위 순위</h3>';
-  html += '<table border="1"><tr><th>#</th><th>팀</th><th>조</th><th>경기</th><th>승</th><th>무</th><th>패</th><th>득실</th><th>승점</th><th>FIFA</th><th>상태</th></tr>';
-  allThirds.forEach((t, i) => {
-    const gd = t.gd >= 0 ? `+${t.gd}` : t.gd;
-    const status = qualifiedIds.has(t.id) ? '✓ 진출' : '탈락';
-    html += `<tr><td>${i + 1}</td><td>${t.flag} ${t.name}</td><td>${t.group}</td><td>${t.played}</td><td>${t.won}</td><td>${t.drawn}</td><td>${t.lost}</td><td>${gd}</td><td><b>${t.pts}</b></td><td>${t.fifaRank ?? '—'}</td><td>${status}</td></tr>`;
+function makeThirdsHtmlTable(allThirds, best8, { t, teamName }) {
+  const qualifiedIds = new Set(best8.map((tm) => tm.id));
+  let html = `<h3>${t('thirds.htmlTitle')}</h3>`;
+  const h = t('thirds.header', { returnObjects: true });
+  html += `<table border="1"><tr><th>${h.rank}</th><th>${h.team}</th><th>${h.group}</th><th>${h.playedFull}</th><th>${h.won}</th><th>${h.drawn}</th><th>${h.lost}</th><th>${h.goalDiff}</th><th>${h.points}</th><th>${h.fifa}</th><th>${h.status}</th></tr>`;
+  allThirds.forEach((tm, i) => {
+    const gd = tm.gd >= 0 ? `+${tm.gd}` : tm.gd;
+    const status = qualifiedIds.has(tm.id) ? t('thirds.statusQualified') : t('thirds.statusEliminated');
+    html += `<tr><td>${i + 1}</td><td>${tm.flag} ${teamName(tm)}</td><td>${tm.group}</td><td>${tm.played}</td><td>${tm.won}</td><td>${tm.drawn}</td><td>${tm.lost}</td><td>${gd}</td><td><b>${tm.pts}</b></td><td>${tm.fifaRank ?? '—'}</td><td>${status}</td></tr>`;
   });
   html += '</table>';
   return html;
 }
 
 // ── 조별리그 Markdown 생성 ────────────────────────────────
-function makeMarkdown(groups) {
-  let md = '# 2026 FIFA World Cup - 조별리그 순위\n\n';
+function makeMarkdown(groups, { t, teamName }) {
+  let md = t('allGroups.mdTitle') + '\n\n';
+  const h = t('allGroups.header', { returnObjects: true });
   Object.entries(groups).forEach(([key, { standings }]) => {
-    md += `## 조 ${key}\n| # | 팀 | 경 | 승 | 무 | 패 | 득 | 실 | 차 | 승점 |\n|---|---|---|---|---|---|---|---|---|---|\n`;
-    standings.forEach((t, i) => {
-      md += `| ${i + 1} | ${t.flag} ${t.name} | ${t.played} | ${t.won} | ${t.drawn} | ${t.lost} | ${t.gf} | ${t.ga} | ${t.gd > 0 ? '+' : ''}${t.gd} | **${t.pts}** |\n`;
+    md += `${t('allGroups.groupHeader', { group: key })}\n`;
+    md += `| ${h.rank} | ${h.team} | ${h.played} | ${h.won} | ${h.drawn} | ${h.lost} | ${h.goalsFor} | ${h.goalsAgainst} | ${h.goalDiff} | ${h.points} |\n`;
+    md += '|---|---|---|---|---|---|---|---|---|---|\n';
+    standings.forEach((tm, i) => {
+      md += `| ${i + 1} | ${tm.flag} ${teamName(tm)} | ${tm.played} | ${tm.won} | ${tm.drawn} | ${tm.lost} | ${tm.gf} | ${tm.ga} | ${tm.gd > 0 ? '+' : ''}${tm.gd} | **${tm.pts}** |\n`;
     });
     md += '\n';
   });
   return md;
 }
 
-function makeHtmlTable(groups) {
+function makeHtmlTable(groups, { t, teamName }) {
   let html = '';
+  const h = t('allGroups.header', { returnObjects: true });
   Object.entries(groups).forEach(([key, { standings }]) => {
-    html += `<h3>조 ${key}</h3><table border="1"><tr><th>#</th><th>팀</th><th>경기</th><th>승</th><th>무</th><th>패</th><th>득실</th><th>승점</th></tr>`;
-    standings.forEach((t, i) => {
-      html += `<tr><td>${i + 1}</td><td>${t.flag} ${t.name}</td><td>${t.played}</td><td>${t.won}</td><td>${t.drawn}</td><td>${t.lost}</td><td>${t.gd >= 0 ? '+' : ''}${t.gd}</td><td><b>${t.pts}</b></td></tr>`;
+    html += `<h3>${t('allGroups.htmlGroupHeader', { group: key })}</h3><table border="1">`;
+    html += `<tr><th>${h.rank}</th><th>${h.team}</th><th>${h.playedFull}</th><th>${h.won}</th><th>${h.drawn}</th><th>${h.lost}</th><th>${h.goalDiff}</th><th>${h.points}</th></tr>`;
+    standings.forEach((tm, i) => {
+      html += `<tr><td>${i + 1}</td><td>${tm.flag} ${teamName(tm)}</td><td>${tm.played}</td><td>${tm.won}</td><td>${tm.drawn}</td><td>${tm.lost}</td><td>${tm.gd >= 0 ? '+' : ''}${tm.gd}</td><td><b>${tm.pts}</b></td></tr>`;
     });
     html += `</table>`;
   });
@@ -77,15 +88,25 @@ function makeHtmlTable(groups) {
 
 // ── 광고 슬롯 컴포넌트 ────────────────────────────────────
 function AdSlot({ slot, className = '' }) {
+  const { t } = useTranslation('common');
   return (
     <div className={`w-full bg-fifa-card border border-dashed border-fifa-border/30 rounded-lg flex items-center justify-center text-fifa-border text-xs ${className}`}>
-      광고 슬롯 ({slot})
+      {t('ads.slot', { name: slot })}
     </div>
   );
 }
 
 // ── 메인 앱 ─────────────────────────────────────────────
 export default function App() {
+  const { t } = useTranslation('common');
+  const { t: tShare } = useTranslation('share');
+  const teamName = useTeamName();
+  const shareCtx = { t: tShare, teamName };
+  useDocumentMeta();
+  const TABS = useMemo(
+    () => TAB_DEFS.map((tab) => ({ ...tab, label: t(`tabs.${tab.id}`) })),
+    [t]
+  );
   const { groups, loading, apiAvailable, handleScoreChange, handleCardChange, resetAll } = useMatches(leagueConfig);
   const [activeTab, setActiveTab] = useLocalStorage(LS_KEYS.ACTIVE_TAB, 'groups');
   const [menuOpen, setMenuOpen] = useState(false);
@@ -160,7 +181,7 @@ export default function App() {
   }, [allGroupStandings, groups, thirdAnalysis]);
 
   const handleReset = async () => {
-    if (!window.confirm('모든 경기 결과를 초기화하시겠습니까?')) return;
+    if (!window.confirm(t('dialog.confirmReset'))) return;
     setResetting(true);
     await resetAll();
     setResetting(false);
@@ -169,8 +190,8 @@ export default function App() {
   return (
     <div className="min-h-screen bg-fifa-dark">
       {/* ── 상단 광고 ─── */}
-      <AdSlot slot="상단 배너 728×90" className="h-[60px] hidden md:flex" />
-      <AdSlot slot="모바일 상단 320×50" className="h-[50px] md:hidden" />
+      <AdSlot slot={t('ads.topBanner')} className="h-[60px] hidden md:flex" />
+      <AdSlot slot={t('ads.mobileTop')} className="h-[50px] md:hidden" />
 
       {/* ── Header ────────────────────────────────────── */}
       <header className="sticky top-0 z-50 bg-fifa-dark/95 backdrop-blur border-b border-fifa-border">
@@ -201,10 +222,10 @@ export default function App() {
             ))}
           </nav>
 
-          {/* DB 상태 + 초기화 버튼 */}
+          {/* DB 상태 + 초기화 버튼 + 언어 스위처 */}
           <div className="hidden md:flex items-center gap-2">
             <span
-              title={apiAvailable ? 'DB 연결됨' : 'DB 미연결 (로컬 모드)'}
+              title={apiAvailable ? t('header.dbConnected') : t('header.dbDisconnected')}
               className={`flex items-center gap-1 text-xs px-2 py-1 rounded-full ${
                 apiAvailable
                   ? 'bg-green-900/30 text-green-400'
@@ -212,26 +233,30 @@ export default function App() {
               }`}
             >
               <Database size={10} />
-              {apiAvailable ? 'DB' : 'Local'}
+              {apiAvailable ? t('header.dbLabel') : t('header.localLabel')}
             </span>
             <button
               onClick={handleReset}
               disabled={resetting}
-              title="전체 경기 결과 초기화"
+              title={t('header.resetTitle')}
               className="flex items-center gap-1 text-xs px-2 py-1 rounded-lg text-fifa-muted hover:text-white hover:bg-white/10 transition-colors"
             >
               <RotateCcw size={12} />
-              초기화
+              {t('header.reset')}
             </button>
+            <LanguageSwitcher />
           </div>
 
-          {/* Mobile Menu */}
-          <button
-            className="md:hidden text-fifa-muted hover:text-white"
-            onClick={() => setMenuOpen((v) => !v)}
-          >
-            {menuOpen ? <X size={20} /> : <Menu size={20} />}
-          </button>
+          {/* Mobile: 언어 스위처 + 메뉴 */}
+          <div className="md:hidden flex items-center gap-1">
+            <LanguageSwitcher />
+            <button
+              className="text-fifa-muted hover:text-white"
+              onClick={() => setMenuOpen((v) => !v)}
+            >
+              {menuOpen ? <X size={20} /> : <Menu size={20} />}
+            </button>
+          </div>
         </div>
 
         {/* Mobile Menu Dropdown */}
@@ -253,7 +278,7 @@ export default function App() {
               className="w-full flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm text-red-400 hover:bg-red-900/20"
             >
               <RotateCcw size={14} />
-              전체 초기화
+              {t('header.resetAll')}
             </button>
           </div>
         )}
@@ -265,32 +290,27 @@ export default function App() {
         <div className="mb-6 flex items-center justify-between flex-wrap gap-3">
           <div>
             <h2 className="text-xl font-bold text-white flex items-center gap-2">
-              {TABS.find((t) => t.id === activeTab)?.label}
+              {TABS.find((tab) => tab.id === activeTab)?.label}
               {loading && (
-                <span className="text-xs font-normal text-fifa-muted animate-pulse">로딩 중...</span>
+                <span className="text-xs font-normal text-fifa-muted animate-pulse">{t('header.loading')}</span>
               )}
             </h2>
             <p className="text-sm text-fifa-muted mt-0.5">
-              {activeTab === 'groups' && '12개 조, 48팀 조별 순위 실시간 계산'}
-              {activeTab === 'scenarios' && '조별리그 결과에 따른 16강 진출 경우의 수 계산'}
-              {activeTab === 'thirds' && '12개 조 3위팀 중 상위 8팀 16강 진출 판별'}
-              {activeTab === 'knockout' && '32강부터 결승까지 토너먼트 대진표'}
-              {activeTab === 'draw' && '포트 시스템 및 지리적 제약 조건 조추첨 시뮬레이션'}
-              {activeTab === 'rules' && '2026 FIFA 월드컵 조별리그 순위 결정 방식 안내'}
+              {t(`subtitle.${activeTab}`)}
             </p>
           </div>
           {activeTab === 'groups' && (
             <ShareButtons
               targetId="main-content"
-              generateMarkdown={() => makeMarkdown(groups)}
-              generateHtmlTable={() => makeHtmlTable(groups)}
+              generateMarkdown={() => makeMarkdown(groups, shareCtx)}
+              generateHtmlTable={() => makeHtmlTable(groups, shareCtx)}
             />
           )}
           {activeTab === 'thirds' && (
             <ShareButtons
               targetId="thirds-content"
-              generateMarkdown={() => makeThirdsMarkdown(allThirds, best8)}
-              generateHtmlTable={() => makeThirdsHtmlTable(allThirds, best8)}
+              generateMarkdown={() => makeThirdsMarkdown(allThirds, best8, shareCtx)}
+              generateHtmlTable={() => makeThirdsHtmlTable(allThirds, best8, shareCtx)}
             />
           )}
         </div>
@@ -325,7 +345,7 @@ export default function App() {
                 />
 
                 {/* 중간 광고 */}
-                <AdSlot slot="중간 배너 728×90" className="h-[90px]" />
+                <AdSlot slot={t('ads.middleBanner')} className="h-[90px]" />
               </div>
             )}
 
@@ -339,6 +359,8 @@ export default function App() {
                 fromNavigation={scenarioFromNav}
                 groups={groups}
                 onScoreChange={handleScoreChange}
+                allGroupStandings={allGroupStandings}
+                thirdAnalysis={thirdAnalysis}
               />
             )}
 
@@ -363,7 +385,7 @@ export default function App() {
           {activeTab !== 'knockout' && (
             <aside className="hidden lg:block w-[160px] shrink-0">
               <div className="sticky top-20 space-y-4">
-                <AdSlot slot="사이드 160×600" className="h-[600px]" />
+                <AdSlot slot={t('ads.sideBanner')} className="h-[600px]" />
               </div>
             </aside>
           )}
@@ -371,14 +393,14 @@ export default function App() {
 
         {/* 하단 광고 */}
         <div className="mt-8">
-          <AdSlot slot="하단 배너 728×90" className="h-[90px]" />
+          <AdSlot slot={t('ads.bottomBanner')} className="h-[90px]" />
         </div>
       </main>
 
       {/* ── Footer ───────────────────────────────────── */}
       <footer className="border-t border-fifa-border mt-8 py-6 text-center text-xs text-fifa-muted">
-        <p>GroupStages © 2026 · 2026 FIFA World Cup 경우의 수 계산기</p>
-        <p className="mt-1">본 사이트는 FIFA와 공식 관련이 없습니다</p>
+        <p>{t('footer.copyright')}</p>
+        <p className="mt-1">{t('footer.disclaimer')}</p>
       </footer>
     </div>
   );

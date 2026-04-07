@@ -1,0 +1,68 @@
+{
+  "tabs": {
+    "groups": "Group Stage",
+    "scenarios": "Scenarios",
+    "thirds": "3rd Place",
+    "knockout": "Knockout",
+    "draw": "Draw",
+    "rules": "Rules"
+  },
+  "subtitle": {
+    "groups": "Real-time standings for 12 groups, 48 teams",
+    "scenarios": "Round of 32 qualification scenarios based on group stage results",
+    "thirds": "Top 8 of 12 third-placed teams advancing to the Round of 32",
+    "knockout": "Tournament bracket from Round of 32 to Final",
+    "draw": "Pot system and geographic constraint draw simulation",
+    "rules": "FIFA 2026 World Cup group stage standings rules"
+  },
+  "header": {
+    "dbConnected": "DB Connected",
+    "dbDisconnected": "DB Disconnected (local mode)",
+    "dbLabel": "DB",
+    "localLabel": "Local",
+    "resetTitle": "Reset all match results",
+    "reset": "Reset",
+    "resetAll": "Reset all",
+    "loading": "Loading..."
+  },
+  "dialog": {
+    "confirmReset": "Reset all match results?",
+    "confirmResetTest": "Reset test data?"
+  },
+  "footer": {
+    "copyright": "GroupStages © 2026 · 2026 FIFA World Cup Scenario Calculator",
+    "disclaimer": "This site is not officially affiliated with FIFA",
+    "testNotice": "TEST MODE · Data on this page is not saved to the database"
+  },
+  "test": {
+    "modeBadge": "TEST",
+    "modeBanner": "TEST MODE — Using local data without API · resets on refresh",
+    "modeSubtitle": "2026 FIFA World Cup · Test Environment",
+    "backToMain": "Back to main",
+    "resetTitle": "Reset test data",
+    "subtitle": {
+      "groups": "12 groups, 48 teams — enter scores directly to test",
+      "scenarios": "Scenario calculation test",
+      "thirds": "Top 8 third-placed teams test",
+      "knockout": "Tournament bracket from Round of 32 to Final",
+      "draw": "Draw simulator",
+      "rules": "Standings rules"
+    }
+  },
+  "share": {
+    "redditMd": "Reddit MD",
+    "redditMdTooltip": "Copy Reddit Markdown table",
+    "htmlTable": "HTML table",
+    "htmlTableTooltip": "Copy HTML table (for community)",
+    "saveImage": "Save image",
+    "saveImageTooltip": "Save as image"
+  },
+  "ads": {
+    "slot": "Ad slot ({{name}})",
+    "topBanner": "Top banner 728×90",
+    "mobileTop": "Mobile top 320×50",
+    "middleBanner": "Middle banner 728×90",
+    "sideBanner": "Side 160×600",
+    "bottomBanner": "Bottom banner 728×90"
+  }
+}

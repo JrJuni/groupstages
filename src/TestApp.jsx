@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Globe, Shuffle, Trophy, Menu, X, RotateCcw, GitBranch, BookOpen, FlaskConical, ExternalLink, Swords } from 'lucide-react';
 import { getBest8ThirdPlace, getFairPlayPoints } from './utils/rankings.js';
 import { analyzeThirdPlaceCombinations, computeThirdRange } from './utils/knockout.js';
@@ -10,18 +11,27 @@ import ScenarioPage from './components/ScenarioPage.jsx';
 import RulesPage from './components/RulesPage.jsx';
 import DrawSimulator from './components/DrawSimulator.jsx';
 import BracketPage from './components/knockout/BracketPage.jsx';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
+import LanguageSwitcher from './i18n/LanguageSwitcher.jsx';
+import { useDocumentMeta } from './i18n/useDocumentMeta.js';
 
-const TABS = [
-  { id: 'groups', label: '조별리그', icon: Globe },
-  { id: 'scenarios', label: '경우의 수', icon: GitBranch },
-  { id: 'thirds', label: '3위 순위', icon: Trophy },
-  { id: 'knockout', label: '토너먼트', icon: Swords },
-  { id: 'draw', label: '조추첨', icon: Shuffle },
-  { id: 'rules', label: '규칙', icon: BookOpen },
+const TAB_DEFS = [
+  { id: 'groups', icon: Globe },
+  { id: 'scenarios', icon: GitBranch },
+  { id: 'thirds', icon: Trophy },
+  { id: 'knockout', icon: Swords },
+  { id: 'draw', icon: Shuffle },
+  { id: 'rules', icon: BookOpen },
 ];
 
 export default function TestApp() {
+  const { t } = useTranslation('common');
+  useDocumentMeta();
+  const { lang } = useParams();
+  const TABS = useMemo(
+    () => TAB_DEFS.map((tab) => ({ ...tab, label: t(`tabs.${tab.id}`) })),
+    [t]
+  );
   const { groups, loading, apiAvailable, handleScoreChange, handleCardChange, resetAll } = useTestMatches();
   const [activeTab, setActiveTab] = useState(() => localStorage.getItem('gs_activeTab') || 'groups');
   const [menuOpen, setMenuOpen] = useState(false);
@@ -90,7 +100,7 @@ export default function TestApp() {
     });
 
   const handleReset = () => {
-    if (!window.confirm('테스트 데이터를 초기화하시겠습니까?')) return;
+    if (!window.confirm(t('dialog.confirmResetTest'))) return;
     resetAll();
   };
 
@@ -100,14 +110,14 @@ export default function TestApp() {
       <div className="bg-amber-500/15 border-b border-amber-500/30 px-4 py-1.5 flex items-center justify-between">
         <div className="flex items-center gap-2 text-amber-400 text-xs font-medium">
           <FlaskConical size={13} />
-          TEST MODE — API 없이 로컬 데이터 사용 중 · 새로고침 시 초기화
+          {t('test.modeBanner')}
         </div>
         <Link
-          to="/"
+          to={`/${lang || 'en'}`}
           className="flex items-center gap-1 text-xs text-amber-400/70 hover:text-amber-300 transition-colors"
         >
           <ExternalLink size={11} />
-          메인으로
+          {t('test.backToMain')}
         </Link>
       </div>
 
@@ -119,9 +129,9 @@ export default function TestApp() {
             <div>
               <h1 className="text-base font-bold text-white leading-tight flex items-center gap-1.5">
                 GroupStages
-                <span className="text-[10px] font-normal bg-amber-500/20 text-amber-400 px-1.5 py-0.5 rounded">TEST</span>
+                <span className="text-[10px] font-normal bg-amber-500/20 text-amber-400 px-1.5 py-0.5 rounded">{t('test.modeBadge')}</span>
               </h1>
-              <p className="text-[10px] text-fifa-muted leading-none">2026 FIFA World Cup · 테스트 환경</p>
+              <p className="text-[10px] text-fifa-muted leading-none">{t('test.modeSubtitle')}</p>
             </div>
           </div>
 
@@ -150,20 +160,24 @@ export default function TestApp() {
             </span>
             <button
               onClick={handleReset}
-              title="테스트 데이터 초기화"
+              title={t('test.resetTitle')}
               className="flex items-center gap-1 text-xs px-2 py-1 rounded-lg text-fifa-muted hover:text-white hover:bg-white/10 transition-colors"
             >
               <RotateCcw size={12} />
-              초기화
+              {t('header.reset')}
             </button>
+            <LanguageSwitcher />
           </div>
 
-          <button
-            className="md:hidden text-fifa-muted hover:text-white"
-            onClick={() => setMenuOpen((v) => !v)}
-          >
-            {menuOpen ? <X size={20} /> : <Menu size={20} />}
-          </button>
+          <div className="md:hidden flex items-center gap-1">
+            <LanguageSwitcher />
+            <button
+              className="text-fifa-muted hover:text-white"
+              onClick={() => setMenuOpen((v) => !v)}
+            >
+              {menuOpen ? <X size={20} /> : <Menu size={20} />}
+            </button>
+          </div>
         </div>
 
         {menuOpen && (
@@ -184,7 +198,7 @@ export default function TestApp() {
               className="w-full flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm text-red-400 hover:bg-red-900/20"
             >
               <RotateCcw size={14} />
-              전체 초기화
+              {t('header.resetAll')}
             </button>
           </div>
         )}
@@ -194,15 +208,10 @@ export default function TestApp() {
       <main className="max-w-7xl mx-auto px-4 py-6">
         <div className="mb-6">
           <h2 className="text-xl font-bold text-white flex items-center gap-2">
-            {TABS.find((t) => t.id === activeTab)?.label}
+            {TABS.find((tab) => tab.id === activeTab)?.label}
           </h2>
           <p className="text-sm text-fifa-muted mt-0.5">
-            {activeTab === 'groups' && '12개 조, 48팀 — 직접 점수 입력하여 테스트'}
-            {activeTab === 'scenarios' && '경우의 수 계산 테스트'}
-            {activeTab === 'thirds' && '3위팀 상위 8팀 선별 테스트'}
-            {activeTab === 'knockout' && '32강부터 결승까지 토너먼트 대진표'}
-            {activeTab === 'draw' && '조추첨 시뮬레이터'}
-            {activeTab === 'rules' && '순위 결정 규칙'}
+            {t(`test.subtitle.${activeTab}`)}
           </p>
         </div>
 
@@ -240,6 +249,8 @@ export default function TestApp() {
               fromNavigation={scenarioFromNav}
               groups={groups}
               onScoreChange={handleScoreChange}
+              allGroupStandings={allGroupStandings}
+              thirdAnalysis={thirdAnalysis}
             />
           )}
 
@@ -258,7 +269,7 @@ export default function TestApp() {
       </main>
 
       <footer className="border-t border-fifa-border mt-8 py-4 text-center text-xs text-amber-400/50">
-        TEST MODE · 이 페이지의 데이터는 실제 DB에 저장되지 않습니다
+        {t('footer.testNotice')}
       </footer>
     </div>
   );

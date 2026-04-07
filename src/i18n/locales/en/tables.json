@@ -1,0 +1,57 @@
+{
+  "groups": {
+    "title": "Group {{group}}",
+    "viewScenarioGroup": "View scenarios for Group {{group}}",
+    "viewScenarioTeam": "View scenarios for {{team}}",
+    "headers": {
+      "rank": "#",
+      "team": "Team",
+      "played": "P",
+      "won": "W",
+      "drawn": "D",
+      "lost": "L",
+      "goalsFor": "GF",
+      "goalsAgainst": "GA",
+      "goalDiff": "GD",
+      "points": "Pts"
+    }
+  },
+  "thirds": {
+    "title": "Top 8 Third-Placed Teams (Round of 32)",
+    "dbTooltip": "Live query from DB",
+    "localTooltip": "Local calculation",
+    "confirmedCount": "{{count}}/8 confirmed",
+    "headers": {
+      "rank": "#",
+      "team": "Team",
+      "group": "Grp",
+      "played": "P",
+      "won": "W",
+      "drawn": "D",
+      "lost": "L",
+      "goalDiff": "GD",
+      "points": "Pts",
+      "ptsMax": "Max",
+      "ptsMin": "Min",
+      "fifa": "FIFA",
+      "status": "Status",
+      "nextMatch": "Next match"
+    },
+    "headerTooltips": {
+      "ptsMax": "Maximum possible points for 3rd place in this group",
+      "ptsMin": "Minimum possible points for 3rd place in this group",
+      "fifa": "FIFA ranking"
+    },
+    "loading": "Loading data from DB...",
+    "loadingLocal": "Loading data...",
+    "status": {
+      "qualified": "Qualified",
+      "eliminated": "Eliminated",
+      "likely": "Likely"
+    },
+    "legend": {
+      "qualified": "Round of 32 qualification (top 8)",
+      "tiebreaker": "Pts → GD → GF → Fair play → FIFA ranking"
+    }
+  }
+}

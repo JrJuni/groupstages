@@ -1,0 +1,125 @@
+{
+  "selector": {
+    "title": "选择小组 / 球队",
+    "selected": "— 已选择 {{group}}组",
+    "selectedTeam": "— 已选择 {{group}}组 · {{team}}",
+    "groupLabel": "{{group}}组"
+  },
+  "section": {
+    "standings": "积分榜",
+    "matchScheduleOpen": "赛程 · 结果",
+    "matchScheduleClosed": "显示赛程 · 结果"
+  },
+  "standings": {
+    "headers": {
+      "rank": "#",
+      "team": "球队",
+      "played": "赛",
+      "won": "胜",
+      "drawn": "平",
+      "lost": "负",
+      "goalsFor": "进",
+      "goalsAgainst": "失",
+      "goalDiff": "差",
+      "points": "积分",
+      "fp": "FP"
+    },
+    "cardTooltips": {
+      "yc": "黄牌(-1分)",
+      "twoYR": "两黄变红出场(-3分)",
+      "dr": "直接红牌(-4分)",
+      "fp": "公平竞赛分"
+    }
+  },
+  "legend": {
+    "qualified": "32强晋级",
+    "thirdContender": "争夺第三",
+    "fairPlay": "公平竞赛"
+  },
+  "emptyState": "请在上方选择一个小组,或在小组赛标签中点击一支球队",
+  "panel": {
+    "currentRank": "当前 {{rank}}",
+    "rankLabels": {
+      "1": "第1",
+      "2": "第2",
+      "3": "第3",
+      "4": "第4"
+    },
+    "matchesCount": "{{count}}场",
+    "pointsCount": "{{count}}分",
+    "goalDiff": "净胜 {{value}}",
+    "goalsForCount": "进球 {{count}}",
+    "remainingTitle": "剩余比赛",
+    "remainingCount": "{{count}}场",
+    "maxPoints": "最多可获 {{count}} 分",
+    "allDone": "全部比赛已结束",
+    "matchdayLabel": "第{{md}}轮",
+    "title16": "32强晋级情形",
+    "needMore": "本组再进行{{count}}场比赛后开始分析",
+    "activateNotice": "小组2场比赛后启用",
+    "oppPoints": "({{count}}分)"
+  },
+  "badge": {
+    "qualified": "确定晋级",
+    "eliminated": "确定淘汰",
+    "thirdContender": "争夺第三",
+    "uncertain": "未确定"
+  },
+  "matrix": {
+    "myMatch": "本队比赛",
+    "otherMatch": "另一场比赛",
+    "home": "主场",
+    "away": "客场",
+    "wdl": {
+      "W": "胜",
+      "D": "平",
+      "L": "负"
+    },
+    "axisHint": "本↓ 他→",
+    "drawShort": "平",
+    "rankLabel": "第{{rank}}",
+    "topTwoLabel": "前两名",
+    "thirdLabel": "第三",
+    "winSuffix": "{{team}} 胜"
+  },
+  "qualSummary": {
+    "title": "条件下的预期排名",
+    "wdl": {
+      "W": "胜",
+      "D": "平",
+      "L": "负"
+    },
+    "rankLabels": {
+      "1": "第1",
+      "2": "第2",
+      "3": "第3",
+      "4": "出局"
+    },
+    "otherDraw": "另一场比赛平局",
+    "otherWin": "{{team}} 胜",
+    "ignored": "结果不限",
+    "or": " 或 ",
+    "tiebreakerBetter": "净胜球/进球数占优时",
+    "tiebreakerWorse": "净胜球/进球数处下风时",
+    "statsNote": "当前 {{teamName}} 净胜 {{teamGd}}, 进球 {{teamGf}} / {{competitor}} 净胜 {{competitorGd}}, 进球 {{competitorGf}}"
+  },
+  "match": {
+    "relevant": "相关比赛"
+  },
+  "r32": {
+    "title": "32强可能对阵",
+    "ifAdvance": "若以{{group}}组{{rank}}晋级",
+    "oneOf": "— 任一",
+    "vs": "vs",
+    "noCandidates": "无候选",
+    "slot": {
+      "direct": "{{group}}组{{rank}}",
+      "third": "{{groups}} 第三"
+    },
+    "rankLabels": {
+      "1": "第1",
+      "2": "第2",
+      "3": "第3"
+    }
+  }
+}

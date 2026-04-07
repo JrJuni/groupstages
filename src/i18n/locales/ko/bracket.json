@@ -1,0 +1,54 @@
+{
+  "rounds": {
+    "R32": "32강",
+    "R16": "16강",
+    "QF": "8강",
+    "SF": "4강",
+    "FINAL": "결승"
+  },
+  "matchLabel": "{{round}} {{num}}경기",
+  "roundCountLabel": "{{round}} ({{count}}경기)",
+  "finalHeader": "🏆 결승",
+  "groupSelector": "조 선택:",
+  "validCombinations": "유효 조합: {{count}}/495",
+  "rankLabels": {
+    "1": "1위",
+    "2": "2위",
+    "3": "3위"
+  },
+  "thirdStatus": {
+    "eliminated": "(탈락 확정)",
+    "qualified": "(진출 확정)",
+    "currentBest": "(현재 3위 {{rank}}위)",
+    "currentOut": "(현재 탈락권)"
+  },
+  "legend": {
+    "first": "1위 진출 위치",
+    "second": "2위 진출 위치",
+    "third": "3위 가능 위치",
+    "confirmed": "슬롯 확정"
+  },
+  "match": {
+    "possibleThirds": "가능한 3위팀",
+    "groupSuffix": "{{group}}조"
+  },
+  "draw": {
+    "speed": "속도",
+    "speedSlow": "느림",
+    "speedNormal": "보통",
+    "speedFast": "빠름",
+    "reset": "초기화",
+    "instantDraw": "즉시 추첨",
+    "drawStart": "추첨 시작",
+    "pause": "일시정지",
+    "completed": "완료",
+    "drawProgress": "추첨 진행",
+    "lastDrawn": "방금 추첨된 팀",
+    "assignedGroup": "배정된 조",
+    "groupLabel": "{{group}}조",
+    "drawComplete": "✓ 추첨 완료",
+    "drawResult": "추첨 결과",
+    "groupName": "조 {{name}}",
+    "unassigned": "미배정"
+  }
+}

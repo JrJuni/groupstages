@@ -1,0 +1,57 @@
+{
+  "groups": {
+    "title": "조 {{group}}",
+    "viewScenarioGroup": "조 {{group}} 경우의 수 보기",
+    "viewScenarioTeam": "{{team}} 경우의 수 보기",
+    "headers": {
+      "rank": "#",
+      "team": "팀",
+      "played": "경기",
+      "won": "승",
+      "drawn": "무",
+      "lost": "패",
+      "goalsFor": "득",
+      "goalsAgainst": "실",
+      "goalDiff": "차",
+      "points": "승점"
+    }
+  },
+  "thirds": {
+    "title": "조 3위 상위 8팀 (16강 진출)",
+    "dbTooltip": "DB에서 실시간 쿼리",
+    "localTooltip": "로컬 계산",
+    "confirmedCount": "{{count}}/8팀 확정",
+    "headers": {
+      "rank": "#",
+      "team": "팀",
+      "group": "조",
+      "played": "경",
+      "won": "승",
+      "drawn": "무",
+      "lost": "패",
+      "goalDiff": "득실",
+      "points": "승점",
+      "ptsMax": "최대",
+      "ptsMin": "최소",
+      "fifa": "FIFA",
+      "status": "상태",
+      "nextMatch": "다음 경기"
+    },
+    "headerTooltips": {
+      "ptsMax": "이 조 3위가 될 수 있는 최대 승점",
+      "ptsMin": "이 조 3위가 될 수 있는 최소 승점",
+      "fifa": "FIFA 랭킹"
+    },
+    "loading": "DB에서 데이터 로딩 중...",
+    "loadingLocal": "데이터 로딩 중...",
+    "status": {
+      "qualified": "진출 확정",
+      "eliminated": "탈락 확정",
+      "likely": "진출 유력"
+    },
+    "legend": {
+      "qualified": "16강 진출 (상위 8팀)",
+      "tiebreaker": "승점 → 득실차 → 다득점 → 페어플레이 → FIFA 랭킹 순으로 결정"
+    }
+  }
+}

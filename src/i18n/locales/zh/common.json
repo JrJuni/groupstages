@@ -1,0 +1,68 @@
+{
+  "tabs": {
+    "groups": "小组赛",
+    "scenarios": "晋级情形",
+    "thirds": "第三名排名",
+    "knockout": "淘汰赛",
+    "draw": "分组抽签",
+    "rules": "规则"
+  },
+  "subtitle": {
+    "groups": "12组48支球队的实时积分",
+    "scenarios": "基于小组赛结果的32强晋级情形",
+    "thirds": "12组第三名中前8名晋级32强",
+    "knockout": "从32强到决赛的淘汰赛对阵图",
+    "draw": "分档制度与地理限制下的抽签模拟",
+    "rules": "FIFA 2026世界杯小组赛排名规则说明"
+  },
+  "header": {
+    "dbConnected": "已连接数据库",
+    "dbDisconnected": "未连接数据库(本地模式)",
+    "dbLabel": "DB",
+    "localLabel": "本地",
+    "resetTitle": "重置所有比赛结果",
+    "reset": "重置",
+    "resetAll": "全部重置",
+    "loading": "加载中..."
+  },
+  "dialog": {
+    "confirmReset": "重置所有比赛结果?",
+    "confirmResetTest": "重置测试数据?"
+  },
+  "footer": {
+    "copyright": "GroupStages © 2026 · 2026 FIFA世界杯晋级情形计算器",
+    "disclaimer": "本站与FIFA无官方关联",
+    "testNotice": "TEST MODE · 本页数据不会保存到数据库"
+  },
+  "test": {
+    "modeBadge": "TEST",
+    "modeBanner": "TEST MODE — 不使用API的本地数据 · 刷新后重置",
+    "modeSubtitle": "2026 FIFA世界杯 · 测试环境",
+    "backToMain": "返回主页",
+    "resetTitle": "重置测试数据",
+    "subtitle": {
+      "groups": "12组48支球队 — 直接输入比分进行测试",
+      "scenarios": "晋级情形计算测试",
+      "thirds": "前8名第三名筛选测试",
+      "knockout": "从32强到决赛的淘汰赛对阵图",
+      "draw": "抽签模拟器",
+      "rules": "排名规则"
+    }
+  },
+  "share": {
+    "redditMd": "Reddit MD",
+    "redditMdTooltip": "复制Reddit Markdown表格",
+    "htmlTable": "HTML表格",
+    "htmlTableTooltip": "复制HTML表格(用于社区)",
+    "saveImage": "保存图片",
+    "saveImageTooltip": "另存为图片"
+  },
+  "ads": {
+    "slot": "广告位 ({{name}})",
+    "topBanner": "顶部横幅 728×90",
+    "mobileTop": "移动端顶部 320×50",
+    "middleBanner": "中部横幅 728×90",
+    "sideBanner": "侧边栏 160×600",
+    "bottomBanner": "底部横幅 728×90"
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "groupStandings": {
+    "mdTitle": "## Group {{group}} standings",
+    "htmlTitle": "Group {{group}} standings",
+    "header": {
+      "rank": "#",
+      "team": "Team",
+      "played": "P",
+      "won": "W",
+      "drawn": "D",
+      "lost": "L",
+      "goalDiff": "GD",
+      "points": "Pts",
+      "playedFull": "Played"
+    }
+  },
+  "allGroups": {
+    "mdTitle": "# 2026 FIFA World Cup - Group stage standings",
+    "groupHeader": "## Group {{group}}",
+    "htmlGroupHeader": "Group {{group}}",
+    "header": {
+      "rank": "#",
+      "team": "Team",
+      "played": "P",
+      "won": "W",
+      "drawn": "D",
+      "lost": "L",
+      "goalsFor": "GF",
+      "goalsAgainst": "GA",
+      "goalDiff": "GD",
+      "points": "Pts",
+      "playedFull": "Played"
+    }
+  },
+  "thirds": {
+    "mdTitle": "# 2026 FIFA World Cup - Third-place ranking",
+    "htmlTitle": "2026 FIFA World Cup - Third-place ranking",
+    "header": {
+      "rank": "#",
+      "team": "Team",
+      "group": "Grp",
+      "played": "P",
+      "won": "W",
+      "drawn": "D",
+      "lost": "L",
+      "goalDiff": "GD",
+      "points": "Pts",
+      "fifa": "FIFA",
+      "status": "Status",
+      "playedFull": "Played"
+    },
+    "statusQualified": "✓ Qualified",
+    "statusEliminated": "Out"
+  },
+  "scenario": {
+    "mdTitle": "## {{team}} — Round of 32 scenarios",
+    "htmlTitle": "{{team}} — Round of 32 scenarios",
+    "currentLine": "Currently **{{rank}}** | {{played}} played | **{{pts}} pts** | GD {{gd}} | GF {{gf}}",
+    "currentLineHtml": "Currently <b>{{rank}}</b> | {{played}} played | <b>{{pts}} pts</b> | GD {{gd}} | GF {{gf}}",
+    "allDone": "All matches played",
+    "rankProbHeader": "### Rank probabilities",
+    "rankProbHtmlHeader": "Rank probabilities",
+    "rankCol": "Rank",
+    "probCol": "Probability",
+    "rankRow": "{{rank}}",
+    "topTwoLine": "Top 2 direct qualification: **{{pct}}%**",
+    "topTwoLineHtml": "Top 2 direct qualification: <b>{{pct}}%</b>",
+    "thirdLine": " | 3rd place possible: **{{pct}}%**",
+    "thirdLineHtml": " | 3rd place possible: <b>{{pct}}%</b>",
+    "condTitle": "### Projected ranks per condition",
+    "condIgnoreOther": "{{team}} {{wdl}} (any result)",
+    "condFormat": "{{team}} {{wdl}}",
+    "rankConfirmed": "**{{rank}} confirmed**",
+    "tiebreakerNote": "*(may depend on goal difference)*",
+    "wdl": {
+      "W": "W",
+      "D": "D",
+      "L": "L"
+    },
+    "otherDraw": "other match draw",
+    "otherWin": "{{team}} W",
+    "or": " or ",
+    "join": ", or "
+  }
+}

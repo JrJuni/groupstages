@@ -1,0 +1,85 @@
+{
+  "groupStandings": {
+    "mdTitle": "## Clasificación del Grupo {{group}}",
+    "htmlTitle": "Clasificación del Grupo {{group}}",
+    "header": {
+      "rank": "#",
+      "team": "Equipo",
+      "played": "PJ",
+      "won": "G",
+      "drawn": "E",
+      "lost": "P",
+      "goalDiff": "DG",
+      "points": "Pts",
+      "playedFull": "Jugados"
+    }
+  },
+  "allGroups": {
+    "mdTitle": "# Mundial FIFA 2026 - Clasificación de la fase de grupos",
+    "groupHeader": "## Grupo {{group}}",
+    "htmlGroupHeader": "Grupo {{group}}",
+    "header": {
+      "rank": "#",
+      "team": "Equipo",
+      "played": "PJ",
+      "won": "G",
+      "drawn": "E",
+      "lost": "P",
+      "goalsFor": "GF",
+      "goalsAgainst": "GC",
+      "goalDiff": "DG",
+      "points": "Pts",
+      "playedFull": "Jugados"
+    }
+  },
+  "thirds": {
+    "mdTitle": "# Mundial FIFA 2026 - Clasificación de terceros",
+    "htmlTitle": "Mundial FIFA 2026 - Clasificación de terceros",
+    "header": {
+      "rank": "#",
+      "team": "Equipo",
+      "group": "Grp",
+      "played": "PJ",
+      "won": "G",
+      "drawn": "E",
+      "lost": "P",
+      "goalDiff": "DG",
+      "points": "Pts",
+      "fifa": "FIFA",
+      "status": "Estado",
+      "playedFull": "Jugados"
+    },
+    "statusQualified": "✓ Clasificado",
+    "statusEliminated": "Fuera"
+  },
+  "scenario": {
+    "mdTitle": "## {{team}} — Escenarios para dieciseisavos",
+    "htmlTitle": "{{team}} — Escenarios para dieciseisavos",
+    "currentLine": "Actualmente **{{rank}}** | {{played}} jugados | **{{pts}} pts** | DG {{gd}} | GF {{gf}}",
+    "currentLineHtml": "Actualmente <b>{{rank}}</b> | {{played}} jugados | <b>{{pts}} pts</b> | DG {{gd}} | GF {{gf}}",
+    "allDone": "Todos los partidos jugados",
+    "rankProbHeader": "### Probabilidades de posición",
+    "rankProbHtmlHeader": "Probabilidades de posición",
+    "rankCol": "Posición",
+    "probCol": "Probabilidad",
+    "rankRow": "{{rank}}",
+    "topTwoLine": "Clasificación directa Top 2: **{{pct}}%**",
+    "topTwoLineHtml": "Clasificación directa Top 2: <b>{{pct}}%</b>",
+    "thirdLine": " | Posible 3º: **{{pct}}%**",
+    "thirdLineHtml": " | Posible 3º: <b>{{pct}}%</b>",
+    "condTitle": "### Posición proyectada por condición",
+    "condIgnoreOther": "{{team}} {{wdl}} (cualquier resultado)",
+    "condFormat": "{{team}} {{wdl}}",
+    "rankConfirmed": "**{{rank}} confirmado**",
+    "tiebreakerNote": "*(puede depender de la diferencia de goles)*",
+    "wdl": {
+      "W": "G",
+      "D": "E",
+      "L": "P"
+    },
+    "otherDraw": "empate en el otro partido",
+    "otherWin": "{{team}} G",
+    "or": " o ",
+    "join": ", o "
+  }
+}

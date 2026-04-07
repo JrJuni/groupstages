@@ -1,0 +1,85 @@
+{
+  "groupStandings": {
+    "mdTitle": "## {{group}}组 积分榜",
+    "htmlTitle": "{{group}}组 积分榜",
+    "header": {
+      "rank": "#",
+      "team": "球队",
+      "played": "赛",
+      "won": "胜",
+      "drawn": "平",
+      "lost": "负",
+      "goalDiff": "净胜",
+      "points": "积分",
+      "playedFull": "比赛"
+    }
+  },
+  "allGroups": {
+    "mdTitle": "# 2026 FIFA世界杯 - 小组赛积分榜",
+    "groupHeader": "## {{group}}组",
+    "htmlGroupHeader": "{{group}}组",
+    "header": {
+      "rank": "#",
+      "team": "球队",
+      "played": "赛",
+      "won": "胜",
+      "drawn": "平",
+      "lost": "负",
+      "goalsFor": "进",
+      "goalsAgainst": "失",
+      "goalDiff": "差",
+      "points": "积分",
+      "playedFull": "比赛"
+    }
+  },
+  "thirds": {
+    "mdTitle": "# 2026 FIFA世界杯 - 第三名排名",
+    "htmlTitle": "2026 FIFA世界杯 - 第三名排名",
+    "header": {
+      "rank": "#",
+      "team": "球队",
+      "group": "组",
+      "played": "赛",
+      "won": "胜",
+      "drawn": "平",
+      "lost": "负",
+      "goalDiff": "净胜",
+      "points": "积分",
+      "fifa": "FIFA",
+      "status": "状态",
+      "playedFull": "比赛"
+    },
+    "statusQualified": "✓ 晋级",
+    "statusEliminated": "淘汰"
+  },
+  "scenario": {
+    "mdTitle": "## {{team}} — 32强晋级情形",
+    "htmlTitle": "{{team}} — 32强晋级情形",
+    "currentLine": "当前 **第{{rank}}** | {{played}}场 | **{{pts}}分** | 净胜 {{gd}} | 进球 {{gf}}",
+    "currentLineHtml": "当前 <b>第{{rank}}</b> | {{played}}场 | <b>{{pts}}分</b> | 净胜 {{gd}} | 进球 {{gf}}",
+    "allDone": "全部比赛已结束",
+    "rankProbHeader": "### 排名概率",
+    "rankProbHtmlHeader": "排名概率",
+    "rankCol": "排名",
+    "probCol": "概率",
+    "rankRow": "第{{rank}}",
+    "topTwoLine": "前两名直接晋级: **{{pct}}%**",
+    "topTwoLineHtml": "前两名直接晋级: <b>{{pct}}%</b>",
+    "thirdLine": " | 第三晋级可能: **{{pct}}%**",
+    "thirdLineHtml": " | 第三晋级可能: <b>{{pct}}%</b>",
+    "condTitle": "### 条件下的预期排名",
+    "condIgnoreOther": "{{team}} {{wdl}} (结果不限)",
+    "condFormat": "{{team}} {{wdl}}",
+    "rankConfirmed": "**第{{rank}}确定**",
+    "tiebreakerNote": "*(可能取决于净胜球)*",
+    "wdl": {
+      "W": "胜",
+      "D": "平",
+      "L": "负"
+    },
+    "otherDraw": "另一场比赛平局",
+    "otherWin": "{{team}} 胜",
+    "or": " 或 ",
+    "join": ", 或 "
+  }
+}

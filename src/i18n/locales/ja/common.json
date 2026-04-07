@@ -1,0 +1,68 @@
+{
+  "tabs": {
+    "groups": "グループステージ",
+    "scenarios": "シナリオ",
+    "thirds": "3位順位",
+    "knockout": "トーナメント",
+    "draw": "組み合わせ抽選",
+    "rules": "ルール"
+  },
+  "subtitle": {
+    "groups": "12グループ48チームのリアルタイム順位",
+    "scenarios": "グループステージ結果に基づく32強進出シナリオ",
+    "thirds": "12組3位中の上位8チームが32強進出",
+    "knockout": "32強から決勝までのトーナメント表",
+    "draw": "ポット制度と地理的制約を考慮した抽選シミュレーション",
+    "rules": "FIFA 2026 W杯 グループステージ順位決定方式の案内"
+  },
+  "header": {
+    "dbConnected": "DB接続済み",
+    "dbDisconnected": "DB未接続(ローカルモード)",
+    "dbLabel": "DB",
+    "localLabel": "Local",
+    "resetTitle": "全試合結果をリセット",
+    "reset": "リセット",
+    "resetAll": "全てリセット",
+    "loading": "読み込み中..."
+  },
+  "dialog": {
+    "confirmReset": "全ての試合結果をリセットしますか?",
+    "confirmResetTest": "テストデータをリセットしますか?"
+  },
+  "footer": {
+    "copyright": "GroupStages © 2026 · 2026 FIFAワールドカップ シナリオ計算機",
+    "disclaimer": "本サイトはFIFAと公式な関係はありません",
+    "testNotice": "TEST MODE · このページのデータはDBに保存されません"
+  },
+  "test": {
+    "modeBadge": "TEST",
+    "modeBanner": "TEST MODE — APIなしのローカルデータ使用中 · リロードでリセット",
+    "modeSubtitle": "2026 FIFAワールドカップ · テスト環境",
+    "backToMain": "メインへ戻る",
+    "resetTitle": "テストデータをリセット",
+    "subtitle": {
+      "groups": "12グループ48チーム — スコアを直接入力してテスト",
+      "scenarios": "シナリオ計算テスト",
+      "thirds": "3位上位8チーム選別テスト",
+      "knockout": "32強から決勝までのトーナメント表",
+      "draw": "組み合わせ抽選シミュレーター",
+      "rules": "順位決定ルール"
+    }
+  },
+  "share": {
+    "redditMd": "Reddit MD",
+    "redditMdTooltip": "Reddit Markdown表をコピー",
+    "htmlTable": "HTML表",
+    "htmlTableTooltip": "HTML表をコピー(コミュニティ用)",
+    "saveImage": "画像で保存",
+    "saveImageTooltip": "画像として保存"
+  },
+  "ads": {
+    "slot": "広告枠 ({{name}})",
+    "topBanner": "上部バナー 728×90",
+    "mobileTop": "モバイル上部 320×50",
+    "middleBanner": "中央バナー 728×90",
+    "sideBanner": "サイド 160×600",
+    "bottomBanner": "下部バナー 728×90"
+  }
+}

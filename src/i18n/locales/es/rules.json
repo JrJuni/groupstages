@@ -1,0 +1,93 @@
+{
+  "intro": {
+    "prefix": "Estas reglas se basan en el ",
+    "bold": "Reglamento Oficial de la Copa Mundial FIFA 2026 (aprobado en 2024)",
+    "suffix": ". El torneo de 2026 cuenta con 48 selecciones distribuidas en 12 grupos de 4. Los dos primeros de cada grupo más los ocho mejores terceros avanzan a dieciseisavos (fase eliminatoria)."
+  },
+  "tiebreakers": {
+    "title": "Criterios de desempate de grupo (en orden)",
+    "rows": {
+      "1": {
+        "label": "Puntos",
+        "sub": "El equipo con más puntos tiene preferencia."
+      },
+      "2": {
+        "label": "Diferencia de goles (general)",
+        "sub": "Goles a favor menos goles en contra en todos los partidos del grupo."
+      },
+      "3": {
+        "label": "Goles a favor (general)",
+        "sub": "Total de goles marcados en todos los partidos del grupo."
+      },
+      "4-6": {
+        "label": "Enfrentamiento directo",
+        "sub": "Solo se aplican los registros entre los equipos empatados → ④ puntos en enfrentamiento directo → ⑤ diferencia de goles en enfrentamiento directo → ⑥ goles a favor en enfrentamiento directo. Si hay tres o más equipos empatados y el enfrentamiento directo separa solo a algunos, se repiten ④–⑥ para los restantes."
+      },
+      "7": {
+        "label": "Puntos de juego limpio",
+        "sub": "El equipo con menos puntos disciplinarios (tarjetas) tiene preferencia (ver tabla a continuación)."
+      },
+      "8": {
+        "label": "Ranking FIFA",
+        "sub": "Mayor puntuación oficial del ranking FIFA tiene preferencia."
+      },
+      "9": {
+        "label": "Sorteo",
+        "sub": "Si todos los criterios anteriores son iguales, la FIFA decide por sorteo público."
+      }
+    }
+  },
+  "fairPlay": {
+    "title": "Tabla de puntos de juego limpio",
+    "intro": "Cuanto menos, mejor. El equipo con menos puntos de penalización tiene preferencia.",
+    "header": {
+      "card": "Tipo de tarjeta",
+      "points": "Penalización"
+    },
+    "rows": {
+      "yellow": { "card": "🟡 Tarjeta amarilla", "pts": "-1 pt" },
+      "twoYellow": { "card": "🟡🟡 Doble amarilla / expulsión indirecta", "pts": "-3 pts" },
+      "red": { "card": "🟥 Tarjeta roja directa", "pts": "-4 pts" },
+      "yellowRed": { "card": "🟡🟥 Amarilla seguida de roja directa", "pts": "-5 pts" }
+    },
+    "footer": "Las sanciones administrativas (suspensiones) recaen sobre el jugador y no afectan a la puntuación de juego limpio del equipo."
+  },
+  "thirdPlace": {
+    "title": "Criterios para los terceros clasificados",
+    "intro": {
+      "prefix": "Entre los terceros de los 12 grupos, los ",
+      "bold": "8 mejores",
+      "suffix": " avanzan a dieciseisavos."
+    },
+    "subtitle": "Criterios de clasificación de terceros (igual que para los segundos)",
+    "rows": {
+      "1": "Puntos",
+      "2": "Diferencia de goles (general)",
+      "3": "Goles a favor (general)",
+      "4": "Puntos de juego limpio",
+      "5": "Ranking FIFA",
+      "6": "Sorteo"
+    },
+    "note": "El enfrentamiento directo no se aplica entre terceros porque juegan en grupos diferentes."
+  },
+  "knockout": {
+    "title": "Estructura de los dieciseisavos",
+    "intro": {
+      "prefix": "12 ganadores de grupo + 12 segundos + los 8 mejores terceros = ",
+      "bold": "32 equipos en total",
+      "suffix": " avanzan a la fase eliminatoria."
+    },
+    "tableHeader": "Vías de clasificación",
+    "rows": {
+      "first": { "label": "Ganadores de grupo", "count": "12 equipos" },
+      "second": { "label": "Segundos", "count": "12 equipos" },
+      "third": { "label": "8 mejores terceros", "count": "8 equipos" }
+    },
+    "total": {
+      "label": "Total",
+      "count": "32 equipos"
+    },
+    "note": "Los cruces de dieciseisavos (qué primero se enfrenta a qué tercero) los determina el cuadro oficial de la FIFA según los grupos de los terceros clasificados."
+  },
+  "source": "Fuente: FIFA World Cup 2026 – Reglamento de la competición (aprobado 2024) · FIFA.com"
+}

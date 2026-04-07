@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Copy, Download, Table, CheckCircle } from 'lucide-react';
 import { toPng } from 'html-to-image';
 
 export default function ShareButtons({ targetId, generateMarkdown, generateHtmlTable }) {
+  const { t } = useTranslation('common');
   const [copied, setCopied] = useState(null);
 
   const copyMarkdown = async () => {
@@ -52,26 +54,26 @@ export default function ShareButtons({ targetId, generateMarkdown, generateHtmlT
       <button
         onClick={copyMarkdown}
         className="btn-ghost flex items-center gap-1.5 text-xs"
-        title="Reddit Markdown 표 복사"
+        title={t('share.redditMdTooltip')}
       >
         {copied === 'markdown' ? <CheckCircle size={13} className="text-green-400" /> : <Copy size={13} />}
-        Reddit MD
+        {t('share.redditMd')}
       </button>
       <button
         onClick={copyHtml}
         className="btn-ghost flex items-center gap-1.5 text-xs"
-        title="HTML 표 복사 (커뮤니티용)"
+        title={t('share.htmlTableTooltip')}
       >
         {copied === 'html' ? <CheckCircle size={13} className="text-green-400" /> : <Table size={13} />}
-        HTML 표
+        {t('share.htmlTable')}
       </button>
       <button
         onClick={saveImage}
         className="btn-ghost flex items-center gap-1.5 text-xs"
-        title="이미지로 저장"
+        title={t('share.saveImageTooltip')}
       >
         {copied === 'image' ? <CheckCircle size={13} className="text-green-400" /> : <Download size={13} />}
-        이미지 저장
+        {t('share.saveImage')}
       </button>
     </div>
   );

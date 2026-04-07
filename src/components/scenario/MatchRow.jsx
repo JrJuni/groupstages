@@ -1,17 +1,23 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { MapPin } from 'lucide-react';
 import { formatKST, TeamFlag } from './shared.jsx';
+import { useTeamName } from '../../i18n/useTeamName.js';
+import { bcp47 } from '../../i18n/dateLocale.js';
 
 function MatchRow({ match, standings, onScoreChange, highlightId }) {
-  const homeTeam = standings.find((t) => t.id === match.home);
-  const awayTeam = standings.find((t) => t.id === match.away);
+  const { t, i18n } = useTranslation('scenario');
+  const teamName = useTeamName();
+  const locale = bcp47(i18n.language);
+  const homeTeam = standings.find((s) => s.id === match.home);
+  const awayTeam = standings.find((s) => s.id === match.away);
   if (!homeTeam || !awayTeam) return null;
 
   const played = match.homeScore !== null && match.homeScore !== undefined &&
                  match.homeScore !== '' && match.awayScore !== null &&
                  match.awayScore !== undefined && match.awayScore !== '';
 
-  const dateStr = formatKST(match.date);
+  const dateStr = formatKST(match.date, locale);
   const isRelevant = highlightId && (match.home === highlightId || match.away === highlightId);
 
   return (
@@ -26,14 +32,14 @@ function MatchRow({ match, standings, onScoreChange, highlightId }) {
             </span>
           )}
           {isRelevant && !played && (
-            <span className="ml-auto text-[9px] bg-sky-400/15 text-sky-400 px-1.5 py-0.5 rounded-full">관련 경기</span>
+            <span className="ml-auto text-[9px] bg-sky-400/15 text-sky-400 px-1.5 py-0.5 rounded-full">{t('match.relevant')}</span>
           )}
         </div>
       )}
 
       <div className="flex items-center gap-3 py-2 px-4 text-sm">
         <div className="flex items-center gap-1.5 flex-1 justify-end">
-          <span className={`text-xs sm:text-sm whitespace-nowrap hidden sm:inline ${match.home === highlightId ? 'text-sky-400 font-bold' : 'text-white'}`}>{homeTeam.name}</span>
+          <span className={`text-xs sm:text-sm whitespace-nowrap hidden sm:inline ${match.home === highlightId ? 'text-sky-400 font-bold' : 'text-white'}`}>{teamName(homeTeam)}</span>
           <TeamFlag team={homeTeam} />
         </div>
 
@@ -71,7 +77,7 @@ function MatchRow({ match, standings, onScoreChange, highlightId }) {
 
         <div className="flex items-center gap-1.5 flex-1 justify-start">
           <TeamFlag team={awayTeam} />
-          <span className={`text-xs sm:text-sm whitespace-nowrap hidden sm:inline ${match.away === highlightId ? 'text-sky-400 font-bold' : 'text-white'}`}>{awayTeam.name}</span>
+          <span className={`text-xs sm:text-sm whitespace-nowrap hidden sm:inline ${match.away === highlightId ? 'text-sky-400 font-bold' : 'text-white'}`}>{teamName(awayTeam)}</span>
         </div>
       </div>
     </div>
@@ -79,6 +85,7 @@ function MatchRow({ match, standings, onScoreChange, highlightId }) {
 }
 
 export function MatchList({ matches, standings, groupKey, onScoreChange, highlightId }) {
+  const { t } = useTranslation('scenario');
   if (!matches?.length) return null;
 
   const sorted = [...matches].sort((a, b) => {
@@ -96,7 +103,7 @@ export function MatchList({ matches, standings, groupKey, onScoreChange, highlig
       rows.push(
         <div key={`md-${md}`} className="flex items-center gap-2 px-4 py-1.5 bg-white/5 border-b border-fifa-border/30">
           <span className="text-[10px] font-bold text-fifa-muted uppercase tracking-wider">
-            경기일 {md}
+            {t('panel.matchdayLabel', { md })}
           </span>
         </div>
       );

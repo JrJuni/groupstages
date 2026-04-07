@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Play, RotateCcw, ChevronRight, Shuffle } from 'lucide-react';
 import { DRAW_POTS, CONFEDERATIONS } from '../leagues/worldcup2026/data.js';
 import { createInitialDrawState, drawOneTeam, runFullDraw, generateDrawSteps } from '../utils/draw.js';
 import { BASE_URL } from '../config.js';
+import { useTeamName } from '../i18n/useTeamName.js';
 
 const POT_COLORS = {
   pot1: { bg: 'bg-yellow-900/30', border: 'border-yellow-600', text: 'text-yellow-400', label: 'Pot 1' },
@@ -21,6 +23,8 @@ const CONF_COLORS = {
 };
 
 function TeamBall({ team, potKey, highlight = false, small = false }) {
+  const teamName = useTeamName();
+  const tn = teamName(team);
   return (
     <div
       className={`flex items-center gap-1.5 px-2 py-1 rounded-lg border transition-all duration-300 cursor-default
@@ -29,9 +33,9 @@ function TeamBall({ team, potKey, highlight = false, small = false }) {
       `}
     >
       {team.flagImg
-        ? <img src={`${BASE_URL}${team.flagImg}`} alt={team.name} className={small ? 'w-5 h-3' : 'w-6 h-4'} style={{objectFit:'cover', borderRadius:'2px'}} />
+        ? <img src={`${BASE_URL}${team.flagImg}`} alt={tn} className={small ? 'w-5 h-3' : 'w-6 h-4'} style={{objectFit:'cover', borderRadius:'2px'}} />
         : <span className={small ? 'text-sm' : 'text-base'}>{team.flag}</span>}
-      <span className={`font-medium ${highlight ? 'text-white' : 'text-fifa-text'}`}>{team.name}</span>
+      <span className={`font-medium ${highlight ? 'text-white' : 'text-fifa-text'}`}>{tn}</span>
       <span className={`text-xs px-1 rounded ${CONF_COLORS[team.confederation] || 'bg-gray-800 text-gray-400'}`}>
         {team.confederation}
       </span>
@@ -41,6 +45,8 @@ function TeamBall({ team, potKey, highlight = false, small = false }) {
 }
 
 export default function DrawSimulator() {
+  const { t } = useTranslation('bracket');
+  const teamName = useTeamName();
   const [drawState, setDrawState] = useState(createInitialDrawState(DRAW_POTS));
   const [steps, setSteps] = useState([]);
   const [stepIdx, setStepIdx] = useState(-1);
@@ -108,7 +114,7 @@ export default function DrawSimulator() {
       {/* Controls */}
       <div className="card p-4 flex flex-wrap items-center gap-3">
         <div className="flex items-center gap-2">
-          <span className="text-fifa-muted text-sm">속도</span>
+          <span className="text-fifa-muted text-sm">{t('draw.speed')}</span>
           {[1000, 600, 300].map((s) => (
             <button
               key={s}
@@ -117,23 +123,23 @@ export default function DrawSimulator() {
                 speed === s ? 'bg-fifa-gold text-black' : 'bg-white/10 text-fifa-muted hover:text-white'
               }`}
             >
-              {s === 1000 ? '느림' : s === 600 ? '보통' : '빠름'}
+              {s === 1000 ? t('draw.speedSlow') : s === 600 ? t('draw.speedNormal') : t('draw.speedFast')}
             </button>
           ))}
         </div>
         <div className="ml-auto flex gap-2">
           <button onClick={reset} className="btn-ghost flex items-center gap-1 text-sm">
-            <RotateCcw size={14} /> 초기화
+            <RotateCcw size={14} /> {t('draw.reset')}
           </button>
           <button onClick={instantDraw} className="btn-ghost flex items-center gap-1 text-sm">
-            <Shuffle size={14} /> 즉시 추첨
+            <Shuffle size={14} /> {t('draw.instantDraw')}
           </button>
           <button
             onClick={isPlaying ? () => setIsPlaying(false) : startAutoPlay}
             disabled={isComplete && steps.length > 0}
             className="btn-gold flex items-center gap-1 text-sm disabled:opacity-50"
           >
-            <Play size={14} /> {isPlaying ? '일시정지' : isComplete ? '완료' : '추첨 시작'}
+            <Play size={14} /> {isPlaying ? t('draw.pause') : isComplete ? t('draw.completed') : t('draw.drawStart')}
           </button>
         </div>
       </div>
@@ -142,7 +148,7 @@ export default function DrawSimulator() {
       {steps.length > 0 && (
         <div className="card p-3">
           <div className="flex justify-between text-xs text-fifa-muted mb-1">
-            <span>추첨 진행</span>
+            <span>{t('draw.drawProgress')}</span>
             <span>{stepIdx + 1}/{steps.length}</span>
           </div>
           <div className="h-1.5 bg-fifa-border rounded-full overflow-hidden">
@@ -159,14 +165,14 @@ export default function DrawSimulator() {
         <div className="card p-3 flex items-center gap-3 border-fifa-gold/30 bg-yellow-900/10 animate-fade-in">
           <span className="text-2xl">{lastDrawn.flag}</span>
           <div>
-            <p className="text-xs text-fifa-muted">방금 추첨된 팀</p>
-            <p className="font-bold text-white">{lastDrawn.name}</p>
+            <p className="text-xs text-fifa-muted">{t('draw.lastDrawn')}</p>
+            <p className="font-bold text-white">{teamName(lastDrawn)}</p>
           </div>
           <ChevronRight size={16} className="text-fifa-muted" />
           <div>
-            <p className="text-xs text-fifa-muted">배정된 조</p>
+            <p className="text-xs text-fifa-muted">{t('draw.assignedGroup')}</p>
             <p className="font-bold text-fifa-gold text-xl">
-              {drawState.history[drawState.history.length - 1]?.group}조
+              {t('draw.groupLabel', { group: drawState.history[drawState.history.length - 1]?.group })}
             </p>
           </div>
         </div>
@@ -191,11 +197,11 @@ export default function DrawSimulator() {
                     className="flex items-center gap-1 text-xs text-fifa-muted"
                   >
                     <span>{team.flag}</span>
-                    <span>{team.name}</span>
+                    <span>{teamName(team)}</span>
                   </div>
                 ))}
                 {remaining.length === 0 && (
-                  <p className={`text-xs ${colors.text}`}>✓ 추첨 완료</p>
+                  <p className={`text-xs ${colors.text}`}>{t('draw.drawComplete')}</p>
                 )}
               </div>
             </div>
@@ -205,13 +211,13 @@ export default function DrawSimulator() {
 
       {/* Draw Result - Groups Grid */}
       <div>
-        <h3 className="text-sm font-bold text-fifa-muted mb-3">추첨 결과</h3>
+        <h3 className="text-sm font-bold text-fifa-muted mb-3">{t('draw.drawResult')}</h3>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
           {drawState.groups.map((group) => (
             <div key={group.name} className="card p-3">
-              <div className="text-xs font-bold text-fifa-gold mb-2">조 {group.name}</div>
+              <div className="text-xs font-bold text-fifa-gold mb-2">{t('draw.groupName', { name: group.name })}</div>
               {group.teams.length === 0 ? (
-                <p className="text-xs text-fifa-border">미배정</p>
+                <p className="text-xs text-fifa-border">{t('draw.unassigned')}</p>
               ) : (
                 <div className="space-y-1.5">
                   {group.teams.map((team, idx) => {

@@ -1,0 +1,54 @@
+{
+  "rounds": {
+    "R32": "32强",
+    "R16": "16强",
+    "QF": "8强",
+    "SF": "半决赛",
+    "FINAL": "决赛"
+  },
+  "matchLabel": "{{round}} 第{{num}}场",
+  "roundCountLabel": "{{round}} (共{{count}}场)",
+  "finalHeader": "🏆 决赛",
+  "groupSelector": "选择小组:",
+  "validCombinations": "有效组合: {{count}}/495",
+  "rankLabels": {
+    "1": "第1",
+    "2": "第2",
+    "3": "第3"
+  },
+  "thirdStatus": {
+    "eliminated": "(已淘汰)",
+    "qualified": "(已晋级)",
+    "currentBest": "(当前第三名第{{rank}}位)",
+    "currentOut": "(当前出局区)"
+  },
+  "legend": {
+    "first": "第1名席位",
+    "second": "第2名席位",
+    "third": "第3名可能席位",
+    "confirmed": "席位确定"
+  },
+  "match": {
+    "possibleThirds": "可能的第三名球队",
+    "groupSuffix": "{{group}}组"
+  },
+  "draw": {
+    "speed": "速度",
+    "speedSlow": "慢",
+    "speedNormal": "正常",
+    "speedFast": "快",
+    "reset": "重置",
+    "instantDraw": "即时抽签",
+    "drawStart": "开始抽签",
+    "pause": "暂停",
+    "completed": "已完成",
+    "drawProgress": "抽签进度",
+    "lastDrawn": "刚抽中的球队",
+    "assignedGroup": "分配到的小组",
+    "groupLabel": "{{group}}组",
+    "drawComplete": "✓ 抽签完成",
+    "drawResult": "抽签结果",
+    "groupName": "{{name}}组",
+    "unassigned": "未分配"
+  }
+}

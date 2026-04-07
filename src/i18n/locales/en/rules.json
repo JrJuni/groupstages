@@ -1,0 +1,93 @@
+{
+  "intro": {
+    "prefix": "These rules are based on the ",
+    "bold": "FIFA 2026 World Cup Official Competition Regulations (approved 2024)",
+    "suffix": ". The 2026 tournament features 48 nations divided into 12 groups of 4. The top two teams from each group plus the eight best third-placed teams advance to the Round of 32 (knockout stage)."
+  },
+  "tiebreakers": {
+    "title": "Group standings tiebreakers (applied in order)",
+    "rows": {
+      "1": {
+        "label": "Points",
+        "sub": "The team with the most points takes precedence."
+      },
+      "2": {
+        "label": "Goal difference (overall)",
+        "sub": "Goals scored minus goals conceded across all group matches."
+      },
+      "3": {
+        "label": "Goals scored (overall)",
+        "sub": "Total goals scored across all group matches."
+      },
+      "4-6": {
+        "label": "Head-to-head",
+        "sub": "Apply only the records between tied teams → ④ head-to-head points → ⑤ head-to-head goal difference → ⑥ head-to-head goals scored. If three or more teams are tied and head-to-head separates only some, repeat ④–⑥ for the remaining tied teams."
+      },
+      "7": {
+        "label": "Fair play points",
+        "sub": "The team with fewer disciplinary points (cards) takes precedence (see card penalty table below)."
+      },
+      "8": {
+        "label": "FIFA ranking",
+        "sub": "Higher official FIFA ranking points take precedence."
+      },
+      "9": {
+        "label": "Drawing of lots",
+        "sub": "If all criteria above are equal, FIFA decides by public draw."
+      }
+    }
+  },
+  "fairPlay": {
+    "title": "Fair play penalty table",
+    "intro": "Lower is better. The team with fewer total penalty points takes precedence.",
+    "header": {
+      "card": "Card type",
+      "points": "Penalty"
+    },
+    "rows": {
+      "yellow": { "card": "🟡 Yellow card", "pts": "-1 pt" },
+      "twoYellow": { "card": "🟡🟡 Two yellows / sending-off (indirect)", "pts": "-3 pts" },
+      "red": { "card": "🟥 Direct red card", "pts": "-4 pts" },
+      "yellowRed": { "card": "🟡🟥 Yellow followed by direct red", "pts": "-5 pts" }
+    },
+    "footer": "Administrative sanctions such as suspensions are imposed on the player and do not affect the team's fair play score."
+  },
+  "thirdPlace": {
+    "title": "Third-place qualification criteria",
+    "intro": {
+      "prefix": "Among the third-placed teams from the 12 groups, the ",
+      "bold": "top 8",
+      "suffix": " advance to the Round of 32."
+    },
+    "subtitle": "Third-place ranking criteria (same as second-place comparison)",
+    "rows": {
+      "1": "Points",
+      "2": "Goal difference (overall)",
+      "3": "Goals scored (overall)",
+      "4": "Fair play points",
+      "5": "FIFA ranking",
+      "6": "Drawing of lots"
+    },
+    "note": "Head-to-head is not applied between third-placed teams since they play in different groups."
+  },
+  "knockout": {
+    "title": "Round of 32 structure",
+    "intro": {
+      "prefix": "12 group winners + 12 runners-up + top 8 third-placed teams = ",
+      "bold": "32 teams total",
+      "suffix": " advance to the knockout stage."
+    },
+    "tableHeader": "Qualification path",
+    "rows": {
+      "first": { "label": "Group winners", "count": "12 teams" },
+      "second": { "label": "Runners-up", "count": "12 teams" },
+      "third": { "label": "Top 8 third-placed", "count": "8 teams" }
+    },
+    "total": {
+      "label": "Total",
+      "count": "32 teams"
+    },
+    "note": "The Round of 32 matchups (which group winner faces which third-placed team) are determined by the FIFA official bracket based on which groups the qualifying third-placed teams come from."
+  },
+  "source": "Source: FIFA World Cup 2026 – Competition Regulations (approved 2024) · FIFA.com"
+}

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import BracketSide from './BracketSide.jsx';
 import MatchCard from './MatchCard.jsx';
 
-const ROUND_LABELS = { R32: '32강', R16: '16강', QF: '8강', SF: '4강', FINAL: '결승' };
 const MOBILE_ROUND_ORDER = ['R32', 'R16', 'QF', 'SF', 'FINAL'];
 
 function MobileRoundSection({
@@ -15,6 +15,7 @@ function MobileRoundSection({
   confirmedSlots,
   defaultCollapsed = false,
 }) {
+  const { t } = useTranslation('bracket');
   const [collapsed, setCollapsed] = useState(defaultCollapsed);
   const Icon = collapsed ? ChevronDown : ChevronUp;
 
@@ -24,7 +25,7 @@ function MobileRoundSection({
         onClick={() => setCollapsed((v) => !v)}
         className="w-full flex items-center justify-between px-3 py-2 text-sm font-bold text-white hover:bg-white/5"
       >
-        <span>{ROUND_LABELS[roundName]} ({matches.length}경기)</span>
+        <span>{t('roundCountLabel', { round: t(`rounds.${roundName}`), count: matches.length })}</span>
         <Icon size={14} className="text-fifa-muted" />
       </button>
       {!collapsed && (
@@ -53,6 +54,7 @@ export default function BracketView({
   thirdCandidates,
   confirmedSlots,
 }) {
+  const { t } = useTranslation('bracket');
   const finalMatch = bracket.find((m) => m.round === 'FINAL');
 
   return (
@@ -70,7 +72,7 @@ export default function BracketView({
 
         <div className="flex flex-col justify-center px-2 min-w-[140px]">
           <div className="text-[10px] text-center text-fifa-gold font-bold mb-1">
-            🏆 결승
+            {t('finalHeader')}
           </div>
           {finalMatch && (
             <MatchCard

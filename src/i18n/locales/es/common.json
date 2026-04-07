@@ -1,0 +1,68 @@
+{
+  "tabs": {
+    "groups": "Fase de grupos",
+    "scenarios": "Escenarios",
+    "thirds": "Terceros",
+    "knockout": "Eliminatorias",
+    "draw": "Sorteo",
+    "rules": "Reglas"
+  },
+  "subtitle": {
+    "groups": "Clasificación en tiempo real de 12 grupos, 48 equipos",
+    "scenarios": "Escenarios de clasificación a dieciseisavos según los resultados de la fase de grupos",
+    "thirds": "Los 8 mejores entre los 12 terceros que avanzan a dieciseisavos",
+    "knockout": "Cuadro del torneo desde dieciseisavos hasta la final",
+    "draw": "Simulación del sorteo con sistema de bombos y restricciones geográficas",
+    "rules": "Reglas oficiales de la fase de grupos del Mundial 2026"
+  },
+  "header": {
+    "dbConnected": "BD conectada",
+    "dbDisconnected": "BD desconectada (modo local)",
+    "dbLabel": "BD",
+    "localLabel": "Local",
+    "resetTitle": "Reiniciar todos los resultados",
+    "reset": "Reiniciar",
+    "resetAll": "Reiniciar todo",
+    "loading": "Cargando..."
+  },
+  "dialog": {
+    "confirmReset": "¿Reiniciar todos los resultados?",
+    "confirmResetTest": "¿Reiniciar los datos de prueba?"
+  },
+  "footer": {
+    "copyright": "GroupStages © 2026 · Calculadora de escenarios del Mundial FIFA 2026",
+    "disclaimer": "Este sitio no está afiliado oficialmente a la FIFA",
+    "testNotice": "MODO PRUEBA · Los datos de esta página no se guardan en la base de datos"
+  },
+  "test": {
+    "modeBadge": "PRUEBA",
+    "modeBanner": "MODO PRUEBA — Datos locales sin API · se reinicia al recargar",
+    "modeSubtitle": "Mundial FIFA 2026 · Entorno de prueba",
+    "backToMain": "Volver al inicio",
+    "resetTitle": "Reiniciar datos de prueba",
+    "subtitle": {
+      "groups": "12 grupos, 48 equipos — introduce resultados directamente para probar",
+      "scenarios": "Prueba de cálculo de escenarios",
+      "thirds": "Prueba de selección de los 8 mejores terceros",
+      "knockout": "Cuadro del torneo desde dieciseisavos hasta la final",
+      "draw": "Simulador de sorteo",
+      "rules": "Reglas de clasificación"
+    }
+  },
+  "share": {
+    "redditMd": "Reddit MD",
+    "redditMdTooltip": "Copiar tabla en Markdown de Reddit",
+    "htmlTable": "Tabla HTML",
+    "htmlTableTooltip": "Copiar tabla HTML (para comunidades)",
+    "saveImage": "Guardar imagen",
+    "saveImageTooltip": "Guardar como imagen"
+  },
+  "ads": {
+    "slot": "Espacio publicitario ({{name}})",
+    "topBanner": "Banner superior 728×90",
+    "mobileTop": "Móvil superior 320×50",
+    "middleBanner": "Banner intermedio 728×90",
+    "sideBanner": "Lateral 160×600",
+    "bottomBanner": "Banner inferior 728×90"
+  }
+}

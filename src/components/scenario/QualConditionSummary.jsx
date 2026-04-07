@@ -1,14 +1,18 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
+import { useTeamName } from '../../i18n/useTeamName.js';
 
 export default function QualConditionSummary({ matrix, hasOther, otherHomeTeam, otherAwayTeam, teamName, currentStandings, teamId }) {
-  const MY_LABEL = { W: '승', D: '무', L: '패' };
+  const { t } = useTranslation('scenario');
+  const getTeamName = useTeamName();
+  const MY_LABEL = { W: t('qualSummary.wdl.W'), D: t('qualSummary.wdl.D'), L: t('qualSummary.wdl.L') };
   const WDL_COLOR = { W: 'text-emerald-300', D: 'text-yellow-300', L: 'text-red-400' };
   const fmtGD = (gd) => gd >= 0 ? `+${gd}` : `${gd}`;
 
   const getOtherLabel = (owdl) => {
-    if (owdl === 'W') return `${otherHomeTeam?.name} 승`;
-    if (owdl === 'D') return '다른 경기 무승부';
-    return `${otherAwayTeam?.name} 승`;
+    if (owdl === 'W') return t('qualSummary.otherWin', { team: otherHomeTeam ? getTeamName(otherHomeTeam) : '' });
+    if (owdl === 'D') return t('qualSummary.otherDraw');
+    return t('qualSummary.otherWin', { team: otherAwayTeam ? getTeamName(otherAwayTeam) : '' });
   };
 
   const cells = hasOther ? matrix : matrix.filter(c => c.otherWDL === 'W');
@@ -31,8 +35,8 @@ export default function QualConditionSummary({ matrix, hasOther, otherHomeTeam, 
       const owdls = twdlMap[twdl];
       if (!owdls && hasOther) continue;
       let otherText = null;
-      if (hasOther && owdls.length === 3) otherText = '결과 무관';
-      else if (hasOther) otherText = owdls.map(o => getOtherLabel(o)).join(' 또는 ');
+      if (hasOther && owdls.length === 3) otherText = t('qualSummary.ignored');
+      else if (hasOther) otherText = owdls.map(o => getOtherLabel(o)).join(t('qualSummary.or'));
       byRank[rank].push({ type: 'definitive', teamWDL: twdl, otherText });
     }
   }
@@ -46,16 +50,28 @@ export default function QualConditionSummary({ matrix, hasOther, otherHomeTeam, 
 
     for (const { rank, pct } of cell.breakdown) {
       const isBetter = rank === bestRank;
-      const tiebreaker = isBetter ? '득실차/다득점 우위 시' : '득실차/다득점 열세 시';
+      const tiebreaker = isBetter ? t('qualSummary.tiebreakerBetter') : t('qualSummary.tiebreakerWorse');
       const statsNote = (isBetter && competitor && myStats)
-        ? `현재 ${teamName} 득실 ${fmtGD(myStats.gd)}, 득점 ${myStats.gf} / ${competitor.name} 득실 ${fmtGD(competitor.gd)}, 득점 ${competitor.gf}`
+        ? t('qualSummary.statsNote', {
+            teamName,
+            teamGd: fmtGD(myStats.gd),
+            teamGf: myStats.gf,
+            competitor: getTeamName(competitor),
+            competitorGd: fmtGD(competitor.gd),
+            competitorGf: competitor.gf,
+          })
         : null;
       byRank[rank].push({ type: 'mixed', teamWDL: cell.teamWDL, otherText, tiebreaker, statsNote, pct });
     }
   }
 
   const RANK_COLOR = { 1: 'text-emerald-400', 2: 'text-green-400', 3: 'text-yellow-400', 4: 'text-red-400' };
-  const RANK_LABEL = { 1: '1위', 2: '2위', 3: '3위', 4: '탈락' };
+  const RANK_LABEL = {
+    1: t('qualSummary.rankLabels.1'),
+    2: t('qualSummary.rankLabels.2'),
+    3: t('qualSummary.rankLabels.3'),
+    4: t('qualSummary.rankLabels.4'),
+  };
 
   const hasAny = Object.values(byRank).some(v => v.length > 0);
   if (!hasAny) return null;
@@ -91,7 +107,7 @@ export default function QualConditionSummary({ matrix, hasOther, otherHomeTeam, 
 
   return (
     <div className="mt-2 pt-2 border-t border-fifa-border/20 space-y-2">
-      <p className="text-[10px] text-fifa-muted/80 font-medium">조건별 예상 순위</p>
+      <p className="text-[10px] text-fifa-muted/80 font-medium">{t('qualSummary.title')}</p>
       {[1, 2, 3, 4].map(rank => {
         const conditions = byRank[rank];
         if (!conditions.length) return null;

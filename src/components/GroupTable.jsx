@@ -1,9 +1,13 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { ArrowRight } from 'lucide-react';
 import { BASE_URL } from '../config.js';
 import { RANK_BG } from './scenario/shared.jsx';
+import { useTeamName } from '../i18n/useTeamName.js';
 
 export default function GroupTable({ groupKey, standings, onGroupClick, onTeamClick }) {
+  const { t } = useTranslation('tables');
+  const teamName = useTeamName();
   return (
     <div className="card overflow-hidden">
       {/* Header */}
@@ -11,15 +15,16 @@ export default function GroupTable({ groupKey, standings, onGroupClick, onTeamCl
         <button
           className="flex items-center gap-2 group hover:opacity-80 transition-opacity text-left min-w-0"
           onClick={() => onGroupClick && onGroupClick(groupKey)}
-          title={`조 ${groupKey} 경우의 수 보기`}
+          title={t('groups.viewScenarioGroup', { group: groupKey })}
         >
-          <span className="font-bold text-lg text-white shrink-0">조 {groupKey}</span>
+          <span className="font-bold text-lg text-white shrink-0">{t('groups.title', { group: groupKey })}</span>
           <div className="flex gap-1 items-center shrink-0">
-            {standings.map((t) => (
-              t.flagImg
-                ? <img key={t.id} src={`${BASE_URL}${t.flagImg}`} alt={t.name} title={t.name} className="w-5 h-3 object-cover rounded-sm" />
-                : <span key={t.id} className="text-sm" title={t.name}>{t.flag}</span>
-            ))}
+            {standings.map((tm) => {
+              const tn = teamName(tm);
+              return tm.flagImg
+                ? <img key={tm.id} src={`${BASE_URL}${tm.flagImg}`} alt={tn} title={tn} className="w-5 h-3 object-cover rounded-sm" />
+                : <span key={tm.id} className="text-sm" title={tn}>{tm.flag}</span>;
+            })}
           </div>
           <ArrowRight size={12} className="text-fifa-muted opacity-0 group-hover:opacity-100 transition-opacity shrink-0" />
         </button>
@@ -40,16 +45,16 @@ export default function GroupTable({ groupKey, standings, onGroupClick, onTeamCl
         </colgroup>
         <thead>
           <tr className="text-fifa-muted text-xs border-b border-fifa-border">
-            <th className="px-1 py-2 text-left">#</th>
-            <th className="px-2 py-2 text-left">팀</th>
-            <th className="px-1 py-2 text-center whitespace-nowrap">경기</th>
-            <th className="px-1 py-2 text-center">승</th>
-            <th className="px-1 py-2 text-center">무</th>
-            <th className="px-1 py-2 text-center">패</th>
-            <th className="px-1 py-2 text-center">득</th>
-            <th className="px-1 py-2 text-center">실</th>
-            <th className="px-1 py-2 text-center">차</th>
-            <th className="px-1 py-2 text-center font-bold">승점</th>
+            <th className="px-1 py-2 text-left">{t('groups.headers.rank')}</th>
+            <th className="px-2 py-2 text-left">{t('groups.headers.team')}</th>
+            <th className="px-1 py-2 text-center whitespace-nowrap">{t('groups.headers.played')}</th>
+            <th className="px-1 py-2 text-center">{t('groups.headers.won')}</th>
+            <th className="px-1 py-2 text-center">{t('groups.headers.drawn')}</th>
+            <th className="px-1 py-2 text-center">{t('groups.headers.lost')}</th>
+            <th className="px-1 py-2 text-center">{t('groups.headers.goalsFor')}</th>
+            <th className="px-1 py-2 text-center">{t('groups.headers.goalsAgainst')}</th>
+            <th className="px-1 py-2 text-center">{t('groups.headers.goalDiff')}</th>
+            <th className="px-1 py-2 text-center font-bold">{t('groups.headers.points')}</th>
           </tr>
         </thead>
         <tbody>
@@ -58,17 +63,17 @@ export default function GroupTable({ groupKey, standings, onGroupClick, onTeamCl
               key={team.id}
               className={`border-b border-fifa-border/30 transition-colors cursor-pointer hover:bg-white/10 ${RANK_BG[idx + 1] || ''}`}
               onClick={() => onTeamClick && onTeamClick(team.id, groupKey)}
-              title={`${team.name} 경우의 수 보기`}
+              title={t('groups.viewScenarioTeam', { team: teamName(team) })}
             >
               <td className="px-1 py-2 text-fifa-muted text-xs text-center">{idx + 1}</td>
               <td className="px-2 py-2 min-w-0">
                 <div className="flex items-center gap-1.5 min-w-0">
                   {team.flagImg ? (
-                    <img src={`${BASE_URL}${team.flagImg}`} alt={team.name} className="w-5 h-3.5 object-cover rounded-sm shrink-0"
+                    <img src={`${BASE_URL}${team.flagImg}`} alt={teamName(team)} className="w-5 h-3.5 object-cover rounded-sm shrink-0"
                       onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'inline'; }} />
                   ) : null}
                   <span className="text-sm shrink-0" style={team.flagImg ? { display: 'none' } : {}}>{team.flag}</span>
-                  <span className="font-medium text-white text-xs truncate">{team.name}</span>
+                  <span className="font-medium text-white text-xs truncate">{teamName(team)}</span>
                   {team.host && (
                     <span className="shrink-0 text-[10px] bg-fifa-gold/20 text-fifa-gold px-1 rounded">H</span>
                   )}

@@ -1,0 +1,125 @@
+{
+  "selector": {
+    "title": "Select group / team",
+    "selected": "— Group {{group}} selected",
+    "selectedTeam": "— Group {{group}} · {{team}} selected",
+    "groupLabel": "Group {{group}}"
+  },
+  "section": {
+    "standings": "Standings",
+    "matchScheduleOpen": "Match schedule · results",
+    "matchScheduleClosed": "Show match schedule · results"
+  },
+  "standings": {
+    "headers": {
+      "rank": "#",
+      "team": "Team",
+      "played": "P",
+      "won": "W",
+      "drawn": "D",
+      "lost": "L",
+      "goalsFor": "GF",
+      "goalsAgainst": "GA",
+      "goalDiff": "GD",
+      "points": "Pts",
+      "fp": "FP"
+    },
+    "cardTooltips": {
+      "yc": "Yellow card (-1 pt)",
+      "twoYR": "Second yellow / sending-off (-3 pts)",
+      "dr": "Direct red card (-4 pts)",
+      "fp": "Fair play points"
+    }
+  },
+  "legend": {
+    "qualified": "Round of 32",
+    "thirdContender": "3rd place race",
+    "fairPlay": "Fair play"
+  },
+  "emptyState": "Select a group above, or click a team in the Group Stage tab",
+  "panel": {
+    "currentRank": "Currently {{rank}}",
+    "rankLabels": {
+      "1": "1st",
+      "2": "2nd",
+      "3": "3rd",
+      "4": "4th"
+    },
+    "matchesCount": "{{count}} played",
+    "pointsCount": "{{count}} pts",
+    "goalDiff": "GD {{value}}",
+    "goalsForCount": "GF {{count}}",
+    "remainingTitle": "Remaining matches",
+    "remainingCount": "{{count}}",
+    "maxPoints": "Up to {{count}} pts possible",
+    "allDone": "All matches played",
+    "matchdayLabel": "Matchday {{md}}",
+    "title16": "Round of 32 scenarios",
+    "needMore": "Analysis starts after {{count}} more match(es) in the group",
+    "activateNotice": "Available after 2 group matches",
+    "oppPoints": "({{count}} pts)"
+  },
+  "badge": {
+    "qualified": "Qualified",
+    "eliminated": "Eliminated",
+    "thirdContender": "3rd place race",
+    "uncertain": "Undecided"
+  },
+  "matrix": {
+    "myMatch": "My match",
+    "otherMatch": "Other match",
+    "home": "home",
+    "away": "away",
+    "wdl": {
+      "W": "W",
+      "D": "D",
+      "L": "L"
+    },
+    "axisHint": "mine↓ other→",
+    "drawShort": "D",
+    "rankLabel": "{{rank}}",
+    "topTwoLabel": "Top 2",
+    "thirdLabel": "3rd",
+    "winSuffix": "{{team}} W"
+  },
+  "qualSummary": {
+    "title": "Projected ranks per condition",
+    "wdl": {
+      "W": "W",
+      "D": "D",
+      "L": "L"
+    },
+    "rankLabels": {
+      "1": "1st",
+      "2": "2nd",
+      "3": "3rd",
+      "4": "Out"
+    },
+    "otherDraw": "other match draw",
+    "otherWin": "{{team}} W",
+    "ignored": "any result",
+    "or": " or ",
+    "tiebreakerBetter": "if GD/GF advantage",
+    "tiebreakerWorse": "if GD/GF disadvantage",
+    "statsNote": "Currently {{teamName}} GD {{teamGd}}, GF {{teamGf}} / {{competitor}} GD {{competitorGd}}, GF {{competitorGf}}"
+  },
+  "match": {
+    "relevant": "relevant"
+  },
+  "r32": {
+    "title": "Round of 32 possible matchups",
+    "ifAdvance": "If advancing as Group {{group}} {{rank}}",
+    "oneOf": "— one of",
+    "vs": "vs",
+    "noCandidates": "no candidates",
+    "slot": {
+      "direct": "Group {{group}} {{rank}}",
+      "third": "3rd from {{groups}}"
+    },
+    "rankLabels": {
+      "1": "1st",
+      "2": "2nd",
+      "3": "3rd"
+    }
+  }
+}

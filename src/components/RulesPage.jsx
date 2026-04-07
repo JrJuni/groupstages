@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ChevronDown, ChevronUp, AlertCircle, Target, Swords, Star, Shuffle } from 'lucide-react';
 
 const Section = ({ icon: Icon, title, color = 'text-fifa-gold', children, defaultOpen = true }) => {
@@ -40,6 +41,17 @@ const FPRow = ({ card, pts }) => (
 );
 
 export default function RulesPage() {
+  const { t } = useTranslation('rules');
+
+  const tiebreakerKeys = ['1', '2', '3', '4-6', '7', '8', '9'];
+  const fpRowKeys = ['yellow', 'twoYellow', 'red', 'yellowRed'];
+  const thirdRowKeys = ['1', '2', '3', '4', '5', '6'];
+  const knockoutRowKeys = [
+    { key: 'first', color: 'text-green-400' },
+    { key: 'second', color: 'text-blue-400' },
+    { key: 'third', color: 'text-yellow-400' },
+  ];
+
   return (
     <div className="max-w-3xl mx-auto space-y-4">
 
@@ -47,95 +59,81 @@ export default function RulesPage() {
       <div className="card px-5 py-4 flex items-start gap-3 bg-fifa-blue/10 border border-fifa-blue/30">
         <AlertCircle size={18} className="text-fifa-blue shrink-0 mt-0.5" />
         <p className="text-sm text-fifa-muted leading-relaxed">
-          아래 규칙은 <strong className="text-white">FIFA 2026 월드컵 공식 대회 규정(2024년 승인)</strong>에 근거합니다.
-          48개국이 참가하는 2026 대회는 4팀씩 12개 조로 진행되며, 각 조 상위 2팀과 3위팀 중 상위 8팀이 32강(녹아웃 스테이지)에 진출합니다.
+          {t('intro.prefix')}<strong className="text-white">{t('intro.bold')}</strong>{t('intro.suffix')}
         </p>
       </div>
 
       {/* 순위 결정 방식 */}
-      <Section icon={Target} title="조별 순위 결정 기준 (동점 시 아래 순서 적용)" color="text-blue-400">
-        <Row rank="1" label="승점" sub="가장 많은 승점을 획득한 팀이 우선합니다." />
-        <Row rank="2" label="득실차 (전체)" sub="조별리그 전 경기의 득점에서 실점을 뺀 값이 높은 팀이 우선합니다." />
-        <Row rank="3" label="다득점 (전체)" sub="조별리그 전 경기에서 득점이 많은 팀이 우선합니다." />
-        <Row
-          rank="4–6"
-          label="상대전적 (Head-to-Head)"
-          sub="동점 팀들끼리의 맞대결 기록만 적용 → ④ 상대전적 승점 → ⑤ 상대전적 득실차 → ⑥ 상대전적 다득점 순서로 비교합니다. 3팀 이상 동점 시, 상대전적 비교 후 한 팀이라도 분리되면 나머지 팀들에 대해 다시 ④–⑥을 반복 적용합니다."
-        />
-        <Row
-          rank="7"
-          label="페어플레이 포인트 (Fair Play)"
-          sub="경고/퇴장 카드에 따른 벌점 합산이 낮은 팀이 우선합니다. (아래 카드 벌점표 참조)"
-        />
-        <Row rank="8" label="FIFA 랭킹" sub="FIFA 공식 랭킹 포인트가 높은 팀이 우선합니다." />
-        <Row rank="9" label="추첨 (Drawing of Lots)" sub="위 모든 기준이 같을 경우 FIFA가 공개 추첨으로 결정합니다." />
+      <Section icon={Target} title={t('tiebreakers.title')} color="text-blue-400">
+        {tiebreakerKeys.map((k) => (
+          <Row
+            key={k}
+            rank={k}
+            label={t(`tiebreakers.rows.${k}.label`)}
+            sub={t(`tiebreakers.rows.${k}.sub`)}
+          />
+        ))}
       </Section>
 
       {/* 페어플레이 */}
-      <Section icon={Swords} title="페어플레이 벌점표" color="text-yellow-400" defaultOpen={false}>
-        <p className="mb-2">낮을수록 유리합니다. 벌점 합산이 작은 팀이 우선합니다.</p>
+      <Section icon={Swords} title={t('fairPlay.title')} color="text-yellow-400" defaultOpen={false}>
+        <p className="mb-2">{t('fairPlay.intro')}</p>
         <div className="rounded-lg border border-fifa-border/40 overflow-hidden text-xs">
           <div className="flex items-center justify-between px-4 py-2 bg-white/5 font-semibold text-white">
-            <span>카드 종류</span>
-            <span>벌점</span>
+            <span>{t('fairPlay.header.card')}</span>
+            <span>{t('fairPlay.header.points')}</span>
           </div>
           <div className="px-4 divide-y divide-fifa-border/20">
-            <FPRow card="🟡 경고 1장" pts="-1점" />
-            <FPRow card="🟡🟡 경고 2장 누적 퇴장 (간접 퇴장)" pts="-3점" />
-            <FPRow card="🟥 직접 퇴장 (레드카드)" pts="-4점" />
-            <FPRow card="🟡🟥 경고 후 직접 퇴장" pts="-5점" />
+            {fpRowKeys.map((k) => (
+              <FPRow key={k} card={t(`fairPlay.rows.${k}.card`)} pts={t(`fairPlay.rows.${k}.pts`)} />
+            ))}
           </div>
         </div>
-        <p className="text-xs mt-2 text-fifa-muted/70">출전 정지 등 행정 징계는 해당 선수에게 부과되며 팀 페어플레이 점수에는 영향을 주지 않습니다.</p>
+        <p className="text-xs mt-2 text-fifa-muted/70">{t('fairPlay.footer')}</p>
       </Section>
 
       {/* 3위팀 진출 */}
-      <Section icon={Star} title="3위팀 16강 진출 기준" color="text-green-400" defaultOpen={false}>
-        <p>12개 조 각 3위팀 중 <strong className="text-white">상위 8팀</strong>이 32강에 진출합니다.</p>
+      <Section icon={Star} title={t('thirdPlace.title')} color="text-green-400" defaultOpen={false}>
+        <p>
+          {t('thirdPlace.intro.prefix')}<strong className="text-white">{t('thirdPlace.intro.bold')}</strong>{t('thirdPlace.intro.suffix')}
+        </p>
         <div className="mt-3 space-y-2">
-          <p className="text-white font-medium">3위팀 순위 결정 기준 (조별 2위팀 순위와 동일 방식)</p>
-          <Row rank="1" label="승점" />
-          <Row rank="2" label="득실차 (전체)" />
-          <Row rank="3" label="다득점 (전체)" />
-          <Row rank="4" label="페어플레이 포인트" />
-          <Row rank="5" label="FIFA 랭킹" />
-          <Row rank="6" label="추첨" />
+          <p className="text-white font-medium">{t('thirdPlace.subtitle')}</p>
+          {thirdRowKeys.map((k) => (
+            <Row key={k} rank={k} label={t(`thirdPlace.rows.${k}`)} />
+          ))}
         </div>
         <p className="text-xs mt-3 bg-fifa-blue/10 border border-fifa-blue/20 rounded px-3 py-2 text-white/70">
-          3위팀 간에는 상대전적(Head-to-Head)을 적용하지 않습니다. 각 팀이 서로 다른 조에서 플레이하기 때문입니다.
+          {t('thirdPlace.note')}
         </p>
       </Section>
 
       {/* 32강 진출 구조 */}
-      <Section icon={Shuffle} title="32강 대진 구조" color="text-purple-400" defaultOpen={false}>
-        <p>각 조 1위(12팀) + 각 조 2위(12팀) + 3위 상위 8팀 = <strong className="text-white">총 32팀</strong>이 녹아웃 스테이지에 진출합니다.</p>
+      <Section icon={Shuffle} title={t('knockout.title')} color="text-purple-400" defaultOpen={false}>
+        <p>
+          {t('knockout.intro.prefix')}<strong className="text-white">{t('knockout.intro.bold')}</strong>{t('knockout.intro.suffix')}
+        </p>
         <div className="mt-3 text-xs rounded-lg border border-fifa-border/40 overflow-hidden">
-          <div className="px-4 py-2 bg-white/5 font-semibold text-white">진출 경로</div>
+          <div className="px-4 py-2 bg-white/5 font-semibold text-white">{t('knockout.tableHeader')}</div>
           <div className="divide-y divide-fifa-border/20">
-            {[
-              ['조 1위', '12팀', 'text-green-400'],
-              ['조 2위', '12팀', 'text-blue-400'],
-              ['조 3위 중 상위 8팀', '8팀', 'text-yellow-400'],
-            ].map(([label, count, color]) => (
-              <div key={label} className="flex justify-between px-4 py-2">
-                <span>{label}</span>
-                <span className={`font-bold ${color}`}>{count}</span>
+            {knockoutRowKeys.map(({ key, color }) => (
+              <div key={key} className="flex justify-between px-4 py-2">
+                <span>{t(`knockout.rows.${key}.label`)}</span>
+                <span className={`font-bold ${color}`}>{t(`knockout.rows.${key}.count`)}</span>
               </div>
             ))}
             <div className="flex justify-between px-4 py-2 bg-white/5 font-semibold text-white">
-              <span>합계</span>
-              <span>32팀</span>
+              <span>{t('knockout.total.label')}</span>
+              <span>{t('knockout.total.count')}</span>
             </div>
           </div>
         </div>
-        <p className="text-xs mt-3 text-fifa-muted/70">
-          32강 매칭 방식(어느 조 1위가 어느 조 3위를 만나는지)은 진출한 3위팀의 조에 따라 FIFA 공식 브래킷표로 결정됩니다.
-        </p>
+        <p className="text-xs mt-3 text-fifa-muted/70">{t('knockout.note')}</p>
       </Section>
 
       {/* 출처 */}
       <p className="text-center text-xs text-fifa-muted/50 pb-2">
-        출처: FIFA World Cup 2026 – Competition Regulations (승인 2024) · FIFA.com
+        {t('source')}
       </p>
     </div>
   );

@@ -1,6 +1,8 @@
 import React, { useState, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import GroupSelector from './GroupSelector.jsx';
 import BracketView from './BracketView.jsx';
+import { useTeamName } from '../../i18n/useTeamName.js';
 import {
   KNOCKOUT_BRACKET,
   resolveR32Teams,
@@ -10,6 +12,8 @@ import {
 } from '../../utils/knockout.js';
 
 export default function BracketPage({ groups, allGroupStandings, best8, thirdAnalysis }) {
+  const { t } = useTranslation('bracket');
+  const teamName = useTeamName();
   const [highlightedGroup, setHighlightedGroup] = useState(null);
 
   // best8에 group 정보 보장
@@ -72,7 +76,7 @@ export default function BracketPage({ groups, allGroupStandings, best8, thirdAna
         <div className="flex items-center justify-between flex-wrap gap-2">
           <GroupSelector selected={highlightedGroup} onSelect={setHighlightedGroup} />
           <span className="text-[10px] text-fifa-muted">
-            유효 조합: {thirdAnalysis.validKeys.length}/495
+            {t('validCombinations', { count: thirdAnalysis.validKeys.length })}
           </span>
         </div>
 
@@ -80,23 +84,23 @@ export default function BracketPage({ groups, allGroupStandings, best8, thirdAna
           <div className="mt-3 pt-3 border-t border-fifa-border/30 flex flex-wrap gap-3 text-xs">
             <div className="flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-green-500" />
-              <span className="text-green-400 font-medium">1위</span>
-              <span className="text-white">{selectedGroupInfo.first?.name}</span>
+              <span className="text-green-400 font-medium">{t('rankLabels.1')}</span>
+              <span className="text-white">{selectedGroupInfo.first && teamName(selectedGroupInfo.first)}</span>
             </div>
             <div className="flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-blue-500" />
-              <span className="text-blue-400 font-medium">2위</span>
-              <span className="text-white">{selectedGroupInfo.second?.name}</span>
+              <span className="text-blue-400 font-medium">{t('rankLabels.2')}</span>
+              <span className="text-white">{selectedGroupInfo.second && teamName(selectedGroupInfo.second)}</span>
             </div>
             <div className="flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-yellow-500" />
-              <span className="text-yellow-400 font-medium">3위</span>
-              <span className="text-white">{selectedGroupInfo.third?.name}</span>
+              <span className="text-yellow-400 font-medium">{t('rankLabels.3')}</span>
+              <span className="text-white">{selectedGroupInfo.third && teamName(selectedGroupInfo.third)}</span>
               <span className="text-fifa-muted">
-                {selectedGroupInfo.isEliminated ? '(탈락 확정)'
-                  : selectedGroupInfo.isQualified ? '(진출 확정)'
-                  : selectedGroupInfo.isInBest8 ? `(현재 3위 ${selectedGroupInfo.thirdRank}위)`
-                  : '(현재 탈락권)'}
+                {selectedGroupInfo.isEliminated ? t('thirdStatus.eliminated')
+                  : selectedGroupInfo.isQualified ? t('thirdStatus.qualified')
+                  : selectedGroupInfo.isInBest8 ? t('thirdStatus.currentBest', { rank: selectedGroupInfo.thirdRank })
+                  : t('thirdStatus.currentOut')}
               </span>
             </div>
           </div>
@@ -106,19 +110,19 @@ export default function BracketPage({ groups, allGroupStandings, best8, thirdAna
       <div className="flex flex-wrap gap-3 text-[10px] text-fifa-muted px-1">
         <span className="flex items-center gap-1">
           <span className="w-3 h-2 rounded border-2 border-green-500 inline-block" />
-          1위 진출 위치
+          {t('legend.first')}
         </span>
         <span className="flex items-center gap-1">
           <span className="w-3 h-2 rounded border-2 border-blue-500 inline-block" />
-          2위 진출 위치
+          {t('legend.second')}
         </span>
         <span className="flex items-center gap-1">
           <span className="w-3 h-2 rounded border-2 border-yellow-500/70 inline-block" style={{ borderStyle: 'dashed' }} />
-          3위 가능 위치
+          {t('legend.third')}
         </span>
         <span className="flex items-center gap-1">
           <span className="w-0.5 h-3 bg-green-500 rounded-full inline-block" />
-          슬롯 확정
+          {t('legend.confirmed')}
         </span>
       </div>
 

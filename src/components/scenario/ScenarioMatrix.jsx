@@ -1,20 +1,25 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { BASE_URL } from '../../config.js';
-import { RANK_COLORS, WDL_KO } from './shared.jsx';
+import { RANK_COLORS } from './shared.jsx';
 import RankCell from './RankCell.jsx';
 import QualConditionSummary from './QualConditionSummary.jsx';
+import { useTeamName } from '../../i18n/useTeamName.js';
 
 export default function ScenarioMatrix({ data, standings }) {
+  const { t } = useTranslation('scenario');
+  const teamName = useTeamName();
+  const WDL_LABELS = { W: t('matrix.wdl.W'), D: t('matrix.wdl.D'), L: t('matrix.wdl.L') };
   const {
     teamMatch, otherMatch, teamIsHome, matrix,
     rankProbabilities, topTwoProbability, thirdPlaceAdvancingProbability,
   } = data;
 
-  const homeTeam = standings.find(t => t.id === teamMatch.home);
-  const awayTeam = standings.find(t => t.id === teamMatch.away);
-  const otherHomeTeam = otherMatch ? standings.find(t => t.id === otherMatch.home) : null;
-  const otherAwayTeam = otherMatch ? standings.find(t => t.id === otherMatch.away) : null;
-  const analyzedTeam = standings.find(t => t.id === data.teamId);
+  const homeTeam = standings.find(s => s.id === teamMatch.home);
+  const awayTeam = standings.find(s => s.id === teamMatch.away);
+  const otherHomeTeam = otherMatch ? standings.find(s => s.id === otherMatch.home) : null;
+  const otherAwayTeam = otherMatch ? standings.find(s => s.id === otherMatch.away) : null;
+  const analyzedTeam = standings.find(s => s.id === data.teamId);
 
   const teamRows = ['W', 'D', 'L'];
   const hasOther = otherMatch !== null;
@@ -24,18 +29,18 @@ export default function ScenarioMatrix({ data, standings }) {
       {/* 경기 레이블 */}
       <div className="space-y-0.5">
         <div className="flex items-center gap-1.5 text-[11px]">
-          <span className="text-sky-400 font-medium shrink-0">내 경기</span>
-          <span className="text-white">{homeTeam?.name}</span>
+          <span className="text-sky-400 font-medium shrink-0">{t('matrix.myMatch')}</span>
+          <span className="text-white">{homeTeam && teamName(homeTeam)}</span>
           <span className="text-fifa-muted">vs</span>
-          <span className="text-white">{awayTeam?.name}</span>
-          <span className="text-[10px] text-fifa-muted ml-1">({teamIsHome ? '홈' : '원정'})</span>
+          <span className="text-white">{awayTeam && teamName(awayTeam)}</span>
+          <span className="text-[10px] text-fifa-muted ml-1">({teamIsHome ? t('matrix.home') : t('matrix.away')})</span>
         </div>
         {hasOther && otherHomeTeam && (
           <div className="flex items-center gap-1.5 text-[11px]">
-            <span className="text-fifa-muted font-medium shrink-0">다른 경기</span>
-            <span className="text-white">{otherHomeTeam.name}</span>
+            <span className="text-fifa-muted font-medium shrink-0">{t('matrix.otherMatch')}</span>
+            <span className="text-white">{teamName(otherHomeTeam)}</span>
             <span className="text-fifa-muted">vs</span>
-            <span className="text-white">{otherAwayTeam?.name}</span>
+            <span className="text-white">{otherAwayTeam && teamName(otherAwayTeam)}</span>
           </div>
         )}
       </div>
@@ -47,21 +52,21 @@ export default function ScenarioMatrix({ data, standings }) {
             {/* 컬럼 헤더 */}
             <div className="grid grid-cols-4 gap-0.5 mb-0.5">
               <div className="flex items-end justify-end pr-1 pb-1">
-                <span className="text-[9px] text-fifa-muted/60">내↓ 타→</span>
+                <span className="text-[9px] text-fifa-muted/60">{t('matrix.axisHint')}</span>
               </div>
               {['W', 'D', 'L'].map(c => {
-                const t = c === 'W' ? otherHomeTeam : c === 'L' ? otherAwayTeam : null;
+                const tm = c === 'W' ? otherHomeTeam : c === 'L' ? otherAwayTeam : null;
                 return (
                   <div key={c} className="flex flex-col items-center justify-center gap-0.5 py-1.5 bg-white/5 rounded-sm">
-                    {t ? (
+                    {tm ? (
                       <>
-                        {t.flagImg
-                          ? <img src={`${BASE_URL}${t.flagImg}`} alt={t.name} className="w-5 h-3.5 object-cover rounded-sm" />
-                          : <span className="text-xs leading-none">{t.flag}</span>}
-                        <span className="text-[9px] text-fifa-muted font-medium leading-none">{t.name} 승</span>
+                        {tm.flagImg
+                          ? <img src={`${BASE_URL}${tm.flagImg}`} alt={teamName(tm)} className="w-5 h-3.5 object-cover rounded-sm" />
+                          : <span className="text-xs leading-none">{tm.flag}</span>}
+                        <span className="text-[9px] text-fifa-muted font-medium leading-none">{t('matrix.winSuffix', { team: teamName(tm) })}</span>
                       </>
                     ) : (
-                      <span className="text-[10px] text-fifa-muted font-medium">무</span>
+                      <span className="text-[10px] text-fifa-muted font-medium">{t('matrix.drawShort')}</span>
                     )}
                   </div>
                 );
@@ -71,7 +76,7 @@ export default function ScenarioMatrix({ data, standings }) {
             {teamRows.map(rowWDL => (
               <div key={rowWDL} className="grid grid-cols-4 gap-0.5 mb-0.5">
                 <div className="flex items-center justify-center bg-white/5 rounded-sm text-[10px] font-bold text-fifa-muted min-h-[44px]">
-                  {WDL_KO[rowWDL]}
+                  {WDL_LABELS[rowWDL]}
                 </div>
                 {['W', 'D', 'L'].map(colWDL => {
                   const cell = matrix.find(m => m.teamWDL === rowWDL && m.otherWDL === colWDL);
@@ -91,7 +96,7 @@ export default function ScenarioMatrix({ data, standings }) {
               return (
                 <div key={rowWDL} className="flex items-stretch gap-0.5">
                   <div className="w-8 flex items-center justify-center bg-white/5 rounded-sm text-[10px] font-bold text-fifa-muted shrink-0">
-                    {WDL_KO[rowWDL]}
+                    {WDL_LABELS[rowWDL]}
                   </div>
                   <div className="flex-1 border border-fifa-border/20 rounded-sm overflow-hidden">
                     {cell && <RankCell breakdown={cell.breakdown} definitive={cell.definitive} />}
@@ -111,7 +116,7 @@ export default function ScenarioMatrix({ data, standings }) {
           const c = RANK_COLORS[rank];
           return (
             <div key={rank} className="flex items-center gap-2">
-              <span className={`text-[11px] font-bold w-6 ${c.text}`}>{rank}위</span>
+              <span className={`text-[11px] font-bold w-6 ${c.text}`}>{t('matrix.rankLabel', { rank })}</span>
               <div className="flex-1 bg-white/5 rounded-full h-1.5 overflow-hidden">
                 <div className={`h-full rounded-full ${c.bar}`} style={{ width: `${pct}%` }} />
               </div>
@@ -124,12 +129,12 @@ export default function ScenarioMatrix({ data, standings }) {
       {/* 진출 확률 요약 */}
       <div className="pt-2 border-t border-fifa-border/20 flex items-center gap-4 flex-wrap">
         <div className="flex flex-col items-center">
-          <span className="text-[9px] text-fifa-muted mb-0.5">1·2위</span>
+          <span className="text-[9px] text-fifa-muted mb-0.5">{t('matrix.topTwoLabel')}</span>
           <span className="text-lg font-bold text-emerald-300">{topTwoProbability}%</span>
         </div>
         {thirdPlaceAdvancingProbability > 0 && (
           <div className="flex flex-col items-center">
-            <span className="text-[9px] text-fifa-muted mb-0.5">3위</span>
+            <span className="text-[9px] text-fifa-muted mb-0.5">{t('matrix.thirdLabel')}</span>
             <span className="text-lg font-bold text-yellow-300">{thirdPlaceAdvancingProbability}%</span>
           </div>
         )}
@@ -140,7 +145,7 @@ export default function ScenarioMatrix({ data, standings }) {
         hasOther={hasOther}
         otherHomeTeam={otherHomeTeam}
         otherAwayTeam={otherAwayTeam}
-        teamName={analyzedTeam?.name ?? ''}
+        teamName={analyzedTeam ? teamName(analyzedTeam) : ''}
         currentStandings={data.currentStandings}
         teamId={data.teamId}
       />
