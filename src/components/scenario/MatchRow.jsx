@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { MapPin } from 'lucide-react';
-import { formatKST, TeamFlag } from './shared.jsx';
+import { formatLocalTime, TeamFlag } from './shared.jsx';
 import { useTeamName } from '../../i18n/useTeamName.js';
 import { bcp47 } from '../../i18n/dateLocale.js';
 
@@ -18,7 +18,7 @@ function MatchRow({ match, standings, onScoreChange, highlightId }) {
                  match.homeScore !== '' && match.awayScore !== null &&
                  match.awayScore !== undefined && match.awayScore !== '';
 
-  const dateStr = formatKST(match.date, locale);
+  const dateStr = formatLocalTime(match.date, locale);
   const isRelevant = highlightId && (match.home === highlightId || match.away === highlightId);
 
   return (

@@ -17,26 +17,26 @@ export const RANK_COLORS = {
 };
 
 // ── 날짜 포맷 ───────────────────────────────────────────
-// locale 인자(BCP47)를 받아서 해당 언어로 포맷. KST 표기는 모든 locale에서 유지.
+// 사용자 로컬 시간대로 표시 (브라우저 기본 timeZone 사용)
 const formatterCache = {};
 function getFormatter(locale) {
   if (!formatterCache[locale]) {
     formatterCache[locale] = new Intl.DateTimeFormat(locale, {
-      timeZone: 'Asia/Seoul',
       month: 'numeric',
       day: 'numeric',
       weekday: 'short',
       hour: '2-digit',
       minute: '2-digit',
       hour12: false,
+      timeZoneName: 'short',
     });
   }
   return formatterCache[locale];
 }
 
-export function formatKST(iso, locale = 'ko-KR') {
+export function formatLocalTime(iso, locale = 'ko-KR') {
   if (!iso) return null;
-  return getFormatter(locale).format(new Date(iso)) + ' KST';
+  return getFormatter(locale).format(new Date(iso));
 }
 
 // ── 카드 아이콘 ─────────────────────────────────────────

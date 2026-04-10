@@ -104,6 +104,18 @@
 - **해결**: Pages (dist/) + Workers (workers/index.js) 분리 배포
 - **교훈**: `npx wrangler pages deploy`와 `npx wrangler deploy`는 다른 프로젝트에 배포됨
 
+### CDN 캐시로 인한 빈 페이지
+- **시도**: Cloudflare Pages에 새 빌드 배포 (JS 번들 해시 변경)
+- **문제**: 일부 사용자 브라우저에 이전 `index.html`이 CDN 캐시 → 구 JS 번들 참조 → 404 → 빈 페이지 (제목만 표시)
+- **해결**: `public/_headers`에 `index.html` + `/wc2026/` 경로에 `Cache-Control: no-cache` 설정
+- **교훈**: SPA에서 `index.html`은 항상 `no-cache`. JS/CSS는 해시 파일명이라 장기 캐시 안전
+
+### D1 구형 플레이오프 placeholder ID
+- **시도**: 조추첨 확정 전에 `KOR_vs_UEFA_PO_D` 같은 placeholder ID로 DB 레코드 생성
+- **문제**: 플레이오프 확정 후 팀 ID가 바뀌었지만(UEFA_PO_D → CZE) DB 레코드는 업데이트 안 됨 → Cron Sync가 매칭 실패 → 6개 조(A,B,D,F,I,K)의 18경기 누락
+- **해결**: placeholder 레코드 삭제 + 확정 팀 기준 재생성
+- **교훈**: DB에 미확정 팀 ID를 넣으면 확정 시 마이그레이션 필요. 팀 확정 전에는 DB 레코드 생성을 피하거나 마이그레이션 스크립트를 준비할 것
+
 ### Git push ≠ 자동배포
 - **현재**: GitHub 연동 없이 수동 wrangler 배포
 - **교훈**: 커밋 후 배포를 잊기 쉬움 — 배포 체크리스트 또는 CI/CD 설정 권장

@@ -47,6 +47,7 @@ npx wrangler secret put SYNC_SECRET        # 수동 sync 인증용
 - ~~카드 데이터 영속성~~ → Workers Cron Sync로 해결
 - DrawSimulator가 leagues/ 직접 import (props 패턴으로 전환 예정)
 - App.jsx UI 문자열 일부 FIFA 하드코딩
+- ~~D1 구형 플레이오프 placeholder ID~~ → 확정 팀 기반으로 교체 완료
 
 ## docs/ 인덱스
 
