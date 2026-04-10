@@ -2,8 +2,14 @@
  * Cloudflare Workers API
  * PostgreSQL Express API를 D1 (SQLite)로 마이그레이션
  */
+import { syncFixturesToD1 } from './sync.js';
 
 export default {
+  // Cron Trigger — 5분마다 API-Football 동기화
+  async scheduled(event, env, ctx) {
+    ctx.waitUntil(syncFixturesToD1(env));
+  },
+
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
     const path = url.pathname;
@@ -22,7 +28,7 @@ export default {
     const corsHeaders = {
       'Access-Control-Allow-Origin': corsOrigin,
       'Access-Control-Allow-Methods': 'GET, POST, DELETE, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type',
+      'Access-Control-Allow-Headers': 'Content-Type, X-Sync-Secret',
     };
 
     // OPTIONS 요청 처리 (CORS preflight)
@@ -122,6 +128,27 @@ export default {
         `).all();
 
         return Response.json(matches, { headers: corsHeaders });
+      }
+
+      // POST /api/sync/fixtures — 수동 동기화 트리거
+      if (path === '/api/sync/fixtures' && method === 'POST') {
+        const secret = request.headers.get('X-Sync-Secret');
+        if (!env.SYNC_SECRET || secret !== env.SYNC_SECRET) {
+          return Response.json(
+            { error: 'Unauthorized' },
+            { status: 401, headers: corsHeaders }
+          );
+        }
+        const result = await syncFixturesToD1(env);
+        return Response.json(result, { headers: corsHeaders });
+      }
+
+      // GET /api/sync/status — 최근 동기화 이력
+      if (path === '/api/sync/status' && method === 'GET') {
+        const { results } = await env.DB.prepare(
+          'SELECT * FROM api_sync_log ORDER BY synced_at DESC LIMIT 10'
+        ).all();
+        return Response.json(results, { headers: corsHeaders });
       }
 
       // 404 Not Found

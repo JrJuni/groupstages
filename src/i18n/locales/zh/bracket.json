@@ -12,9 +12,9 @@
   "groupSelector": "选择小组:",
   "validCombinations": "有效组合: {{count}}/495",
   "rankLabels": {
-    "1": "第1",
-    "2": "第2",
-    "3": "第3"
+    "1": "第1名",
+    "2": "第2名",
+    "3": "第3名"
   },
   "thirdStatus": {
     "eliminated": "(已淘汰)",

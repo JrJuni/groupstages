@@ -93,7 +93,7 @@
       "1": "1st",
       "2": "2nd",
       "3": "3rd",
-      "4": "Out"
+      "4": "Eliminated"
     },
     "otherDraw": "other match draw",
     "otherWin": "{{team}} W",
@@ -104,7 +104,7 @@
     "statsNote": "Currently {{teamName}} GD {{teamGd}}, GF {{teamGf}} / {{competitor}} GD {{competitorGd}}, GF {{competitorGf}}"
   },
   "match": {
-    "relevant": "relevant"
+    "relevant": "Key match"
   },
   "r32": {
     "title": "Round of 32 possible matchups",

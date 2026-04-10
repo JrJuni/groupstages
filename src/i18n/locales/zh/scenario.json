@@ -40,10 +40,10 @@
   "panel": {
     "currentRank": "当前 {{rank}}",
     "rankLabels": {
-      "1": "第1",
-      "2": "第2",
-      "3": "第3",
-      "4": "第4"
+      "1": "第1名",
+      "2": "第2名",
+      "3": "第3名",
+      "4": "第4名"
     },
     "matchesCount": "{{count}}场",
     "pointsCount": "{{count}}分",
@@ -77,9 +77,9 @@
     },
     "axisHint": "本↓ 他→",
     "drawShort": "平",
-    "rankLabel": "第{{rank}}",
+    "rankLabel": "第{{rank}}名",
     "topTwoLabel": "前两名",
-    "thirdLabel": "第三",
+    "thirdLabel": "第三名",
     "winSuffix": "{{team}} 胜"
   },
   "qualSummary": {
@@ -90,9 +90,9 @@
       "L": "负"
     },
     "rankLabels": {
-      "1": "第1",
-      "2": "第2",
-      "3": "第3",
+      "1": "第1名",
+      "2": "第2名",
+      "3": "第3名",
       "4": "出局"
     },
     "otherDraw": "另一场比赛平局",
@@ -114,12 +114,12 @@
     "noCandidates": "无候选",
     "slot": {
       "direct": "{{group}}组{{rank}}",
-      "third": "{{groups}} 第三"
+      "third": "{{groups}} 第三名"
     },
     "rankLabels": {
-      "1": "第1",
-      "2": "第2",
-      "3": "第3"
+      "1": "第1名",
+      "2": "第2名",
+      "3": "第3名"
     }
   }
 }

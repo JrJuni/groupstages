@@ -27,7 +27,7 @@
       "lost": "负",
       "goalsFor": "进",
       "goalsAgainst": "失",
-      "goalDiff": "差",
+      "goalDiff": "净胜",
       "points": "积分",
       "playedFull": "比赛"
     }
@@ -62,15 +62,15 @@
     "rankProbHtmlHeader": "排名概率",
     "rankCol": "排名",
     "probCol": "概率",
-    "rankRow": "第{{rank}}",
+    "rankRow": "第{{rank}}名",
     "topTwoLine": "前两名直接晋级: **{{pct}}%**",
     "topTwoLineHtml": "前两名直接晋级: <b>{{pct}}%</b>",
-    "thirdLine": " | 第三晋级可能: **{{pct}}%**",
-    "thirdLineHtml": " | 第三晋级可能: <b>{{pct}}%</b>",
+    "thirdLine": " | 第三名晋级可能: **{{pct}}%**",
+    "thirdLineHtml": " | 第三名晋级可能: <b>{{pct}}%</b>",
     "condTitle": "### 条件下的预期排名",
     "condIgnoreOther": "{{team}} {{wdl}} (结果不限)",
     "condFormat": "{{team}} {{wdl}}",
-    "rankConfirmed": "**第{{rank}}确定**",
+    "rankConfirmed": "**第{{rank}}名确定**",
     "tiebreakerNote": "*(可能取决于净胜球)*",
     "wdl": {
       "W": "胜",

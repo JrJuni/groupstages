@@ -15,6 +15,10 @@ database_id = "13ee6163-ca10-40cf-8df2-b770146d80f3"
 WORLD_CUP_LEAGUE_ID = "1"
 WORLD_CUP_SEASON = "2026"
 
+# Cron Trigger — 매 5분마다 API-Football 동기화
+[triggers]
+crons = ["*/5 * * * *"]
+
 # Secrets (Cloudflare Dashboard에서 설정)
-# wrangler secret put RAPIDAPI_KEY
-# wrangler secret put RAPIDAPI_HOST
+# wrangler secret put API_FOOTBALL_KEY
+# wrangler secret put SYNC_SECRET

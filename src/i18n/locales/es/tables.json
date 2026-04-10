@@ -24,7 +24,7 @@
     "headers": {
       "rank": "#",
       "team": "Equipo",
-      "group": "Grp",
+      "group": "Gpo",
       "played": "PJ",
       "won": "G",
       "drawn": "E",

@@ -50,7 +50,7 @@
       "playedFull": "Played"
     },
     "statusQualified": "✓ Qualified",
-    "statusEliminated": "Out"
+    "statusEliminated": "Eliminated"
   },
   "scenario": {
     "mdTitle": "## {{team}} — Round of 32 scenarios",
@@ -70,7 +70,7 @@
     "condTitle": "### Projected ranks per condition",
     "condIgnoreOther": "{{team}} {{wdl}} (any result)",
     "condFormat": "{{team}} {{wdl}}",
-    "rankConfirmed": "**{{rank}} confirmed**",
+    "rankConfirmed": "**{{rank}}-place confirmed**",
     "tiebreakerNote": "*(may depend on goal difference)*",
     "wdl": {
       "W": "W",

@@ -46,7 +46,7 @@
     },
     "rows": {
       "yellow": { "card": "🟡 イエロー1枚", "pts": "-1点" },
-      "twoYellow": { "card": "🟡🟡 イエロー2枚で退場(間接退場)", "pts": "-3点" },
+      "twoYellow": { "card": "🟡🟡 イエロー2枚累積退場", "pts": "-3点" },
       "red": { "card": "🟥 一発レッドカード", "pts": "-4点" },
       "yellowRed": { "card": "🟡🟥 警告後の一発退場", "pts": "-5点" }
     },
@@ -81,7 +81,7 @@
     "rows": {
       "first": { "label": "組1位", "count": "12チーム" },
       "second": { "label": "組2位", "count": "12チーム" },
-      "third": { "label": "組3位上位8", "count": "8チーム" }
+      "third": { "label": "各組3位 上位8チーム", "count": "8チーム" }
     },
     "total": {
       "label": "合計",

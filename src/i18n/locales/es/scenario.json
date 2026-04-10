@@ -56,7 +56,7 @@
     "matchdayLabel": "Jornada {{md}}",
     "title16": "Escenarios para dieciseisavos",
     "needMore": "El análisis comienza tras {{count}} partido(s) más en el grupo",
-    "activateNotice": "Disponible tras 2 jornadas",
+    "activateNotice": "Disponible tras 2 partidos",
     "oppPoints": "({{count}} pts)"
   },
   "badge": {

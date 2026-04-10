@@ -53,7 +53,7 @@
     "remainingCount": "{{count}}試合",
     "maxPoints": "最大 {{count}}点 獲得可能",
     "allDone": "全試合終了",
-    "matchdayLabel": "節 {{md}}",
+    "matchdayLabel": "第{{md}}節",
     "title16": "32強進出シナリオ",
     "needMore": "グループでさらに{{count}}試合進むと分析が始まります",
     "activateNotice": "グループ2試合終了後に有効化",
@@ -108,12 +108,12 @@
   },
   "r32": {
     "title": "32強の対戦相手候補",
-    "ifAdvance": "グループ{{group}} {{rank}}で進出した場合",
+    "ifAdvance": "グループ{{group}} {{rank}}位で進出した場合",
     "oneOf": "— いずれか",
     "vs": "vs",
     "noCandidates": "候補なし",
     "slot": {
-      "direct": "グループ{{group}} {{rank}}",
+      "direct": "グループ{{group}} {{rank}}位",
       "third": "{{groups}} 3位"
     },
     "rankLabels": {

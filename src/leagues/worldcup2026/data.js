@@ -217,6 +217,32 @@ export const DRAW_POTS = {
 };
 
 // ──────────────────────────────────────────────────────────────────
+// FIFA 2026 추첨 룰 상수
+// ──────────────────────────────────────────────────────────────────
+
+// 호스트 사전 배정: 멕시코 → A, 캐나다 → B, 미국 → D
+// (FIFA 공식: 추첨 시작 시점에 Pot 1에서 자동 배정)
+export const HOST_PRE_PLACEMENTS = [
+  { teamId: 'MEX', groupName: 'A', potKey: 'pot1' },
+  { teamId: 'CAN', groupName: 'B', potKey: 'pot1' },
+  { teamId: 'USA', groupName: 'D', potKey: 'pot1' },
+];
+
+// 톱4 시드 (2025년 11월 FIFA 랭킹 1~4위)
+// — 서로 다른 quarter에 배정되어 결승 이전에 만나지 않도록 함
+export const TOP_SEED_IDS = ['ESP', 'ARG', 'FRA', 'ENG'];
+
+// 1위 진출 그룹 → quarter 매핑 (KNOCKOUT_BRACKET R32→R16→QF 경로 분석 결과)
+// Q1+Q2 = left half (M101 SF), Q3+Q4 = right half (M102 SF)
+// 토너먼트 구조 변경 시 동기 갱신 필요
+export const GROUP_QUARTERS = {
+  E: 'Q1', I: 'Q1', F: 'Q1',
+  H: 'Q2', D: 'Q2', G: 'Q2',
+  C: 'Q3', A: 'Q3', L: 'Q3',
+  J: 'Q4', B: 'Q4', K: 'Q4',
+};
+
+// ──────────────────────────────────────────────────────────────────
 // 2026 FIFA World Cup 조별리그 공식 경기 일정
 // 모든 시간 UTC 기준 (KST = UTC+9)
 // 출처: FIFA 공식 대회 일정 (2024년 발표)

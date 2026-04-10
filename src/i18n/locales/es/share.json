@@ -38,7 +38,7 @@
     "header": {
       "rank": "#",
       "team": "Equipo",
-      "group": "Grp",
+      "group": "Gpo",
       "played": "PJ",
       "won": "G",
       "drawn": "E",
@@ -50,19 +50,19 @@
       "playedFull": "Jugados"
     },
     "statusQualified": "✓ Clasificado",
-    "statusEliminated": "Fuera"
+    "statusEliminated": "Eliminado"
   },
   "scenario": {
     "mdTitle": "## {{team}} — Escenarios para dieciseisavos",
     "htmlTitle": "{{team}} — Escenarios para dieciseisavos",
-    "currentLine": "Actualmente **{{rank}}** | {{played}} jugados | **{{pts}} pts** | DG {{gd}} | GF {{gf}}",
-    "currentLineHtml": "Actualmente <b>{{rank}}</b> | {{played}} jugados | <b>{{pts}} pts</b> | DG {{gd}} | GF {{gf}}",
+    "currentLine": "Actualmente **{{rank}}º** | {{played}} jugados | **{{pts}} pts** | DG {{gd}} | GF {{gf}}",
+    "currentLineHtml": "Actualmente <b>{{rank}}º</b> | {{played}} jugados | <b>{{pts}} pts</b> | DG {{gd}} | GF {{gf}}",
     "allDone": "Todos los partidos jugados",
     "rankProbHeader": "### Probabilidades de posición",
     "rankProbHtmlHeader": "Probabilidades de posición",
     "rankCol": "Posición",
     "probCol": "Probabilidad",
-    "rankRow": "{{rank}}",
+    "rankRow": "{{rank}}º",
     "topTwoLine": "Clasificación directa Top 2: **{{pct}}%**",
     "topTwoLineHtml": "Clasificación directa Top 2: <b>{{pct}}%</b>",
     "thirdLine": " | Posible 3º: **{{pct}}%**",
@@ -70,7 +70,7 @@
     "condTitle": "### Posición proyectada por condición",
     "condIgnoreOther": "{{team}} {{wdl}} (cualquier resultado)",
     "condFormat": "{{team}} {{wdl}}",
-    "rankConfirmed": "**{{rank}} confirmado**",
+    "rankConfirmed": "**{{rank}}º confirmado**",
     "tiebreakerNote": "*(puede depender de la diferencia de goles)*",
     "wdl": {
       "W": "G",
