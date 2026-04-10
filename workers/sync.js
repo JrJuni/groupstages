@@ -69,6 +69,203 @@ function convertFixtureToDbFormat(fixture, teamMapping) {
   };
 }
 
+// ─── Card Events Sync ──────────────────────────────────────
+
+const LIVE_STATUSES = ['1H', '2H', 'HT', 'ET', 'BT', 'P'];
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+/**
+ * 특정 경기의 이벤트 조회 (카드 추출용)
+ */
+async function fetchFixtureEvents(fixtureId, env) {
+  const url = `${API_BASE}/fixtures/events?fixture=${fixtureId}`;
+  const resp = await fetch(url, {
+    headers: { 'x-apisports-key': env.API_FOOTBALL_KEY },
+  });
+  if (!resp.ok) {
+    if (resp.status === 429) throw new Error('Rate Limit exceeded');
+    throw new Error(`Events API HTTP ${resp.status}`);
+  }
+  const data = await resp.json();
+  return data.response || [];
+}
+
+/**
+ * 이벤트에서 카드 통계 추출 (apiFootballService.js:217-240 포팅)
+ */
+function extractCardStatistics(events) {
+  const stats = {};
+  for (const event of events) {
+    if (event.type !== 'Card') continue;
+    const teamId = String(event.team.id);
+    if (!stats[teamId]) stats[teamId] = { yc: 0, twoYR: 0, dr: 0 };
+    if (event.detail === 'Yellow Card') {
+      stats[teamId].yc++;
+    } else if (event.detail === 'Red Card') {
+      const isTwoYellow = event.comments?.includes('Second Yellow') || false;
+      if (isTwoYellow) stats[teamId].twoYR++;
+      else stats[teamId].dr++;
+    }
+  }
+  return stats;
+}
+
+/**
+ * fixture_cards → team_statistics 재계산
+ */
+async function recalcTeamStatistics(env) {
+  const { results: allCards } = await env.DB.prepare(
+    'SELECT cards_json FROM fixture_cards'
+  ).all();
+
+  // 팀별 합산
+  const totals = {}; // { apiTeamId: { yc, twoYR, dr } }
+  for (const row of allCards) {
+    const parsed = JSON.parse(row.cards_json);
+    for (const [teamId, card] of Object.entries(parsed)) {
+      if (!totals[teamId]) totals[teamId] = { yc: 0, twoYR: 0, dr: 0 };
+      totals[teamId].yc += card.yc;
+      totals[teamId].twoYR += card.twoYR;
+      totals[teamId].dr += card.dr;
+    }
+  }
+
+  // API team ID → 내부 team ID 매핑
+  const { results: mappings } = await env.DB.prepare(
+    'SELECT api_team_id, our_team_id FROM team_mapping'
+  ).all();
+  const apiToOur = {};
+  for (const m of mappings) apiToOur[String(m.api_team_id)] = m.our_team_id;
+
+  // 내부 team ID → group_key 매핑
+  const { results: matches } = await env.DB.prepare(
+    'SELECT DISTINCT home_id, group_key FROM match_results'
+  ).all();
+  const teamGroup = {};
+  for (const m of matches) teamGroup[m.home_id] = m.group_key;
+
+  // batch upsert
+  const statements = [];
+  for (const [apiTeamId, card] of Object.entries(totals)) {
+    const ourId = apiToOur[apiTeamId];
+    if (!ourId) continue;
+    const groupKey = teamGroup[ourId];
+    if (!groupKey) continue;
+    const fp = card.yc * 1 + card.twoYR * 3 + card.dr * 4;
+    statements.push(
+      env.DB.prepare(
+        `INSERT INTO team_statistics (team_id, group_key, yellow_cards, two_yellow_red, direct_red, fair_play_points, updated_at)
+         VALUES (?1, ?2, ?3, ?4, ?5, ?6, datetime('now'))
+         ON CONFLICT (team_id, group_key) DO UPDATE SET
+           yellow_cards = ?3, two_yellow_red = ?4, direct_red = ?5,
+           fair_play_points = ?6, updated_at = datetime('now')`
+      ).bind(ourId, groupKey, card.yc, card.twoYR, card.dr, fp)
+    );
+  }
+  if (statements.length > 0) await env.DB.batch(statements);
+  return statements.length;
+}
+
+/**
+ * 1회 카드 이벤트 동기화 (진행 중 + 막 종료 경기만)
+ */
+async function syncCardEventsOnce(env) {
+  // 진행 중인 경기
+  const { results: liveMatches } = await env.DB.prepare(
+    `SELECT fixture_id, home_id, away_id, status FROM match_results
+     WHERE status IN ('1H', '2H', 'HT', 'ET', 'BT', 'P')
+     AND fixture_id IS NOT NULL`
+  ).all();
+
+  // 막 종료된 경기 (FT인데 fixture_cards에 is_final=0 이거나 없는 것)
+  const { results: justFinished } = await env.DB.prepare(
+    `SELECT m.fixture_id, m.home_id, m.away_id FROM match_results m
+     LEFT JOIN fixture_cards fc ON m.fixture_id = fc.fixture_id
+     WHERE m.status = 'FT' AND m.fixture_id IS NOT NULL
+     AND (fc.fixture_id IS NULL OR fc.is_final = 0)`
+  ).all();
+
+  const targets = [...liveMatches, ...justFinished];
+  if (targets.length === 0) return { fetched: 0, skipped: true };
+
+  let fetched = 0;
+  const cardStatements = [];
+
+  for (const match of targets) {
+    const events = await fetchFixtureEvents(match.fixture_id, env);
+    const cards = extractCardStatistics(events);
+    const isFinal = match.status === 'FT' ? 1 : 0;
+
+    cardStatements.push(
+      env.DB.prepare(
+        `INSERT INTO fixture_cards (fixture_id, home_id, away_id, cards_json, is_final, updated_at)
+         VALUES (?1, ?2, ?3, ?4, ?5, datetime('now'))
+         ON CONFLICT (fixture_id) DO UPDATE SET
+           cards_json = ?4, is_final = ?5, updated_at = datetime('now')`
+      ).bind(match.fixture_id, match.home_id, match.away_id, JSON.stringify(cards), isFinal)
+    );
+    fetched++;
+  }
+
+  if (cardStatements.length > 0) await env.DB.batch(cardStatements);
+
+  // team_statistics 재계산
+  const teamsUpdated = await recalcTeamStatistics(env);
+
+  return { fetched, teamsUpdated };
+}
+
+/**
+ * 카드 이벤트 cron 핸들러 — 1분 cron, 내부 3회 호출 (20초 간격)
+ */
+export async function syncCardEvents(env) {
+  const startTime = Date.now();
+  const log = { sync_type: 'card_events', status: 'success', fixtures_synced: 0, error_message: null };
+
+  try {
+    let totalFetched = 0;
+
+    for (let i = 0; i < 3; i++) {
+      const result = await syncCardEventsOnce(env);
+      if (result.skipped) {
+        console.log(`[Cards] Pass ${i + 1}/3: no live matches, skipping`);
+        break; // 진행 중 경기 없으면 나머지 패스도 스킵
+      }
+      totalFetched += result.fetched;
+      console.log(`[Cards] Pass ${i + 1}/3: ${result.fetched} fixtures, ${result.teamsUpdated} teams`);
+      if (i < 2) await sleep(20000);
+    }
+
+    log.fixtures_synced = totalFetched;
+    const duration = Date.now() - startTime;
+
+    if (totalFetched > 0) {
+      await env.DB.prepare(
+        `INSERT INTO api_sync_log (sync_type, status, fixtures_synced, sync_duration_ms)
+         VALUES (?1, ?2, ?3, ?4)`
+      ).bind(log.sync_type, log.status, log.fixtures_synced, duration).run();
+    }
+
+    return { success: true, fetched: totalFetched, duration_ms: duration };
+
+  } catch (error) {
+    const duration = Date.now() - startTime;
+    console.error(`[Cards] Failed: ${error.message}`);
+    try {
+      await env.DB.prepare(
+        `INSERT INTO api_sync_log (sync_type, status, fixtures_synced, error_message, sync_duration_ms)
+         VALUES (?1, ?2, ?3, ?4, ?5)`
+      ).bind('card_events', 'failed', log.fixtures_synced, error.message, duration).run();
+    } catch (_) { /* ignore */ }
+    return { success: false, error: error.message, duration_ms: duration };
+  }
+}
+
+// ─── Fixtures Sync ─────────────────────────────────────────
+
 /**
  * 메인 오케스트레이터 — syncRoutes.js POST /fixtures 포팅
  * @returns {{ success, synced, skipped, duration_ms, error? }}

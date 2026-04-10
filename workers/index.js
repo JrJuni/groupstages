@@ -2,12 +2,16 @@
  * Cloudflare Workers API
  * PostgreSQL Express API를 D1 (SQLite)로 마이그레이션
  */
-import { syncFixturesToD1 } from './sync.js';
+import { syncFixturesToD1, syncCardEvents } from './sync.js';
 
 export default {
-  // Cron Trigger — 5분마다 API-Football 동기화
+  // Cron Triggers — fixtures(5분) + cards(1분, 경기 중만 활성)
   async scheduled(event, env, ctx) {
-    ctx.waitUntil(syncFixturesToD1(env));
+    if (event.cron === '*/5 * * * *') {
+      ctx.waitUntil(syncFixturesToD1(env));
+    } else if (event.cron === '* * * * *') {
+      ctx.waitUntil(syncCardEvents(env));
+    }
   },
 
   async fetch(request, env, ctx) {

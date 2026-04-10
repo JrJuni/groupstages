@@ -39,6 +39,16 @@ CREATE TABLE IF NOT EXISTS team_statistics (
   PRIMARY KEY (team_id, group_key)
 );
 
+-- 경기별 카드 캐시 (실시간 수집 → team_statistics 합산)
+CREATE TABLE IF NOT EXISTS fixture_cards (
+  fixture_id    INTEGER PRIMARY KEY,
+  home_id       TEXT NOT NULL,
+  away_id       TEXT NOT NULL,
+  cards_json    TEXT NOT NULL DEFAULT '{}',
+  is_final      INTEGER DEFAULT 0,
+  updated_at    TEXT DEFAULT (datetime('now'))
+);
+
 -- API 동기화 로그
 CREATE TABLE IF NOT EXISTS api_sync_log (
   id               INTEGER PRIMARY KEY AUTOINCREMENT,
