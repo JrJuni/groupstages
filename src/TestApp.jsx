@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Globe, Shuffle, Trophy, Menu, X, RotateCcw, GitBranch, BookOpen, FlaskConical, ExternalLink, Swords } from 'lucide-react';
 import { getBest8ThirdPlace, getFairPlayPoints } from './utils/rankings.js';
 import { analyzeThirdPlaceCombinations, computeThirdRange } from './utils/knockout.js';
-import { TEAM_SEEDS, FIFA_RANKINGS, FIFA_RANKINGS_CURRENT } from './leagues/worldcup2026/data.js';
+import { leagueConfig } from './leagues/worldcup2026/index.js';
 import { useTestMatches } from './hooks/useTestMatches.js';
 import GroupTable from './components/GroupTable.jsx';
 import ThirdPlaceTable from './components/ThirdPlaceTable.jsx';
@@ -62,42 +62,52 @@ export default function TestApp() {
     setActiveTab('scenarios');
   };
 
-  const allGroupStandings = Object.fromEntries(
-    Object.entries(groups).map(([k, v]) => [k, v.standings])
+  const allGroupStandings = useMemo(
+    () => Object.fromEntries(Object.entries(groups).map(([k, v]) => [k, v.standings])),
+    [groups]
   );
-  const best8 = getBest8ThirdPlace(allGroupStandings);
 
-  const thirdAnalysis = analyzeThirdPlaceCombinations(groups);
+  const best8 = useMemo(
+    () => getBest8ThirdPlace(allGroupStandings),
+    [allGroupStandings]
+  );
 
-  const allThirds = Object.entries(allGroupStandings)
-    .map(([group, standings]) => {
-      if (!standings || standings.length < 3) return null;
-      const t = standings[2];
-      const { teams, matches } = groups[group];
-      const range = computeThirdRange(teams, matches);
-      const nextMatch = (matches ?? []).find(m => !m.played && (m.home === t.id || m.away === t.id));
-      const nextOppId = nextMatch ? (nextMatch.home === t.id ? nextMatch.away : nextMatch.home) : null;
-      const nextOpponent = nextOppId ? (standings.find(s => s.id === nextOppId) ?? null) : null;
-      return {
-        group, ...t,
-        fifaRank: FIFA_RANKINGS_CURRENT[t.id] ?? null,
-        ptsMin: range.min, ptsMax: range.max,
-        nextOpponent,
-        qualified: thirdAnalysis.qualifiedGroups.has(group),
-        eliminated: thirdAnalysis.eliminatedGroups.has(group),
-      };
-    })
-    .filter((t) => t !== null)
-    .sort((a, b) => {
-      if (b.pts !== a.pts) return b.pts - a.pts;
-      if (b.gd !== a.gd) return b.gd - a.gd;
-      if (b.gf !== a.gf) return b.gf - a.gf;
-      const fpA = getFairPlayPoints(a), fpB = getFairPlayPoints(b);
-      if (fpB !== fpA) return fpB - fpA;
-      const ra = FIFA_RANKINGS[a.id] ?? 999, rb = FIFA_RANKINGS[b.id] ?? 999;
-      if (ra !== rb) return ra - rb;
-      return (TEAM_SEEDS[a.id] ?? 99) - (TEAM_SEEDS[b.id] ?? 99);
-    });
+  const thirdAnalysis = useMemo(
+    () => analyzeThirdPlaceCombinations(groups),
+    [groups]
+  );
+
+  const allThirds = useMemo(() => {
+    return Object.entries(allGroupStandings)
+      .map(([group, standings]) => {
+        if (!standings || standings.length < 3) return null;
+        const t = standings[2];
+        const { teams, matches } = groups[group];
+        const range = computeThirdRange(teams, matches);
+        const nextMatch = (matches ?? []).find(m => !m.played && (m.home === t.id || m.away === t.id));
+        const nextOppId = nextMatch ? (nextMatch.home === t.id ? nextMatch.away : nextMatch.home) : null;
+        const nextOpponent = nextOppId ? (standings.find(s => s.id === nextOppId) ?? null) : null;
+        return {
+          group, ...t,
+          fifaRank: leagueConfig.rankingsCurrent[t.id] ?? null,
+          ptsMin: range.min, ptsMax: range.max,
+          nextOpponent,
+          qualified: thirdAnalysis.qualifiedGroups.has(group),
+          eliminated: thirdAnalysis.eliminatedGroups.has(group),
+        };
+      })
+      .filter((t) => t !== null)
+      .sort((a, b) => {
+        if (b.pts !== a.pts) return b.pts - a.pts;
+        if (b.gd !== a.gd) return b.gd - a.gd;
+        if (b.gf !== a.gf) return b.gf - a.gf;
+        const fpA = getFairPlayPoints(a), fpB = getFairPlayPoints(b);
+        if (fpB !== fpA) return fpB - fpA;
+        const ra = leagueConfig.rankings[a.id] ?? 999, rb = leagueConfig.rankings[b.id] ?? 999;
+        if (ra !== rb) return ra - rb;
+        return (leagueConfig.seeds[a.id] ?? 99) - (leagueConfig.seeds[b.id] ?? 99);
+      });
+  }, [allGroupStandings, groups, thirdAnalysis]);
 
   const handleReset = () => {
     if (!window.confirm(t('dialog.confirmResetTest'))) return;
