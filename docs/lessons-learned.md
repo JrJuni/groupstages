@@ -37,6 +37,14 @@
 
 ---
 
+## 데이터 수집
+
+### 3위 조합표 위키피디아 파싱
+- **경위**: `KNOCKOUT_BRACKET`과 `THIRD_PLACE_GROUPS` 데이터를 위키피디아 `Template:2026_FIFA_World_Cup_third-place_table`에서 wikitext를 파싱하여 생성 (debug2/3.cjs → parse_thirds.cjs → gen_table.cjs 순으로 반복 시도)
+- **결과**: 파싱 결과가 `src/leagues/worldcup2026/data.js`에 하드코딩됨. 스크립트는 일회성으로 삭제 완료
+
+---
+
 ## API / 데이터
 
 ### RapidAPI vs API-Football 직접 인증
