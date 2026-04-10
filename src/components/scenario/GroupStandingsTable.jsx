@@ -48,7 +48,7 @@ export default function GroupStandingsTable({ standings, highlightId, onTeamClic
                     <TeamFlag team={team} />
                     <span className={`font-medium whitespace-nowrap ${isHighlighted ? 'text-sky-400' : 'text-white group-hover:text-sky-300'}`}>
                       {teamName(team)}
-                      {leagueConfig.rankings[team.id] && <span className="text-[10px] text-fifa-muted font-normal ml-0.5">({leagueConfig.rankings[team.id]})</span>}
+                      {leagueConfig.rankings[team.id] && <span className="text-[10px] text-fifa-muted font-normal ml-1">({leagueConfig.rankings[team.id]})</span>}
                     </span>
                     {team.host && (
                       <span className="text-[9px] bg-fifa-gold/20 text-fifa-gold px-1 rounded">H</span>
