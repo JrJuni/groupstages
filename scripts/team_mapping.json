@@ -268,5 +268,23 @@
     "api_team_id": 11,
     "api_team_name": "Panama",
     "api_team_code": "PAN"
+  },
+  {
+    "our_team_id": "BIH",
+    "api_team_id": 1113,
+    "api_team_name": "Bosnia & Herzegovina",
+    "api_team_code": "BOS"
+  },
+  {
+    "our_team_id": "CUW",
+    "api_team_id": 5530,
+    "api_team_name": "Curaçao",
+    "api_team_code": "CUR"
+  },
+  {
+    "our_team_id": "CPV",
+    "api_team_id": 1533,
+    "api_team_name": "Cape Verde Islands",
+    "api_team_code": "CAP"
   }
 ]
