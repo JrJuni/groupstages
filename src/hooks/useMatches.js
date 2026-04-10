@@ -40,14 +40,23 @@ export function useMatches(leagueConfig) {
               if (!next[g]) return;
               const group = next[g];
               const newMatches = group.matches.map((m) => {
-                if (m.id !== row.id) return m;
+                // 양방향 매칭 (엔진 ID와 DB ID 방향이 다를 수 있음)
+                const [rh, ra] = row.id.split('_vs_');
+                const altRowId = `${ra}_vs_${rh}`;
+                if (m.id !== row.id && m.id !== altRowId) return m;
                 const hs = row.home_score !== null ? String(row.home_score) : null;
                 const as_ = row.away_score !== null ? String(row.away_score) : null;
+                // DB home/away 순서가 엔진과 다를 수 있으므로 스왑 처리
+                const isSwapped = m.id !== row.id;
                 return {
                   ...m,
-                  homeScore: hs,
-                  awayScore: as_,
+                  homeScore: isSwapped ? as_ : hs,
+                  awayScore: isSwapped ? hs : as_,
                   played: hs !== null && as_ !== null,
+                  matchday: row.matchday ?? m.matchday,
+                  date: row.match_date ?? m.date,
+                  venue: row.venue ?? m.venue,
+                  city: row.city ?? m.city,
                 };
               });
               const newStandings = calculateStandings(group.teams, newMatches);

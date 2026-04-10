@@ -55,7 +55,7 @@ export default {
       if (path === '/api/matches' && method === 'GET') {
         const { results } = await env.DB.prepare(`
           SELECT id, group_key, home_id, away_id, home_score, away_score,
-                 matchday, match_date, status, fixture_id
+                 matchday, match_date, venue, city, status, fixture_id
           FROM match_results
           ORDER BY
             CASE WHEN match_date IS NULL THEN 1 ELSE 0 END,
@@ -71,7 +71,7 @@ export default {
       if (path === '/api/matches' && method === 'POST') {
         const body = await request.json();
         const { id, group_key, home_id, away_id, home_score, away_score,
-                matchday, match_date, status, fixture_id } = body;
+                matchday, match_date, venue, city, status, fixture_id } = body;
 
         if (!id || !group_key || !home_id || !away_id) {
           return Response.json(
@@ -84,15 +84,17 @@ export default {
         await env.DB.prepare(`
           INSERT INTO match_results
             (id, group_key, home_id, away_id, home_score, away_score,
-             matchday, match_date, status, fixture_id, updated_at)
-          VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, datetime('now'))
+             matchday, match_date, venue, city, status, fixture_id, updated_at)
+          VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, datetime('now'))
           ON CONFLICT(id) DO UPDATE SET
             home_score  = COALESCE(?5, home_score),
             away_score  = COALESCE(?6, away_score),
             matchday    = COALESCE(?7, matchday),
             match_date  = COALESCE(?8, match_date),
-            status      = COALESCE(?9, status),
-            fixture_id  = COALESCE(?10, fixture_id),
+            venue       = COALESCE(?9, venue),
+            city        = COALESCE(?10, city),
+            status      = COALESCE(?11, status),
+            fixture_id  = COALESCE(?12, fixture_id),
             updated_at  = datetime('now')
         `).bind(
           id, group_key, home_id, away_id,
@@ -100,6 +102,8 @@ export default {
           away_score !== '' && away_score !== null && away_score !== undefined ? parseInt(away_score) : null,
           matchday ?? null,
           match_date ?? null,
+          venue ?? null,
+          city ?? null,
           status ?? 'NS',
           fixture_id ?? null
         ).run();

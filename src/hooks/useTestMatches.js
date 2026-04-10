@@ -36,7 +36,8 @@ function buildGroupsWithMockResults() {
           played: saved.home !== '' && saved.away !== '',
         };
       }
-      const mock = MOCK_RESULTS[m.id];
+      const [h, a] = m.id.split('_vs_');
+      const mock = MOCK_RESULTS[m.id] || MOCK_RESULTS[`${a}_vs_${h}`];
       if (mock) {
         return {
           ...m,

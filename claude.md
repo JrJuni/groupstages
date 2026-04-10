@@ -32,6 +32,7 @@ npx wrangler deploy
 - 컴포넌트에서 `calculateStandings` 등 직접 호출 금지 → App 레벨 useMemo → props
 - `team.name` 직접 렌더링 금지 → `useTeamName()` 훅 사용
 - App.jsx와 TestApp.jsx 계산 로직 중복 금지 → 동일 함수(utils/) 사용
+- MATCH_SCHEDULE/결과 데이터 키를 엔진 ID와 대조 없이 교체 금지 → 양방향 lookup 또는 키 정규화 필수 (출처: lessons-learned.md#match-schedule-키-방향-불일치)
 - CLAUDE.md 80줄 초과 금지 → docs/로 분리
 
 ## Workers Secrets

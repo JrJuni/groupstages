@@ -40,7 +40,8 @@ export function createInitialMatches(teams, matchSchedule = {}) {
   for (let i = 0; i < teams.length; i++) {
     for (let j = i + 1; j < teams.length; j++) {
       const id = `${teams[i].id}_vs_${teams[j].id}`;
-      const sched = matchSchedule[id] || {};
+      const altId = `${teams[j].id}_vs_${teams[i].id}`;
+      const sched = matchSchedule[id] || matchSchedule[altId] || {};
       matches.push({
         id,
         home: teams[i].id,

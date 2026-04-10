@@ -39,6 +39,12 @@
 
 ## 데이터 수집
 
+### MATCH_SCHEDULE 키 방향 불일치 (2회 발생)
+- **시도**: API-Football에서 받은 fixture 데이터로 MATCH_SCHEDULE 키를 `홈_vs_어웨이` 형식으로 저장
+- **문제**: `createInitialMatches()`는 팀 배열 인덱스 순서(i < j)로 ID 생성 (예: `MEX_vs_CZE`), API 데이터는 실제 FIFA 홈/어웨이 순서 (예: `CZE_vs_MEX`). lookup 실패 → matchday/date/venue 전부 null → MD3 통째 미표시, 일부 MD1/2도 1경기만 표시
+- **해결**: `createInitialMatches`에서 양방향 lookup (`matchSchedule[id] || matchSchedule[altId]`)
+- **교훈**: **엔진이 생성하는 매치 ID와 외부 데이터 소스의 키 형식이 다를 수 있음.** 일정/결과 데이터를 교체할 때 반드시 엔진의 ID 생성 로직(`teams[i]_vs_teams[j]`, i < j)과 대조 확인. 또는 lookup 자체를 양방향으로 설계하여 키 방향에 무관하게 동작하도록 할 것
+
 ### 3위 조합표 위키피디아 파싱
 - **경위**: `KNOCKOUT_BRACKET`과 `THIRD_PLACE_GROUPS` 데이터를 위키피디아 `Template:2026_FIFA_World_Cup_third-place_table`에서 wikitext를 파싱하여 생성 (debug2/3.cjs → parse_thirds.cjs → gen_table.cjs 순으로 반복 시도)
 - **결과**: 파싱 결과가 `src/leagues/worldcup2026/data.js`에 하드코딩됨. 스크립트는 일회성으로 삭제 완료

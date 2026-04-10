@@ -65,6 +65,8 @@ function convertFixtureToDbFormat(fixture, teamMapping) {
     away_score: fixture.goals.away,
     matchday,
     match_date: fixture.fixture.date,
+    venue: fixture.fixture.venue?.name || null,
+    city: fixture.fixture.venue?.city || null,
     status: fixture.fixture.status.short, // NS, FT, 1H, HT, 2H, etc.
   };
 }
@@ -332,12 +334,15 @@ export async function syncFixturesToD1(env) {
                fixture_id = COALESCE(?4, fixture_id),
                matchday = COALESCE(?5, matchday),
                match_date = COALESCE(?6, match_date),
+               venue = COALESCE(?7, venue),
+               city = COALESCE(?8, city),
                updated_at = datetime('now')
-           WHERE id = ?7`
+           WHERE id = ?9`
         ).bind(
           homeScore, awayScore, converted.status,
           converted.fixture_id, converted.matchday,
-          converted.match_date, match.id
+          converted.match_date, converted.venue,
+          converted.city, match.id
         )
       );
       synced++;

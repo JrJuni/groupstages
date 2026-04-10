@@ -11,6 +11,8 @@ CREATE TABLE IF NOT EXISTS match_results (
   away_score INTEGER,
   matchday   INTEGER,
   match_date TEXT,                          -- ISO 8601 format
+  venue      TEXT,
+  city       TEXT,
   status     TEXT DEFAULT 'NS',             -- NS/FT/1H/HT/2H
   fixture_id INTEGER,
   updated_at TEXT DEFAULT (datetime('now'))
