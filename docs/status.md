@@ -22,13 +22,15 @@ Phase 14: 다국어(i18n) 지원         ✅ 완료 (ko/en/es/ja/zh 5개 언어)
 Phase 15: 번역 품질 검수            ✅ 완료 (High 31건 수정)
 Phase 16: Workers Cron Sync         ✅ 완료 (5분 주기 API-Football → D1)
 Phase 17: 문서 체계 정리            ✅ 완료 (CLAUDE.md 슬림화 + docs/ 분리)
+Phase 18: 카드 데이터 Cron Sync      ✅ 완료 (fixture_cards → team_statistics)
+Phase 19: 시나리오 UX 개선           ✅ 완료 (FIFA 랭킹 표시 + 점수 수정 + localStorage)
 ```
 
 ## 다음 단계
 
 ### 우선순위 HIGH
 - [ ] ELO 기반 시나리오 가중치 정교화
-- [ ] 카드 데이터 자동 동기화 (Workers Cron에 카드 통계 추가)
+- [x] ~~카드 데이터 자동 동기화~~ → Phase 18 완료
 - [ ] 3위 확정 판정 정밀도 (동점 시 GD/GF 비교)
 
 ### 우선순위 MEDIUM
@@ -51,5 +53,5 @@ Phase 17: 문서 체계 정리            ✅ 완료 (CLAUDE.md 슬림화 + docs
 | 이슈 | 상태 |
 |------|------|
 | ELO 미반영 (시나리오 가중치) | ⚠️ 캐시만 구축 |
-| 카드 데이터 영속성 없음 | ⚠️ DB 저장 미구현 |
+| ~~카드 데이터 영속성 없음~~ | ✅ Workers Cron Sync로 해결 (Phase 18) |
 | DrawSimulator leagues/ 직접 import | ⚠️ props 전환 예정 |
