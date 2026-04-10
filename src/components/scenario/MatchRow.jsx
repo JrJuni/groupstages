@@ -9,6 +9,7 @@ function MatchRow({ match, standings, onScoreChange, highlightId }) {
   const { t, i18n } = useTranslation('scenario');
   const teamName = useTeamName();
   const locale = bcp47(i18n.language);
+  const [editing, setEditing] = React.useState(false);
   const homeTeam = standings.find((s) => s.id === match.home);
   const awayTeam = standings.find((s) => s.id === match.away);
   if (!homeTeam || !awayTeam) return null;
@@ -44,8 +45,12 @@ function MatchRow({ match, standings, onScoreChange, highlightId }) {
         </div>
 
         <div className="flex items-center gap-1.5 shrink-0">
-          {played ? (
-            <div className="flex items-center gap-1 bg-white/10 rounded px-3 py-1">
+          {played && !editing ? (
+            <div
+              className="flex items-center gap-1 bg-white/10 rounded px-3 py-1 cursor-pointer hover:bg-white/20 transition-colors"
+              onClick={() => setEditing(true)}
+              title={t('match.clickToEdit', '클릭하여 수정')}
+            >
               <span className="font-bold text-white text-base w-5 text-right">{match.homeScore}</span>
               <span className="text-fifa-muted text-xs">:</span>
               <span className="font-bold text-white text-base w-5 text-left">{match.awayScore}</span>
@@ -59,7 +64,9 @@ function MatchRow({ match, standings, onScoreChange, highlightId }) {
                 className="score-input"
                 value={match.homeScore ?? ''}
                 onChange={(e) => onScoreChange(match.id, 'homeScore', e.target.value)}
+                onBlur={() => { if (played) setEditing(false); }}
                 placeholder="-"
+                autoFocus={editing}
               />
               <span className="text-fifa-muted text-xs">:</span>
               <input
@@ -69,6 +76,7 @@ function MatchRow({ match, standings, onScoreChange, highlightId }) {
                 className="score-input"
                 value={match.awayScore ?? ''}
                 onChange={(e) => onScoreChange(match.id, 'awayScore', e.target.value)}
+                onBlur={() => { if (played) setTimeout(() => setEditing(false), 150); }}
                 placeholder="-"
               />
             </>

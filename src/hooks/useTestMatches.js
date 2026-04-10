@@ -1,27 +1,51 @@
 /**
- * useTestMatches — API 없이 순수 로컬 상태만 사용하는 테스트용 훅
- * DB 저장 없음 / 새로고침 시 초기화 / MOCK_RESULTS로 MD1+MD2 사전 입력
+ * useTestMatches — API 없이 로컬 상태 사용하는 테스트용 훅
+ * localStorage로 점수 영속화 / 새로고침 시 복구 / MOCK_RESULTS로 초기 데이터
  */
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { INITIAL_GROUPS } from '../leagues/worldcup2026/data.js';
 import { MOCK_RESULTS } from '../data/mockResults.js';
-import { createInitialStandings, createInitialMatches, calculateStandings } from '../utils/rankings.js';
+import { createInitialMatches, calculateStandings } from '../utils/rankings.js';
 
+const LS_KEY_TEST_SCORES = 'gs_testScores';
+
+/**
+ * localStorage에서 저장된 점수를 복구하여 groups 빌드
+ */
 function buildGroupsWithMockResults() {
+  // localStorage에서 사용자 입력 점수 복구
+  let savedScores = {};
+  try {
+    const raw = localStorage.getItem(LS_KEY_TEST_SCORES);
+    if (raw) savedScores = JSON.parse(raw);
+  } catch (_) { /* ignore */ }
+
   const groups = {};
 
   Object.entries(INITIAL_GROUPS).forEach(([key, { teams }]) => {
     const rawMatches = createInitialMatches(teams);
 
     const matches = rawMatches.map((m) => {
-      const result = MOCK_RESULTS[m.id];
-      if (!result) return m;
-      return {
-        ...m,
-        homeScore: String(result.home),
-        awayScore: String(result.away),
-        played: true,
-      };
+      // 우선순위: localStorage > MOCK_RESULTS > 빈값
+      const saved = savedScores[m.id];
+      if (saved) {
+        return {
+          ...m,
+          homeScore: saved.home,
+          awayScore: saved.away,
+          played: saved.home !== '' && saved.away !== '',
+        };
+      }
+      const mock = MOCK_RESULTS[m.id];
+      if (mock) {
+        return {
+          ...m,
+          homeScore: String(mock.home),
+          awayScore: String(mock.away),
+          played: true,
+        };
+      }
+      return m;
     });
 
     groups[key] = {
@@ -34,8 +58,30 @@ function buildGroupsWithMockResults() {
   return groups;
 }
 
+/**
+ * 현재 groups에서 사용자가 입력/수정한 점수를 추출
+ */
+function extractScores(groups) {
+  const scores = {};
+  for (const [, { matches }] of Object.entries(groups)) {
+    for (const m of matches) {
+      if (m.homeScore !== null && m.homeScore !== undefined && m.homeScore !== '' ||
+          m.awayScore !== null && m.awayScore !== undefined && m.awayScore !== '') {
+        scores[m.id] = { home: m.homeScore ?? '', away: m.awayScore ?? '' };
+      }
+    }
+  }
+  return scores;
+}
+
 export function useTestMatches() {
   const [groups, setGroups] = useState(() => buildGroupsWithMockResults());
+
+  // groups 변경 시 점수를 localStorage에 저장
+  useEffect(() => {
+    const scores = extractScores(groups);
+    localStorage.setItem(LS_KEY_TEST_SCORES, JSON.stringify(scores));
+  }, [groups]);
 
   const handleScoreChange = useCallback((groupKey, matchId, field, value) => {
     setGroups((prev) => {
@@ -65,6 +111,7 @@ export function useTestMatches() {
   }, []);
 
   const resetAll = useCallback(() => {
+    localStorage.removeItem(LS_KEY_TEST_SCORES);
     setGroups(buildGroupsWithMockResults());
   }, []);
 
