@@ -4,6 +4,7 @@ import { ChevronRight } from 'lucide-react';
 import { getFairPlayPoints } from '../../utils/rankings.js';
 import { RANK_BG, TeamFlag, YellowCard, DoubleYellowCard, RedCard } from './shared.jsx';
 import { useTeamName } from '../../i18n/useTeamName.js';
+import { leagueConfig } from '../../leagues/worldcup2026/index.js';
 
 export default function GroupStandingsTable({ standings, highlightId, onTeamClick }) {
   const { t } = useTranslation('scenario');
@@ -45,7 +46,10 @@ export default function GroupStandingsTable({ standings, highlightId, onTeamClic
                     className={`flex items-center gap-1.5 text-left group hover:opacity-80 transition-opacity ${isHighlighted ? 'cursor-default' : 'cursor-pointer'}`}
                   >
                     <TeamFlag team={team} />
-                    <span className={`font-medium whitespace-nowrap ${isHighlighted ? 'text-sky-400' : 'text-white group-hover:text-sky-300'}`}>{teamName(team)}</span>
+                    <span className={`font-medium whitespace-nowrap ${isHighlighted ? 'text-sky-400' : 'text-white group-hover:text-sky-300'}`}>
+                      {teamName(team)}
+                      {leagueConfig.rankings[team.id] && <span className="text-[10px] text-fifa-muted font-normal ml-0.5">({leagueConfig.rankings[team.id]})</span>}
+                    </span>
                     {team.host && (
                       <span className="text-[9px] bg-fifa-gold/20 text-fifa-gold px-1 rounded">H</span>
                     )}
