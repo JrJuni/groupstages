@@ -1,0 +1,11 @@
+# Cloudflare Pages Headers
+# index.html은 항상 최신 버전 확인 (JS/CSS는 해시 파일명이라 캐시 안전)
+
+/index.html
+  Cache-Control: no-cache
+
+/wc2026/
+  Cache-Control: no-cache
+
+/wc2026
+  Cache-Control: no-cache
