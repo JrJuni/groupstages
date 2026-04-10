@@ -79,8 +79,8 @@ export const MOCK_RESULTS = {
   // ── Group I: FRA(0) SEN(1) NOR(2) IRQ(3) ────────
   FRA_vs_SEN:       { home: 1, away: 1 },   // draw — Senegal holds France!
   NOR_vs_IRQ:   { home: 2, away: 0 },   // NOR wins
-  SEN_vs_NOR:       { home: 1, away: 2 },   // UPSET: NOR beats SEN
   FRA_vs_IRQ:   { home: 4, away: 0 },   // FRA dominant
+  NOR_vs_SEN:       { home: 2, away: 1 },   // UPSET: NOR beats SEN
 
   // ── Group J: ARG(0) AUT(1) ALG(2) JOR(3) ────────────
   ARG_vs_ALG:       { home: 2, away: 0 },   // ARG wins

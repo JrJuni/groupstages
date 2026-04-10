@@ -320,10 +320,10 @@ export const MATCH_SCHEDULE = {
   // ── Group I (FRA · SEN · NOR · IRQ) ──────────────────────
   'FRA_vs_SEN':         { matchday: 1, date: '2026-06-16T19:00:00Z', venue: 'MetLife Stadium',         city: 'East Rutherford, NJ' },
   'NOR_vs_IRQ':     { matchday: 1, date: '2026-06-16T19:00:00Z', venue: 'Gillette Stadium',        city: 'Foxborough, MA' },
-  'SEN_vs_IRQ':     { matchday: 2, date: '2026-06-22T04:00:00Z', venue: 'BMO Field',               city: 'Toronto, CAN' },
-  'SEN_vs_NOR':         { matchday: 2, date: '2026-06-23T00:00:00Z', venue: 'Gillette Stadium',        city: 'Foxborough, MA' },
-  'FRA_vs_NOR':         { matchday: 3, date: '2026-06-26T19:00:00Z', venue: 'Lincoln Financial Field', city: 'Philadelphia, PA' },
-  'FRA_vs_IRQ':     { matchday: 3, date: '2026-06-27T23:00:00Z', venue: 'MetLife Stadium',         city: 'East Rutherford, NJ' },
+  'FRA_vs_IRQ':     { matchday: 2, date: '2026-06-22T21:00:00Z', venue: 'Lincoln Financial Field', city: 'Philadelphia, PA' },
+  'NOR_vs_SEN':         { matchday: 2, date: '2026-06-23T00:00:00Z', venue: 'MetLife Stadium',         city: 'East Rutherford, NJ' },
+  'NOR_vs_FRA':         { matchday: 3, date: '2026-06-26T19:00:00Z', venue: 'Gillette Stadium',        city: 'Foxborough, MA' },
+  'SEN_vs_IRQ':     { matchday: 3, date: '2026-06-26T19:00:00Z', venue: 'BMO Field',               city: 'Toronto, CAN' },
 
   // ── Group J (ARG · AUT · ALG · JOR) ──────────────────────────
   'ARG_vs_ALG':         { matchday: 1, date: '2026-06-16T22:00:00Z', venue: 'Arrowhead Stadium',       city: 'Kansas City, MO' },
