@@ -33,7 +33,10 @@ function TeamBall({ team, potKey, highlight = false, small = false }) {
       `}
     >
       {team.flagImg
-        ? <img src={`${BASE_URL}${team.flagImg}`} alt={tn} className={small ? 'w-5 h-3' : 'w-6 h-4'} style={{objectFit:'cover', borderRadius:'2px'}} />
+        ? <>
+            <img src={`${BASE_URL}${team.flagImg}`} alt={tn} className={small ? 'w-5 h-3' : 'w-6 h-4'} style={{objectFit:'cover', borderRadius:'2px'}} onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'inline'; }} />
+            <span style={{ display: 'none' }} className={small ? 'text-sm' : 'text-base'}>{team.flag}</span>
+          </>
         : <span className={small ? 'text-sm' : 'text-base'}>{team.flag}</span>}
       <span className={`font-medium ${highlight ? 'text-white' : 'text-fifa-text'}`}>{tn}</span>
       <span className={`text-xs px-1 rounded ${CONF_COLORS[team.confederation] || 'bg-gray-800 text-gray-400'}`}>
@@ -163,7 +166,10 @@ export default function DrawSimulator() {
       {/* Last Drawn */}
       {lastDrawn && (
         <div className="card p-3 flex items-center gap-3 border-fifa-gold/30 bg-yellow-900/10 animate-fade-in">
-          <span className="text-2xl">{lastDrawn.flag}</span>
+          {lastDrawn.flagImg
+          ? <img src={`${BASE_URL}${lastDrawn.flagImg}`} alt="" className="w-8 h-5" style={{objectFit:'cover', borderRadius:'2px'}} onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'inline'; }} />
+          : null}
+        <span className="text-2xl" style={lastDrawn.flagImg ? { display: 'none' } : {}}>{lastDrawn.flag}</span>
           <div>
             <p className="text-xs text-fifa-muted">{t('draw.lastDrawn')}</p>
             <p className="font-bold text-white">{teamName(lastDrawn)}</p>
@@ -196,7 +202,10 @@ export default function DrawSimulator() {
                     key={team.id}
                     className="flex items-center gap-1 text-xs text-fifa-muted"
                   >
-                    <span>{team.flag}</span>
+                    {team.flagImg
+                      ? <img src={`${BASE_URL}${team.flagImg}`} alt="" className="w-5 h-3" style={{objectFit:'cover', borderRadius:'2px'}} onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'inline'; }} />
+                      : null}
+                    <span style={team.flagImg ? { display: 'none' } : {}}>{team.flag}</span>
                     <span>{teamName(team)}</span>
                   </div>
                 ))}
@@ -224,8 +233,11 @@ export default function DrawSimulator() {
                     const potKey = Object.entries(POT_COLORS)[idx]?.[0] || 'pot4';
                     return (
                       <div key={team.id} className="flex items-center gap-1.5 text-xs">
-                        <span className="text-sm">{team.flag}</span>
-                        <span className="text-white font-medium flex-1">{team.name}</span>
+                        {team.flagImg
+                          ? <img src={`${BASE_URL}${team.flagImg}`} alt="" className="w-5 h-3" style={{objectFit:'cover', borderRadius:'2px'}} onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'inline'; }} />
+                          : null}
+                        <span className="text-sm" style={team.flagImg ? { display: 'none' } : {}}>{team.flag}</span>
+                        <span className="text-white font-medium flex-1">{teamName(team)}</span>
                         <span className={`text-xs px-1 rounded ${CONF_COLORS[team.confederation]}`}>
                           {team.confederation.slice(0, 3)}
                         </span>
