@@ -4,7 +4,12 @@
  */
 import { calculateStandings } from './rankings.js';
 
-// ── 3위팀 가능 승점 범위 계산 ─────────────────────────────────
+// ── 3위팀 가능 승점/GD 범위 계산 ─────────────────────────────
+// remaining ≤ 2 (마지막 매치데이): 마진 1~10 확장 (21^2=441 조합)
+// remaining > 2: W/D/L만 (3^N), GD는 ±Infinity
+// GD 범위가 ±GD_THRESHOLD를 넘으면 신뢰 불가 → ±Infinity 처리
+const GD_THRESHOLD = 4;
+
 export function computeThirdRange(teams, matches, standingsOptions) {
   const remaining = matches.filter((m) => !m.played);
   if (remaining.length === 0) {
@@ -14,9 +19,15 @@ export function computeThirdRange(teams, matches, standingsOptions) {
   }
   let minPts = Infinity, maxPts = -Infinity, minGD = Infinity, maxGD = -Infinity;
 
-  // 남은 경기 인덱스 → matches 배열 내 위치 사전 계산 (map 대신 직접 교체)
   const remIdx = remaining.map((rm) => matches.findIndex((m) => m.id === rm.id));
-  const OUTCOMES = [['1','0'],['0','0'],['0','1']];
+
+  // 마지막 매치데이: 마진 1~10 확장으로 실제 GD 상하한 계산
+  // 그 이전: W/D/L만 (마진 조합 폭발 방지)
+  const MAX_MARGIN = remaining.length <= 2 ? 10 : 1;
+  const OUTCOMES = [];
+  for (let m = 1; m <= MAX_MARGIN; m++) OUTCOMES.push([String(m), '0']);
+  OUTCOMES.push(['0', '0']);
+  for (let m = 1; m <= MAX_MARGIN; m++) OUTCOMES.push(['0', String(m)]);
 
   function iter(idx, ms) {
     if (idx === remaining.length) {
@@ -35,15 +46,17 @@ export function computeThirdRange(teams, matches, standingsOptions) {
       ms[mi] = { ...orig, homeScore: h, awayScore: a, played: true };
       iter(idx + 1, ms);
     }
-    ms[mi] = orig; // 복원 (배열 복사 회피)
+    ms[mi] = orig;
   }
 
-  iter(0, [...matches]); // 얕은 복사 1회
+  iter(0, [...matches]);
+
+  const gdReliable = remaining.length <= 2;
   return {
     min: minPts === Infinity ? 0 : minPts,
     max: maxPts === -Infinity ? 0 : maxPts,
-    minGD: minGD === Infinity ? 0 : minGD,
-    maxGD: maxGD === -Infinity ? 0 : maxGD,
+    minGD: (!gdReliable || minGD < -GD_THRESHOLD) ? -Infinity : (minGD === Infinity ? 0 : minGD),
+    maxGD: (!gdReliable || maxGD > GD_THRESHOLD) ? Infinity : (maxGD === -Infinity ? 0 : maxGD),
   };
 }
 
@@ -66,29 +79,37 @@ export function analyzeThirdPlaceCombinations(thirdPlaceTable, groups, options =
   }
 
   // 2. 확정 탈락: 최선의 경우에도 다른 8개 조 최악보다 확실히 못한 팀
-  //    (동점 시 타이브레이커 불확실 → 동점은 "확실히 못한"에 해당하지 않음)
+  //    GD가 ±Infinity인 조는 비교 자동 스킵 (-Inf > X → false)
   const eliminatedGroups = new Set();
   for (const g of groupKeys) {
     const selfBest = ranges[g].max;
     let definitelyAbove = 0;
     for (const other of groupKeys) {
       if (other === g) continue;
-      // other의 최악 승점이 self의 최선 승점보다 strictly 높을 때만 카운트
-      if (ranges[other].min > selfBest) definitelyAbove++;
+      if (ranges[other].min > selfBest) {
+        definitelyAbove++;
+      } else if (ranges[other].min === selfBest
+        && ranges[other].minGD > ranges[g].maxGD) {
+        definitelyAbove++;
+      }
     }
     if (definitelyAbove >= 8) eliminatedGroups.add(g);
   }
 
   // 3. 확정 진출: 최악의 경우에도 top 8 보장
-  //    (동점 시 타이브레이커로 뒤집힐 수 있으므로, 동점도 "위에 올 수 있음"으로 처리)
+  //    GD가 ±Infinity인 조는 보수적 처리 (Inf >= X → true)
   const qualifiedGroups = new Set();
   for (const g of groupKeys) {
     const selfWorst = ranges[g].min;
     let couldBeAbove = 0;
     for (const other of groupKeys) {
       if (other === g) continue;
-      // other의 최선 승점이 self의 최악 승점 이상이면 위에 올 가능성 있음
-      if (ranges[other].max >= selfWorst) couldBeAbove++;
+      if (ranges[other].max > selfWorst) {
+        couldBeAbove++;
+      } else if (ranges[other].max === selfWorst
+        && ranges[other].maxGD >= ranges[g].minGD) {
+        couldBeAbove++;
+      }
     }
     if (couldBeAbove < 8) qualifiedGroups.add(g);
   }
