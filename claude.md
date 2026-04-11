@@ -54,6 +54,7 @@ npx wrangler secret put SYNC_SECRET        # 수동 sync 인증용
 | 파일 | 설명 | 태그 |
 |------|------|------|
 | [architecture.md](docs/architecture.md) | Engine/League/Shim 구조, 데이터 흐름, 모듈 API | `#architecture` `#engine` `#data-flow` |
+| [deploy.md](docs/deploy.md) | Cloudflare Pages/Workers/D1 배포, 시크릿, 캐시 정책 | `#deploy` `#cloudflare` `#d1` |
 | [new-league-guide.md](docs/new-league-guide.md) | 새 리그 추가 가이드, LeagueConfig, API-Football | `#multi-league` `#api` `#schema` |
 | [lessons-learned.md](docs/lessons-learned.md) | 실패 케이스 & 교훈 (렌더링, API, i18n, 배포) | `#failure` `#workaround` `#lesson` |
 | [status.md](docs/status.md) | 로드맵 진행률, 다음 단계, 알려진 이슈 | `#status` `#roadmap` |
