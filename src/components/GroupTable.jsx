@@ -34,7 +34,6 @@ export default function GroupTable({ groupKey, standings, onGroupClick, onTeamCl
         <colgroup>
           <col style={{ width: '28px' }} />
           <col />
-          <col style={{ width: '34px' }} />
           <col style={{ width: '26px' }} />
           <col style={{ width: '26px' }} />
           <col style={{ width: '26px' }} />
@@ -47,7 +46,6 @@ export default function GroupTable({ groupKey, standings, onGroupClick, onTeamCl
           <tr className="text-fifa-muted text-xs border-b border-fifa-border">
             <th className="px-1 py-2 text-left">{t('groups.headers.rank')}</th>
             <th className="px-2 py-2 text-left">{t('groups.headers.team')}</th>
-            <th className="px-1 py-2 text-center whitespace-nowrap">{t('groups.headers.played')}</th>
             <th className="px-1 py-2 text-center">{t('groups.headers.won')}</th>
             <th className="px-1 py-2 text-center">{t('groups.headers.drawn')}</th>
             <th className="px-1 py-2 text-center">{t('groups.headers.lost')}</th>
@@ -68,18 +66,12 @@ export default function GroupTable({ groupKey, standings, onGroupClick, onTeamCl
               <td className="px-1 py-2 text-fifa-muted text-xs text-center">{idx + 1}</td>
               <td className="px-2 py-2 min-w-0">
                 <div className="flex items-center gap-1.5 min-w-0">
-                  {team.flagImg ? (
-                    <img src={`${BASE_URL}${team.flagImg}`} alt={teamName(team)} className="w-5 h-3.5 object-cover rounded-sm shrink-0"
-                      onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'inline'; }} />
-                  ) : null}
-                  <span className="text-sm shrink-0" style={team.flagImg ? { display: 'none' } : {}}>{team.flag}</span>
                   <span className="font-medium text-white text-xs truncate">{teamName(team)}</span>
                   {team.host && (
                     <span className="shrink-0 text-[10px] bg-fifa-gold/20 text-fifa-gold px-1 rounded">H</span>
                   )}
                 </div>
               </td>
-              <td className="px-1 py-2 text-center text-xs text-fifa-muted">{team.played}</td>
               <td className="px-1 py-2 text-center text-xs text-green-400">{team.won}</td>
               <td className="px-1 py-2 text-center text-xs">{team.drawn}</td>
               <td className="px-1 py-2 text-center text-xs text-red-400">{team.lost}</td>
