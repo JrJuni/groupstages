@@ -75,8 +75,32 @@ FIFA 타이브레이커 체인: 승점 → 득실차 → 다득점 → 헤드투
 - `getBestThirdPlace(allGroupStandings, count, options)` — count 파라미터화 (FIFA=8)
 
 ### 시나리오 엔진 (engine/scenarioComputer.js)
-포아송 λ=1.4 가중 브루트포스 (6,561 조합/그룹):
-- `runBruteForce(teamId, teams, matches, { advancementSlots, thirdMinPts, standingsOptions })`
+포아송 가중 브루트포스 (6,561 조합/그룹):
+- `runBruteForce(teamId, teams, matches, { advancementSlots, thirdMinPts, standingsOptions, matchPredictor })`
+- `matchPredictor` 미주입 시 baseline `GOAL_W` (λ=1.4 양쪽 동일)
+- 주입 시 매치별로 다른 81셀 PMF 그리드 → ELO/폼 차이 반영
+
+### 매치 예측 엔진 (engine/matchPredictor.js, Phase 24)
+ELO + 최근 폼 → Poisson λ 산출 (순수, data 의존 zero):
+- `predictMatchLambdas(home, away, cfg?)` → `{ lambdaHome, lambdaAway }`
+- `poissonWeights(lambda, max=8)` → 정규화된 PMF 배열
+- `buildPredictorFn(eloMap, formMap, cfg?)` → scenarioComputer가 호출하는 클로저
+- 공식: `λH = (BASE_TOTAL + ELO_supremacy + form_term) / 2`, `MIN/MAX_LAMBDA` clamp
+- HFA: 호스트 팀(MEX/USA/CAN)에 +0.30골 supremacy
+
+### usePredictor 훅 (src/hooks/usePredictor.js, Phase 24)
+- `/api/elo` + `/api/team-form` Promise.allSettled fetch → `buildPredictorFn` 빌드
+- 호스트 팀 ID는 `leagueConfig.groups[].teams[].host`에서 추출
+- `?predictor=off` URL flag → predictor null → baseline fallback
+- App.jsx + TestApp.jsx 둘 다 동일하게 호출, props로 ScenarioPage → TeamScenarioPanel 전달
+
+### Workers ELO + 폼 sync (workers/elo.js, workers/form.js, Phase 24 / 24.1)
+- `team_elo` (eloratings.net World.tsv 파싱) + `team_form` (API-Football last=10 집계) 테이블
+- **2개 분리된 cron** (Phase 24.1에서 분리, 50 subrequest 한도 회피):
+  - `0 */6 * * *` → `syncElo` (1 subrequest)
+  - `30 */6 * * *` → `syncForm` (48 subrequest, 48팀 × last=10)
+- Express dev (`server/services/eloService.js`, `teamFormService.js`)와 듀얼 코드 (axios↔fetch, fs↔D1)
+- ⚠️ **subrequest 추가 금지**: `syncForm`은 48/50으로 buffer 2. 어떤 형태의 fetch 추가도 위험. 자세한 가이드는 `docs/deploy.md` 참조.
 
 ### 조추첨 엔진 (engine/draw.js)
 - `createInitialDrawState(pots, { prePlacements, constraintChecker, ... })` — 사전 배정 적용

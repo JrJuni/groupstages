@@ -125,17 +125,53 @@ wrangler d1 execute groupstages --remote --command="SELECT COUNT(*) FROM match_r
 wrangler d1 execute groupstages --command="..."
 ```
 
-## API-Football Cron Sync
+## Workers Cron Sync (4종)
 
 `wrangler.toml`:
 ```toml
 [triggers]
-crons = ["*/5 * * * *"]
+crons = [
+  "*/5 * * * *",   # fixtures (5분, 1 subrequest)
+  "* * * * *",     # cards (1분, 경기 중에만 active)
+  "0 */6 * * *",   # ELO (6h, hh:00, 1 subrequest)
+  "30 */6 * * *",  # form (6h, hh:30 — 30분 offset, 48 subrequest)
+]
 ```
 
-- 5분마다 `workers/index.js`의 scheduled handler 호출
-- `workers/sync.js`가 API-Football에서 fixtures/cards 가져와 D1 batch UPDATE
-- 수동 트리거: `curl -H "Authorization: Bearer $SYNC_SECRET" https://.../api/sync/fixtures`
+- `workers/index.js`의 `scheduled(event, env, ctx)`가 `event.cron` 문자열 매칭으로 4-way 분기
+- `workers/sync.js` (fixtures/cards), `workers/elo.js` (ELO), `workers/form.js` (form)
+- 수동 트리거: `curl -X POST https://.../api/sync/{fixtures,elo,team-form} -H "X-Sync-Secret: $SS" -H "Origin: https://groupstages.com"`
+  - **Origin 헤더 spoof 필수** — `workers/index.js:64-71` CORS 체크가 server-to-server 요청을 차단함 (개선 예정 과제, status.md 참조)
+
+### ⚠️ Workers 무료 티어 50 subrequest/invocation 한도 — 절대 지키기
+
+Cloudflare Workers 무료 티어는 **단일 invocation 당 외부 fetch 50건 제한**. 초과 시 invocation 통째로 실패.
+
+**현재 cron별 사용량**:
+
+| Cron | 핸들러 | subrequest |
+|---|---|---:|
+| `*/5 * * * *` | `syncFixturesToD1` | 1 |
+| `* * * * *` | `syncCardEvents` | 가변 (경기 중만) |
+| `0 */6 * * *` | `syncElo` | 1 (eloratings.net) |
+| `30 */6 * * *` | `syncForm` | **48** (API-Football per team) |
+
+`syncForm` 단독으로 48/50 → **버퍼 2**. 매우 brittle.
+
+**Phase 24.1에서 ELO/form을 분리한 이유** — 통합 cron(`syncEloAndForm`)이 49/50으로 buffer 1이었음. 1건만 추가돼도 한도 초과 → 전체 cron 실패. 현재는 분리되어 ELO가 1/50, form이 48/50.
+
+**Workers cron 핸들러에 코드 추가 시 반드시 체크할 것**:
+1. **외부 fetch 추가 금지** — `syncForm`에 retry 로직, 에러 webhook(Sentry/Discord), pagination, 추가 API 호출 등을 절대 추가하지 말 것. 현재 48/50이라 1건 추가도 위험.
+2. **D1/KV/R2 binding은 subrequest 아님** — `env.DB.prepare(...).run()` 등은 카운트 안 됨. SQL 추가는 안전.
+3. **새 cron 작업은 별도 cron으로 분리** — 기존 cron 핸들러에 fetch를 끼워넣지 말고, 새 cron 항목을 wrangler.toml에 추가 + scheduled() 분기를 새로 추가할 것.
+4. **수동 sync endpoint도 동일** — `/api/sync/team-form` POST 핸들러도 같은 함수를 호출하므로 동일 한도 적용.
+
+**Mitigation 옵션 (현재 시점에서는 미적용)**:
+- **Paid plan** ($5/월) → 1000 subrequest/invocation. 가장 깔끔하지만 비용 발생.
+- **Form stale-only 갱신** — D1에서 `updated_at < now() - 24h` 인 팀만 fetch. 평소엔 < 50, 본선 중 풀 갱신 시 위험.
+- **Form 추가 분할** — 48팀을 24+24로 쪼개 두 cron(예: `30 */12`, `45 */12`)으로 분리. 코드 복잡도 증가.
+
+**결정 기록**: 2026-04-12 시점 — 무료 티어 유지. 추후 paid plan 결정 전까지 위 4가지 규칙 엄수.
 
 ## 비용
 

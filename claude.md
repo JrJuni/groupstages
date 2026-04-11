@@ -33,6 +33,7 @@ npx wrangler deploy
 - `team.name` 직접 렌더링 금지 → `useTeamName()` 훅 사용
 - App.jsx와 TestApp.jsx 계산 로직 중복 금지 → 동일 함수(utils/) 사용
 - MATCH_SCHEDULE/결과 데이터 키를 엔진 ID와 대조 없이 교체 금지 → 양방향 lookup 또는 키 정규화 필수 (출처: lessons-learned.md#match-schedule-키-방향-불일치)
+- Workers cron 핸들러에 외부 fetch 추가 금지 (syncForm 현재 48/50 buffer 2) → 새 작업은 별도 cron으로 분리, D1 binding은 안전 (출처: docs/deploy.md#workers-무료-티어-50-subrequest-한도)
 - CLAUDE.md 80줄 초과 금지 → docs/로 분리
 
 ## Workers Secrets

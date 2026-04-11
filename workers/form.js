@@ -82,6 +82,15 @@ async function fetchTeamLastN(env, apiTeamId, n) {
 
 /**
  * 메인 form sync 오케스트레이터 — cron + 수동 트리거 양쪽에서 호출
+ *
+ * ⚠️ SUBREQUEST BUDGET: 이 함수는 현재 48 fetch (48팀 × 1콜) 사용 중.
+ * Workers 무료 티어 한도는 invocation 당 50건. **buffer 2건만 남음.**
+ * - retry 로직 추가 금지
+ * - 에러 webhook(Sentry/Discord) 추가 금지
+ * - pagination 추가 금지
+ * - 새 외부 fetch 추가 시 반드시 stale-only filter 또는 cron 추가 분리 필요
+ * 자세한 가이드: docs/deploy.md "Workers 무료 티어 50 subrequest 한도" 섹션
+ *
  * @returns {{ success, mapped, skipped, duration_ms, api_remaining?, error? }}
  */
 export async function syncForm(env) {

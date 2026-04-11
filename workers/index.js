@@ -6,31 +6,22 @@ import { syncFixturesToD1, syncCardEvents } from './sync.js';
 import { syncElo } from './elo.js';
 import { syncForm } from './form.js';
 
-/**
- * ELO + form 통합 cron 핸들러 — Promise.allSettled로 부분 실패 격리
- * (한쪽이 실패해도 나머지는 진행 → 예측 엔진이 ELO만으로도 동작)
- */
-async function syncEloAndForm(env) {
-  const results = await Promise.allSettled([syncElo(env), syncForm(env)]);
-  return {
-    elo: results[0].status === 'fulfilled'
-      ? results[0].value
-      : { success: false, error: results[0].reason?.message },
-    form: results[1].status === 'fulfilled'
-      ? results[1].value
-      : { success: false, error: results[1].reason?.message },
-  };
-}
-
 export default {
-  // Cron Triggers — fixtures(5분) + cards(1분, 경기 중만 활성) + elo/form(6h)
+  // Cron Triggers
+  // - fixtures (5분): 1 subrequest
+  // - cards (1분, 경기 중만 활성): 가변
+  // - ELO (6시간, hh:00): 1 subrequest (eloratings.net World.tsv)
+  // - form (6시간, hh:30 — 30분 offset): 48 subrequest (API-Football per team)
+  // ELO/form은 무료 티어 50 subrequest/invocation 한도 회피를 위해 분리됨
   async scheduled(event, env, ctx) {
     if (event.cron === '*/5 * * * *') {
       ctx.waitUntil(syncFixturesToD1(env));
     } else if (event.cron === '* * * * *') {
       ctx.waitUntil(syncCardEvents(env));
     } else if (event.cron === '0 */6 * * *') {
-      ctx.waitUntil(syncEloAndForm(env));
+      ctx.waitUntil(syncElo(env));
+    } else if (event.cron === '30 */6 * * *') {
+      ctx.waitUntil(syncForm(env));
     }
   },
 

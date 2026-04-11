@@ -16,11 +16,13 @@ WORLD_CUP_LEAGUE_ID = "1"
 WORLD_CUP_SEASON = "2026"
 
 # Cron Triggers
-# - "*/5 * * * *"  → fixtures sync (5분 간격)
+# - "*/5 * * * *"  → fixtures sync (5분 간격, 1 subrequest)
 # - "* * * * *"    → card events sync (1분 간격, 경기 중에만 active)
-# - "0 */6 * * *"  → ELO + form sync (6시간 간격, 일 4회)
+# - "0 */6 * * *"  → ELO sync (6시간, hh:00, 1 subrequest)
+# - "30 */6 * * *" → form sync (6시간, hh:30 — 30분 offset, 48 subrequest)
+# ELO/form 분리 이유: 무료 티어 50 subrequest/invocation 한도 (49/50 buffer 위험 → 각자 단독 invocation으로 분리)
 [triggers]
-crons = ["*/5 * * * *", "* * * * *", "0 */6 * * *"]
+crons = ["*/5 * * * *", "* * * * *", "0 */6 * * *", "30 */6 * * *"]
 
 # Secrets (Cloudflare Dashboard에서 설정)
 # wrangler secret put API_FOOTBALL_KEY

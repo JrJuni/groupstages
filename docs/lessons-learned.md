@@ -125,6 +125,24 @@
 - **해결**: `git rm -r dist-deploy/` + `.gitignore`에 `dist-deploy/`, `attached_assets/` 추가
 - **교훈**: 빌드/배포 중간 산출물 폴더는 **이름 변형까지 고려해 .gitignore에 방어적으로 등록**. `dist`, `dist-*`, `build`, `out` 등 변형 패턴을 주기적으로 감사할 것
 
+### Workers 무료 티어 50 subrequest 한도 — 통합 cron 위험 (Phase 24 → 24.1)
+- **시도**: `syncEloAndForm` 한 cron 핸들러에서 ELO(1) + form(48) = 49 subrequest를 `Promise.allSettled`로 병렬 실행
+- **문제**: 49/50으로 한도에 거의 닿음. retry/webhook/pagination 같은 fetch 1건만 추가돼도 50 초과 → 전체 invocation 실패. 무료 티어는 invocation 단위로 카운트되므로 단일 핸들러에서 분산 불가
+- **해결**: ELO(`0 */6`)와 form(`30 */6`, 30분 offset) cron을 분리. 각 cron이 독립 invocation이라 한도가 리셋됨. ELO 1/50, form 48/50
+- **교훈**: Workers 무료 티어에서 cron 핸들러를 설계할 때 **한 핸들러에 fetch 40건 이상 모이면 분리 검토**. 단일 핸들러에 추가 fetch(retry, 에러 보고, pagination)를 무심코 끼워넣으면 cron 자체가 죽음. 분리한 cron은 같은 시간대 충돌이 나도 Workers가 동시 실행을 허용하므로 30분 offset만 줘도 충분. 가이드는 `docs/deploy.md` "Workers 무료 티어 50 subrequest/invocation 한도" 섹션 참조
+
+### Workers CORS Origin 체크가 server-to-server 트리거를 차단 (Phase 24 배포)
+- **시도**: `curl -X POST .../api/sync/elo -H "X-Sync-Secret: $SS"` 로 첫 sync 트리거
+- **문제**: `{"error":"Forbidden"}` (403) — 인증 메시지("Unauthorized")도 아니고 401도 아님. `workers/index.js:64-71`에서 모든 POST에 대해 `Origin` 헤더가 `allowedOrigins`에 있어야 통과하는 체크가 X-Sync-Secret 검사보다 먼저 위치. curl은 기본적으로 Origin 헤더 미전송 → 빈 문자열 → 차단
+- **해결**: 트리거 명령에 `-H "Origin: https://groupstages.com"` 추가하여 spoof
+- **교훈**: 브라우저 CORS 보호와 server-to-server 인증은 분리된 관심사. **`X-Sync-Secret` 같은 server-to-server 인증 헤더가 있으면 CORS Origin 체크를 우회하는 분기를 추가**해야 cron/CI/스크립트 트리거가 항상 가능. 향후 PR에서 개선 예정 (status.md 신규 과제 등록됨)
+
+### Windows PowerShell 멀티라인 명령 붙여넣기 함정 (Phase 24 배포 디버깅)
+- **시도**: bash 스타일 멀티라인 curl 명령(`curl ... \\` 또는 `curl ... -H ...` 두 줄)을 PowerShell 콘솔에 붙여넣기
+- **문제**: PowerShell이 자동 줄 이음을 안 해주고 각 줄을 별도 명령으로 해석 → 두 번째 줄의 `-H` 가 standalone command로 인식되어 `CommandNotFoundException`. 또한 `curl`이 PowerShell에서는 `Invoke-WebRequest` alias라 bash curl 옵션이 안 통함 → `curl.exe` 명시 필요
+- **해결**: 트리거 절차를 `.ps1` 스크립트 파일로 작성하여 사용자가 한 줄 명령으로 호출 (`.\_trigger-sync.ps1 -Secret "..."`)
+- **교훈**: Windows 사용자에게 멀티라인 bash 명령을 안내하지 말 것. **즉석 트리거 절차도 .ps1/.cmd 스크립트 파일로 제공**하면 줄바꿈 이슈 + curl alias 이슈를 동시에 회피. 또한 `wrangler secret put`은 positional arg 미지원 — 반드시 interactive stdin (`npx wrangler secret put NAME` → 프롬프트에 값 입력)
+
 ---
 
 ## UI / UX
