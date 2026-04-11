@@ -6,9 +6,19 @@ import { runBruteForce as _runBruteForce } from '../engine/scenarioComputer.js';
 
 export const THIRD_PLACE_MIN_PTS = 4;
 
-export function runBruteForce(teamId, teams, matches, thirdMinPts = THIRD_PLACE_MIN_PTS) {
+/**
+ * @param {string} teamId
+ * @param {Array}  teams
+ * @param {Array}  matches
+ * @param {Object} [options]
+ * @param {number} [options.thirdMinPts=4]
+ * @param {Function|null} [options.predictor]  - usePredictor 훅이 만든 matchPredictor 클로저. null이면 baseline.
+ */
+export function runBruteForce(teamId, teams, matches, options = {}) {
+  const { thirdMinPts = THIRD_PLACE_MIN_PTS, predictor = null } = options;
   return _runBruteForce(teamId, teams, matches, {
     advancementSlots: 2,
     thirdMinPts,
+    matchPredictor: predictor,
   });
 }

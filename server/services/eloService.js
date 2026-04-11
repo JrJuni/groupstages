@@ -21,8 +21,10 @@
  */
 
 import fs from 'fs/promises';
+import https from 'https';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { createStaleRefresher } from './_staleRefresh.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const CACHE_PATH = path.join(__dirname, '../../cache/elo_worldcup_2026.json');
@@ -189,3 +191,40 @@ export async function saveEloFromTsv(tsvText) {
   console.log(`[ELO] 저장 완료: ${Object.keys(data).length}팀 매핑, ${unmapped.length}팀 미매핑`);
   return payload;
 }
+
+/**
+ * eloratings.net/World.tsv fetch (Node 내장 https)
+ * — UA 헤더 필수, 10s 타임아웃
+ */
+export function fetchEloTsv() {
+  return new Promise((resolve, reject) => {
+    const req = https.get(
+      'https://eloratings.net/World.tsv',
+      { headers: { 'User-Agent': 'Mozilla/5.0 (GroupStages/1.0)' } },
+      (res) => {
+        if (res.statusCode !== 200) {
+          return reject(new Error(`eloratings.net HTTP ${res.statusCode}`));
+        }
+        let body = '';
+        res.on('data', (chunk) => { body += chunk; });
+        res.on('end', () => resolve(body));
+      }
+    );
+    req.on('error', reject);
+    req.setTimeout(10000, () => { req.destroy(); reject(new Error('eloratings.net 타임아웃')); });
+  });
+}
+
+/**
+ * ELO 갱신 한 번에 (fetch + parse + save)
+ */
+export async function refreshElo() {
+  const tsv = await fetchEloTsv();
+  return saveEloFromTsv(tsv);
+}
+
+/**
+ * stale 캐시 자동 갱신 (Phase 3.5)
+ * 호출 측: refreshIfStale({ maxAgeHours: 24, refreshFn: refreshElo })
+ */
+export const refreshIfStale = createStaleRefresher(getCacheStatus, 'ELO');

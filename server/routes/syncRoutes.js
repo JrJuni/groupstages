@@ -1,8 +1,7 @@
 import express from 'express';
 import apiFootballService from '../services/apiFootballService.js';
 import cacheService from '../services/cacheService.js';
-import { getCacheStatus, getEloCached, saveEloFromTsv } from '../services/eloService.js';
-import https from 'https';
+import { getCacheStatus, getEloCached, saveEloFromTsv, fetchEloTsv } from '../services/eloService.js';
 
 export function createSyncRoutes(pool) {
   const router = express.Router();
@@ -226,41 +225,10 @@ export function createSyncRoutes(pool) {
 
   /**
    * POST /api/sync/elo
-   * api-football에서 ELO를 가져와 cache/elo_worldcup_2026.json에 저장
-   *
-   * Query params:
-   *   ?force=true  → 하루 4회 제한 무시하고 강제 fetch
-   *
-   * 응답:
-   *   { success, source: "api"|"cache", todayFetchCount, mapped, unmapped, fetchedAt }
-   */
-  /**
-   * eloratings.net/World.tsv 를 fetch 하는 헬퍼 (Node 내장 https 모듈 사용)
-   */
-  function fetchEloTsv() {
-    return new Promise((resolve, reject) => {
-      const req = https.get(
-        'https://eloratings.net/World.tsv',
-        { headers: { 'User-Agent': 'Mozilla/5.0 (GroupStages/1.0)' } },
-        (res) => {
-          if (res.statusCode !== 200) {
-            return reject(new Error(`eloratings.net HTTP ${res.statusCode}`));
-          }
-          let body = '';
-          res.on('data', chunk => { body += chunk; });
-          res.on('end', () => resolve(body));
-        }
-      );
-      req.on('error', reject);
-      req.setTimeout(10000, () => { req.destroy(); reject(new Error('eloratings.net 타임아웃')); });
-    });
-  }
-
-  /**
-   * POST /api/sync/elo
    * eloratings.net/World.tsv 에서 ELO를 가져와 cache/elo_worldcup_2026.json 에 저장
    *
    * Query: ?force=true → 하루 10회 제한 무시하고 강제 fetch
+   * fetchEloTsv 는 eloService.js 에서 import (Phase 3.5: 단일 소스로 통합)
    */
   router.post('/elo', async (req, res) => {
     const force = req.query.force === 'true';

@@ -35,7 +35,7 @@ function computeTeamScenarios(team, standings, matches) {
   return { remaining, maxPts, rank, totalPlayed, allGroupPlayed, isGuaranteedTop2, isEliminated };
 }
 
-export default function TeamScenarioPanel({ team, standings, matches, teams, groupKey, groups, allGroupStandings, thirdAnalysis }) {
+export default function TeamScenarioPanel({ team, standings, matches, teams, groupKey, groups, allGroupStandings, thirdAnalysis, predictor }) {
   const { t } = useTranslation('scenario');
   const { t: tShare } = useTranslation('share');
   const teamName = useTeamName();
@@ -46,9 +46,9 @@ export default function TeamScenarioPanel({ team, standings, matches, teams, gro
 
   const bruteForce = React.useMemo(() => {
     if (!scenarioActive || remaining.length === 0) return null;
-    return runBruteForce(team.id, teams, matches);
+    return runBruteForce(team.id, teams, matches, { predictor });
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [scenarioActive, team.id, JSON.stringify(matches)]);
+  }, [scenarioActive, team.id, JSON.stringify(matches), predictor]);
 
   const rankLabel = t(`panel.rankLabels.${Math.min(rank, 4)}`);
   const rankColor = rank <= 2 ? 'text-green-400' : rank === 3 ? 'text-yellow-400' : 'text-red-400';

@@ -2,7 +2,18 @@ import express from 'express';
 import pg from 'pg';
 import cors from 'cors';
 import { createSyncRoutes } from './routes/syncRoutes.js';
-import { getEloCached, getCacheStatus } from './services/eloService.js';
+import {
+  getEloCached,
+  getCacheStatus,
+  refreshElo,
+  refreshIfStale as refreshEloIfStale,
+} from './services/eloService.js';
+import {
+  getCacheStatus as getFormCacheStatus,
+  refreshAll as refreshAllForm,
+  refreshIfStale as refreshFormIfStale,
+} from './services/teamFormService.js';
+import apiFootballService from './services/apiFootballService.js';
 
 const { Pool } = pg;
 
@@ -18,9 +29,30 @@ app.use(express.json());
 // API-Football 동기화 라우트
 app.use('/api/sync', createSyncRoutes(pool));
 
+// ── Phase 3.5: 캐시 자동 갱신 closures ─────────────────────
+// pool / apiFootballService 를 캡처한 단일 refreshFn — GET handler / POST handler / startup hook 에서 공유
+async function refreshFormFromDb() {
+  const { rows: mappings } = await pool.query(
+    'SELECT api_team_id, our_team_id FROM team_mapping'
+  );
+  const teamMapping = {};
+  mappings.forEach((m) => { teamMapping[m.our_team_id] = m.api_team_id; });
+  return refreshAllForm({
+    teamMapping,
+    fetchLastN: (apiTeamId, n) => apiFootballService.getLastNFixtures(apiTeamId, n),
+  });
+}
+
+// stale 임계값 (24h) — Phase 5 (Workers cron 6시간 간격) 전까지 dev 갭 메우기
+const STALE_MAX_HOURS = 24;
+
 // GET /api/elo - ELO 캐시 데이터 반환 (API 호출 없음, 캐시 파일만 읽음)
+// Phase 3.5: stale 캐시는 백그라운드 자동 갱신 트리거 후 stale 즉시 반환
 // 응답: { data: { "KOR": { elo, apiTeamId, teamName }, ... }, fetchedAt, expired, ageHours }
 app.get('/api/elo', async (req, res) => {
+  // 백그라운드 stale 갱신 (응답 블로킹 X)
+  refreshEloIfStale({ maxAgeHours: STALE_MAX_HOURS, refreshFn: refreshElo }).catch(() => {});
+
   try {
     const status = await getCacheStatus();
     if (!status.cache) {
@@ -37,6 +69,71 @@ app.get('/api/elo', async (req, res) => {
       todayFetchCount: status.todayCount,
     });
   } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// GET /api/team-form - 폼 캐시 데이터 반환 (API 호출 없음, 캐시 파일만 읽음)
+// Phase 3.5: stale 캐시는 백그라운드 자동 갱신 트리거 후 stale 즉시 반환
+// 응답: { data: { TEAM_ID: { n, gfPerGame, gaPerGame, lastUpdated } }, fetchedAt, ageHours }
+app.get('/api/team-form', async (req, res) => {
+  // 백그라운드 stale 갱신 (응답 블로킹 X)
+  refreshFormIfStale({ maxAgeHours: STALE_MAX_HOURS, refreshFn: refreshFormFromDb }).catch(() => {});
+
+  try {
+    const status = await getFormCacheStatus();
+    if (!status.cache) {
+      return res.status(404).json({
+        success: false,
+        error: '폼 캐시 없음. POST /api/team-form/refresh 로 먼저 fetch 하세요.',
+      });
+    }
+    res.json({
+      success: true,
+      data: status.cache.data,
+      fetchedAt: status.cache.fetchedAt,
+      ageHours: status.ageSeconds != null ? +(status.ageSeconds / 3600).toFixed(1) : null,
+      todayFetchCount: status.todayCount,
+      lastN: status.cache.lastN ?? null,
+      skipped: status.cache.skipped ?? [],
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// POST /api/team-form/refresh - team_mapping 기반 48팀 폼 새로고침
+// Query: ?force=true → 일일 10회 제한 우회
+app.post('/api/team-form/refresh', async (req, res) => {
+  const force = req.query.force === 'true';
+
+  try {
+    const status = await getFormCacheStatus();
+    if (!force && !status.canFetchToday) {
+      return res.json({
+        success: true,
+        source: 'cache',
+        reason: `오늘 최대 refresh 횟수(10회) 초과 (${status.todayCount}회 완료)`,
+        todayFetchCount: status.todayCount,
+        fetchedAt: status.cache?.fetchedAt ?? null,
+        teams: Object.keys(status.cache?.data ?? {}).length,
+      });
+    }
+
+    // 단일 소스 (refreshFormFromDb) 사용 — Phase 3.5 DRY 통합
+    const saved = await refreshFormFromDb();
+
+    res.json({
+      success: true,
+      source: 'api-football',
+      todayFetchCount: saved.todayFetchCount,
+      fetchedAt: saved.fetchedAt,
+      teams: Object.keys(saved.data).length,
+      skipped: saved.skipped.length,
+      skippedDetails: saved.skipped.slice(0, 20),
+    });
+  } catch (error) {
+    console.error('[Form] refresh 실패:', error.message);
     res.status(500).json({ success: false, error: error.message });
   }
 });
@@ -177,4 +274,9 @@ app.get('/api/third-place', async (req, res) => {
 const PORT = process.env.API_PORT || 3001;
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`API server running on port ${PORT}`);
+
+  // Phase 3.5: 시작 시 stale 캐시 즉시 1회 갱신 (fire-and-forget)
+  // 캐시 없거나 24h 초과면 백그라운드 fetch — 첫 요청자가 stale 데이터를 받지 않도록 미리 갱신
+  refreshEloIfStale({ maxAgeHours: STALE_MAX_HOURS, refreshFn: refreshElo }).catch(() => {});
+  refreshFormIfStale({ maxAgeHours: STALE_MAX_HOURS, refreshFn: refreshFormFromDb }).catch(() => {});
 });

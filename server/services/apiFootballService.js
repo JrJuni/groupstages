@@ -242,7 +242,34 @@ class ApiFootballService {
   }
 
   /**
-   * 8. Rate Limit 체크
+   * 8. 특정 팀의 최근 N경기 fixture 가져오기 (폼 집계용)
+   * @param {number} apiTeamId
+   * @param {number} [n=10]
+   * @returns {Promise<Array>} fixture 배열 (FT만 필터링은 호출 측에서)
+   */
+  async getLastNFixtures(apiTeamId, n = 10) {
+    const cacheKey = `team_last_${apiTeamId}_${n}`;
+
+    // 캐시 확인 (6시간 TTL — 폼은 변동성 낮음)
+    const cached = await cacheService.get(cacheKey, 6 * 60 * 60);
+    if (cached) {
+      console.log(`[API-Football] 캐시에서 팀 ${apiTeamId} 최근 ${n}경기 로드`);
+      return cached;
+    }
+
+    console.log(`[API-Football] 팀 ${apiTeamId} 최근 ${n}경기 조회 중...`);
+    const data = await this._request('/fixtures', {
+      team: apiTeamId,
+      last: n,
+    });
+
+    const fixtures = data?.response ?? [];
+    await cacheService.set(cacheKey, fixtures);
+    return fixtures;
+  }
+
+  /**
+   * 9. Rate Limit 체크
    */
   async checkRateLimit() {
     try {

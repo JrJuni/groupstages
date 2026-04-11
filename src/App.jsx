@@ -5,6 +5,7 @@ import { getBest8ThirdPlace, getFairPlayPoints } from './utils/rankings.js';
 import { analyzeThirdPlaceCombinations, computeThirdRange } from './utils/knockout.js';
 import { leagueConfig } from './leagues/worldcup2026/index.js';
 import { useMatches } from './hooks/useMatches.js';
+import { usePredictor } from './hooks/usePredictor.js';
 import { useLocalStorage, LS_KEYS } from './hooks/useLocalStorage.js';
 import GroupTable from './components/GroupTable.jsx';
 import ThirdPlaceTable from './components/ThirdPlaceTable.jsx';
@@ -108,6 +109,7 @@ export default function App() {
     [t]
   );
   const { groups, loading, apiAvailable, handleScoreChange, handleCardChange, resetAll } = useMatches(leagueConfig);
+  const { predictor } = usePredictor(leagueConfig);
   const [activeTab, setActiveTab] = useLocalStorage(LS_KEYS.ACTIVE_TAB, 'groups');
   const [menuOpen, setMenuOpen] = useState(false);
   const [resetting, setResetting] = useState(false);
@@ -361,6 +363,7 @@ export default function App() {
                 onScoreChange={handleScoreChange}
                 allGroupStandings={allGroupStandings}
                 thirdAnalysis={thirdAnalysis}
+                predictor={predictor}
               />
             )}
 

@@ -10,7 +10,7 @@ import { MatchList } from './scenario/MatchRow.jsx';
 import TeamScenarioPanel from './scenario/TeamScenarioPanel.jsx';
 import { useTeamName } from '../i18n/useTeamName.js';
 
-export default function ScenarioPage({ selectedGroupKey, onSelectGroup, selectedTeamId, onSelectTeam, fromNavigation, groups, onScoreChange, allGroupStandings, thirdAnalysis }) {
+export default function ScenarioPage({ selectedGroupKey, onSelectGroup, selectedTeamId, onSelectTeam, fromNavigation, groups, onScoreChange, allGroupStandings, thirdAnalysis, predictor }) {
   const { t } = useTranslation('scenario');
   const { t: tShare } = useTranslation('share');
   const teamName = useTeamName();
@@ -182,6 +182,7 @@ export default function ScenarioPage({ selectedGroupKey, onSelectGroup, selected
               groups={groups}
               allGroupStandings={allGroupStandings}
               thirdAnalysis={thirdAnalysis}
+              predictor={predictor}
             />
           )}
 
