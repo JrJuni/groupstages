@@ -4,22 +4,35 @@
  */
 import { calculateStandings } from './rankings.js';
 
-// 포아송 분포 λ=1.4 근사 골 확률 가중치 (0~8골)
+// 포아송 분포 λ=1.4 근사 골 확률 가중치 (0~8골) — predictor 미주입 시 fallback
 const GOAL_W = [0.25, 0.35, 0.24, 0.10, 0.04, 0.005, 0.005, 0.005, 0.005];
 
-// 0~8 스코어 조합 사전 분류: [homeGoals, awayGoals, weight]
-const PAIRS = { W: [], D: [], L: [] };
-for (let h = 0; h <= 8; h++) {
-  for (let a = 0; a <= 8; a++) {
-    const outcome = h > a ? 'W' : h < a ? 'L' : 'D';
-    PAIRS[outcome].push([h, a, GOAL_W[h] * GOAL_W[a]]);
+/**
+ * home/away 골 확률 배열로부터 [h, a, w] 페어를 W/D/L로 분류
+ * predictor 콜백이 매치별로 다른 PMF를 줄 때 사용
+ */
+function buildPairsFromWeights(homeW, awayW) {
+  const out = { W: [], D: [], L: [] };
+  for (let h = 0; h < homeW.length; h++) {
+    for (let a = 0; a < awayW.length; a++) {
+      const outcome = h > a ? 'W' : h < a ? 'L' : 'D';
+      out[outcome].push([h, a, homeW[h] * awayW[a]]);
+    }
   }
+  return out;
 }
 
-function teamScorePairs(teamWDL, teamIsHome) {
-  if (teamWDL === 'D') return PAIRS.D;
-  if (teamIsHome) return PAIRS[teamWDL];
-  return teamWDL === 'W' ? PAIRS.L : PAIRS.W;
+// baseline 페어 (predictor 미주입 시 모든 매치에 사용)
+const DEFAULT_PAIRS = buildPairsFromWeights(GOAL_W, GOAL_W);
+
+/**
+ * 분석 대상 팀 관점의 결과(W/D/L)에 해당하는 페어 추출
+ * — 페어는 fixture home/away 좌표이므로, 팀이 away면 W/L를 뒤집는다
+ */
+function pickTeamPairs(pairs, teamWDL, teamIsHome) {
+  if (teamWDL === 'D') return pairs.D;
+  if (teamIsHome) return pairs[teamWDL];
+  return teamWDL === 'W' ? pairs.L : pairs.W;
 }
 
 /**
@@ -31,6 +44,11 @@ function teamScorePairs(teamWDL, teamIsHome) {
  * @param {number} [options.advancementSlots=2]  - 직접 진출 슬롯 수
  * @param {number|null} [options.thirdMinPts=4]  - 3위 진출 커트라인 (null이면 3위 진출 없음)
  * @param {Object} [options.standingsOptions]    - calculateStandings에 전달할 options
+ * @param {((homeId: string, awayId: string) => {
+ *   homeWeights: number[], awayWeights: number[]
+ * } | null)} [options.matchPredictor]
+ *   매치별 골수 PMF를 반환하는 콜백. 미주입/특정 매치 null 반환 시 baseline GOAL_W로 fallback.
+ *   주입되면 매치별로 다른 81셀 페어 그리드가 사용되어 시나리오 확률에 ELO/폼 차이가 반영됨.
  * @returns {object|null}
  */
 export function runBruteForce(teamId, teams, matches, options = {}) {
@@ -38,6 +56,7 @@ export function runBruteForce(teamId, teams, matches, options = {}) {
     advancementSlots = 2,
     thirdMinPts = 4,
     standingsOptions = {},
+    matchPredictor = null,
   } = options;
 
   const remaining = matches.filter(m => !m.played);
@@ -48,6 +67,22 @@ export function runBruteForce(teamId, teams, matches, options = {}) {
 
   const otherMatch = remaining.find(m => m.id !== teamMatch.id) ?? null;
   const teamIsHome = teamMatch.home === teamId;
+
+  // 매치별 페어 그리드 — predictor 주입 시 ELO/폼 기반, 아니면 baseline GOAL_W
+  let teamMatchPairs = DEFAULT_PAIRS;
+  let otherMatchPairs = DEFAULT_PAIRS;
+  if (matchPredictor) {
+    const teamPred = matchPredictor(teamMatch.home, teamMatch.away);
+    if (teamPred) {
+      teamMatchPairs = buildPairsFromWeights(teamPred.homeWeights, teamPred.awayWeights);
+    }
+    if (otherMatch) {
+      const otherPred = matchPredictor(otherMatch.home, otherMatch.away);
+      if (otherPred) {
+        otherMatchPairs = buildPairsFromWeights(otherPred.homeWeights, otherPred.awayWeights);
+      }
+    }
+  }
 
   const currentStandings = calculateStandings(teams, matches, standingsOptions);
 
@@ -63,10 +98,10 @@ export function runBruteForce(teamId, teams, matches, options = {}) {
   let mostLikelyScenario = null;
 
   for (const teamWDL of ['W', 'D', 'L']) {
-    const tPairs = teamScorePairs(teamWDL, teamIsHome);
+    const tPairs = pickTeamPairs(teamMatchPairs, teamWDL, teamIsHome);
 
     for (const otherWDL of ['W', 'D', 'L']) {
-      const oPairs = otherMatch ? PAIRS[otherWDL] : [[0, 0, 1]];
+      const oPairs = otherMatch ? otherMatchPairs[otherWDL] : [[0, 0, 1]];
       const weightedRankCounts = {};
       for (let r = 1; r <= maxRank; r++) weightedRankCounts[r] = 0;
       let cellWeight = 0;
