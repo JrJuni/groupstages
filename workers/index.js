@@ -3,14 +3,34 @@
  * PostgreSQL Express API를 D1 (SQLite)로 마이그레이션
  */
 import { syncFixturesToD1, syncCardEvents } from './sync.js';
+import { syncElo } from './elo.js';
+import { syncForm } from './form.js';
+
+/**
+ * ELO + form 통합 cron 핸들러 — Promise.allSettled로 부분 실패 격리
+ * (한쪽이 실패해도 나머지는 진행 → 예측 엔진이 ELO만으로도 동작)
+ */
+async function syncEloAndForm(env) {
+  const results = await Promise.allSettled([syncElo(env), syncForm(env)]);
+  return {
+    elo: results[0].status === 'fulfilled'
+      ? results[0].value
+      : { success: false, error: results[0].reason?.message },
+    form: results[1].status === 'fulfilled'
+      ? results[1].value
+      : { success: false, error: results[1].reason?.message },
+  };
+}
 
 export default {
-  // Cron Triggers — fixtures(5분) + cards(1분, 경기 중만 활성)
+  // Cron Triggers — fixtures(5분) + cards(1분, 경기 중만 활성) + elo/form(6h)
   async scheduled(event, env, ctx) {
     if (event.cron === '*/5 * * * *') {
       ctx.waitUntil(syncFixturesToD1(env));
     } else if (event.cron === '* * * * *') {
       ctx.waitUntil(syncCardEvents(env));
+    } else if (event.cron === '0 */6 * * *') {
+      ctx.waitUntil(syncEloAndForm(env));
     }
   },
 
@@ -157,6 +177,96 @@ export default {
           'SELECT * FROM api_sync_log ORDER BY synced_at DESC LIMIT 10'
         ).all();
         return Response.json(results, { headers: corsHeaders });
+      }
+
+      // GET /api/elo — D1 team_elo 읽기 (Express와 동일 shape)
+      if (path === '/api/elo' && method === 'GET') {
+        const { results } = await env.DB.prepare(
+          'SELECT team_id, elo, elo_code, elo_rank, updated_at FROM team_elo'
+        ).all();
+
+        if (!results || results.length === 0) {
+          return Response.json(
+            { success: false, error: 'ELO 캐시 비어있음. POST /api/sync/elo 트리거 필요' },
+            { status: 404, headers: corsHeaders }
+          );
+        }
+
+        // Express 응답 shape: { data: { TEAM_ID: { elo, eloCode, rank } }, fetchedAt }
+        const data = {};
+        let latestUpdate = null;
+        for (const row of results) {
+          data[row.team_id] = {
+            elo: row.elo,
+            eloCode: row.elo_code,
+            rank: row.elo_rank,
+          };
+          if (!latestUpdate || row.updated_at > latestUpdate) latestUpdate = row.updated_at;
+        }
+
+        return Response.json(
+          { success: true, data, fetchedAt: latestUpdate },
+          { headers: corsHeaders }
+        );
+      }
+
+      // GET /api/team-form — D1 team_form 읽기 (Express와 동일 shape)
+      if (path === '/api/team-form' && method === 'GET') {
+        const { results } = await env.DB.prepare(
+          'SELECT team_id, matches_n, gf_per_game, ga_per_game, last_n, updated_at FROM team_form'
+        ).all();
+
+        if (!results || results.length === 0) {
+          return Response.json(
+            { success: false, error: '폼 캐시 비어있음. POST /api/sync/team-form 트리거 필요' },
+            { status: 404, headers: corsHeaders }
+          );
+        }
+
+        // Express 응답 shape: { data: { TEAM_ID: { n, gfPerGame, gaPerGame } }, fetchedAt, lastN }
+        const data = {};
+        let latestUpdate = null;
+        let lastN = null;
+        for (const row of results) {
+          data[row.team_id] = {
+            n: row.matches_n,
+            gfPerGame: row.gf_per_game,
+            gaPerGame: row.ga_per_game,
+          };
+          if (!latestUpdate || row.updated_at > latestUpdate) latestUpdate = row.updated_at;
+          if (lastN == null) lastN = row.last_n;
+        }
+
+        return Response.json(
+          { success: true, data, fetchedAt: latestUpdate, lastN },
+          { headers: corsHeaders }
+        );
+      }
+
+      // POST /api/sync/elo — 수동 ELO 동기화 트리거
+      if (path === '/api/sync/elo' && method === 'POST') {
+        const secret = request.headers.get('X-Sync-Secret');
+        if (!env.SYNC_SECRET || secret !== env.SYNC_SECRET) {
+          return Response.json(
+            { error: 'Unauthorized' },
+            { status: 401, headers: corsHeaders }
+          );
+        }
+        const result = await syncElo(env);
+        return Response.json(result, { headers: corsHeaders });
+      }
+
+      // POST /api/sync/team-form — 수동 폼 동기화 트리거
+      if (path === '/api/sync/team-form' && method === 'POST') {
+        const secret = request.headers.get('X-Sync-Secret');
+        if (!env.SYNC_SECRET || secret !== env.SYNC_SECRET) {
+          return Response.json(
+            { error: 'Unauthorized' },
+            { status: 401, headers: corsHeaders }
+          );
+        }
+        const result = await syncForm(env);
+        return Response.json(result, { headers: corsHeaders });
       }
 
       // 404 Not Found

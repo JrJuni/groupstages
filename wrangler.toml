@@ -15,9 +15,12 @@ database_id = "13ee6163-ca10-40cf-8df2-b770146d80f3"
 WORLD_CUP_LEAGUE_ID = "1"
 WORLD_CUP_SEASON = "2026"
 
-# Cron Trigger — 매 5분마다 API-Football 동기화
+# Cron Triggers
+# - "*/5 * * * *"  → fixtures sync (5분 간격)
+# - "* * * * *"    → card events sync (1분 간격, 경기 중에만 active)
+# - "0 */6 * * *"  → ELO + form sync (6시간 간격, 일 4회)
 [triggers]
-crons = ["*/5 * * * *", "* * * * *"]
+crons = ["*/5 * * * *", "* * * * *", "0 */6 * * *"]
 
 # Secrets (Cloudflare Dashboard에서 설정)
 # wrangler secret put API_FOOTBALL_KEY

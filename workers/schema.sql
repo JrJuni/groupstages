@@ -62,3 +62,22 @@ CREATE TABLE IF NOT EXISTS api_sync_log (
   sync_duration_ms INTEGER,
   synced_at        TEXT DEFAULT (datetime('now'))
 );
+
+-- ELO 캐시 (eloratings.net 기반, 일 4회 cron 갱신)
+CREATE TABLE IF NOT EXISTS team_elo (
+  team_id    TEXT PRIMARY KEY,
+  elo        INTEGER NOT NULL,
+  elo_code   TEXT,                          -- eloratings.net 코드 (ES/AR/...)
+  elo_rank   INTEGER,
+  updated_at TEXT DEFAULT (datetime('now'))
+);
+
+-- 폼 캐시 (API-Football last=10 집계, 일 4회 cron 갱신)
+CREATE TABLE IF NOT EXISTS team_form (
+  team_id      TEXT PRIMARY KEY,
+  matches_n    INTEGER NOT NULL,            -- 집계 경기 수 (sparse 시 < last_n)
+  gf_per_game  REAL NOT NULL,
+  ga_per_game  REAL NOT NULL,
+  last_n       INTEGER NOT NULL,            -- 요청한 윈도우 (보통 10)
+  updated_at   TEXT DEFAULT (datetime('now'))
+);
