@@ -42,8 +42,8 @@ npx wrangler secret put SYNC_SECRET        # 수동 sync 인증용
 ```
 
 ## Known Issues
-- Workers에 ELO sync 미포팅 (fixtures sync는 완료)
-- 시나리오 가중치에 ELO 미반영
+- ~~Workers에 ELO sync 미포팅~~ → Phase 5 (`workers/elo.js` + `workers/form.js`, `0 */6 * * *` cron)
+- ~~시나리오 가중치에 ELO 미반영~~ → Phase 1~5 (`matchPredictor.js` + `usePredictor` 훅)
 - ~~카드 데이터 영속성~~ → Workers Cron Sync로 해결
 - DrawSimulator가 leagues/ 직접 import (props 패턴으로 전환 예정)
 - App.jsx UI 문자열 일부 FIFA 하드코딩
