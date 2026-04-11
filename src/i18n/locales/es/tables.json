@@ -46,8 +46,7 @@
     "loadingLocal": "Cargando datos...",
     "status": {
       "qualified": "Clasificado",
-      "eliminated": "Eliminado",
-      "likely": "Probable"
+      "eliminated": "Eliminado"
     },
     "legend": {
       "qualified": "Clasificación a dieciseisavos (8 mejores)",

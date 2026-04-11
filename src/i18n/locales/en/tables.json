@@ -46,8 +46,7 @@
     "loadingLocal": "Loading data...",
     "status": {
       "qualified": "Qualified",
-      "eliminated": "Eliminated",
-      "likely": "Likely"
+      "eliminated": "Eliminated"
     },
     "legend": {
       "qualified": "Round of 32 qualification (top 8)",

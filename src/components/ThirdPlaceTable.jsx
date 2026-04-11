@@ -46,7 +46,7 @@ export default function ThirdPlaceTable({ best8, allThirds, loading = false, api
               <th className="px-2 py-2 text-center text-emerald-400" title={t('thirds.headerTooltips.ptsMax')}>{t('thirds.headers.ptsMax')}</th>
               <th className="px-2 py-2 text-center text-red-400" title={t('thirds.headerTooltips.ptsMin')}>{t('thirds.headers.ptsMin')}</th>
               <th className="px-2 py-2 text-center" title={t('thirds.headerTooltips.fifa')}>{t('thirds.headers.fifa')}</th>
-              <th className="px-2 py-2 text-center">{t('thirds.headers.status')}</th>
+              <th className="px-2 py-2 text-center whitespace-nowrap min-w-[88px]">{t('thirds.headers.status')}</th>
               <th className="px-2 py-2 text-left">{t('thirds.headers.nextMatch')}</th>
             </tr>
           </thead>
@@ -116,18 +116,14 @@ export default function ThirdPlaceTable({ best8, allThirds, loading = false, api
                     <td className="px-2 py-2 text-center text-fifa-muted text-xs">
                       {team.fifaRank ?? '—'}
                     </td>
-                    <td className="px-2 py-2 text-center">
+                    <td className="px-2 py-2 text-center whitespace-nowrap">
                       {isQualifiedConfirmed ? (
-                        <span className="text-xs bg-green-900/50 text-green-300 px-2 py-0.5 rounded-full font-bold border border-green-700/50">
+                        <span className="text-xs bg-green-900/50 text-green-300 px-2 py-0.5 rounded-full font-bold border border-green-700/50 whitespace-nowrap">
                           {t('thirds.status.qualified')}
                         </span>
                       ) : isEliminated ? (
-                        <span className="text-xs bg-red-900/50 text-red-300 px-2 py-0.5 rounded-full font-bold border border-red-700/50">
+                        <span className="text-xs bg-red-900/50 text-red-300 px-2 py-0.5 rounded-full font-bold border border-red-700/50 whitespace-nowrap">
                           {t('thirds.status.eliminated')}
-                        </span>
-                      ) : isQualified ? (
-                        <span className="text-xs bg-sky-900/40 text-sky-300 px-2 py-0.5 rounded-full">
-                          {t('thirds.status.likely')}
                         </span>
                       ) : null}
                     </td>

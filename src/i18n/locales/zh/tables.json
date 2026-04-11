@@ -46,8 +46,7 @@
     "loadingLocal": "正在加载数据...",
     "status": {
       "qualified": "确定晋级",
-      "eliminated": "确定淘汰",
-      "likely": "极可能晋级"
+      "eliminated": "确定淘汰"
     },
     "legend": {
       "qualified": "晋级32强(前8名)",

@@ -46,8 +46,7 @@
     "loadingLocal": "데이터 로딩 중...",
     "status": {
       "qualified": "진출 확정",
-      "eliminated": "탈락 확정",
-      "likely": "진출 유력"
+      "eliminated": "탈락 확정"
     },
     "legend": {
       "qualified": "16강 진출 (상위 8팀)",
