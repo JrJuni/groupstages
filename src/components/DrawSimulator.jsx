@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Play, RotateCcw, ChevronRight, Shuffle } from 'lucide-react';
 import { DRAW_POTS, CONFEDERATIONS } from '../leagues/worldcup2026/data.js';
-import { createInitialDrawState, drawOneTeam, runFullDraw, generateDrawSteps } from '../utils/draw.js';
+import { createInitialDrawState, runFullDraw, generateDrawSteps } from '../utils/draw.js';
 import { BASE_URL } from '../config.js';
 import { useTeamName } from '../i18n/useTeamName.js';
 

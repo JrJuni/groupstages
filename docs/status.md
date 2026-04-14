@@ -1,25 +1,6 @@
 # 프로젝트 로드맵 & 상태
 
-> **마지막 업데이트**: 2026-04-12 (Phase 24 ELO 예측 엔진 prod 배포 완료)
-
-## ⏳ 사용자 펜딩 확인 (2026-04-13 아침)
-
-Phase 24.1 cron 분리 후 첫 자동 발화 검증. 사용자가 컴퓨터 재시작 전 다음 명령으로 직접 확인 예정:
-
-```bash
-curl -s "https://groupstages-api.behomely0409.workers.dev/api/sync/status" | grep -oE '"sync_type":"(elo|form)"[^}]*"synced_at":"[^"]*"'
-```
-
-**기대 결과**:
-- `sync_type":"elo"` 1건 — 2026-04-11 18:00 UTC (= 2026-04-12 03:00 KST) `0 */6 * * *` cron 발화
-- `sync_type":"form"` 1건 — 2026-04-11 18:30 UTC (= 2026-04-12 03:30 KST) `30 */6 * * *` cron 발화 (**Phase 24.1 신규 cron의 첫 발화**)
-
-**위험 시나리오 별 후속**:
-- 둘 다 미발화 → `workers/index.js` `scheduled()` 디스패처 매칭 로직 재점검 필요 (이전 통합 cron도 발화 안 됐던 의문 재발)
-- ELO만 발화 / form만 미발화 → `30 */6` cron 매칭 분기 점검
-- 발화는 됐는데 status="error" → eloratings.net UA 차단 또는 API-Football 응답 이슈
-
-확인 결과는 다음 세션에서 사용자가 알려줄 예정. 정상이면 이 섹션 삭제.
+> **마지막 업데이트**: 2026-04-14 (Phase 24.1 cron 분리 첫 발화 검증 완료)
 
 ## 로드맵 진행률
 

@@ -4,10 +4,8 @@
  */
 import {
   createInitialDrawState as _createInitialDrawState,
-  drawOneTeam,
   runFullDraw as _runFullDraw,
   generateDrawSteps as _generateDrawSteps,
-  getEligibleGroups,
 } from '../engine/draw.js';
 import {
   HOST_PRE_PLACEMENTS,
@@ -77,8 +75,3 @@ export function generateDrawSteps(pots) {
   return _generateDrawSteps(pots, FIFA_DRAW_OPTIONS);
 }
 
-export function checkConstraints(group, team, state) {
-  return fifaConstraintChecker(group, team, state);
-}
-
-export { drawOneTeam, getEligibleGroups };
