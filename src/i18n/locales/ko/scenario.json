@@ -113,7 +113,7 @@
     "vs": "vs",
     "noCandidates": "후보 없음",
     "slot": {
-      "direct": "{{group}}조 {{rank}}위",
+      "direct": "{{group}}조 {{rank}}",
       "third": "{{groups}} 3위"
     },
     "rankLabels": {
