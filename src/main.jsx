@@ -5,6 +5,7 @@ import './i18n';
 import LocaleGate from './i18n/LocaleGate.jsx';
 import LocaleRedirect from './i18n/LocaleRedirect.jsx';
 import LegacyWc2026Redirect from './i18n/LegacyWc2026Redirect.jsx';
+import CookieConsent from './components/CookieConsent.jsx';
 import './index.css';
 
 const LandingPage = lazy(() => import('./landing/LandingPage.jsx'));
@@ -48,6 +49,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Route path="*" element={<LocaleRedirect />} />
         </Routes>
       </Suspense>
+      <CookieConsent />
     </BrowserRouter>
   </React.StrictMode>
 );

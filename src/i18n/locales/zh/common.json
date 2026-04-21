@@ -64,5 +64,20 @@
     "middleBanner": "中部横幅 728×90",
     "sideBanner": "侧边栏 160×600",
     "bottomBanner": "底部横幅 728×90"
+  },
+  "cookie": {
+    "title": "Cookie 使用说明",
+    "description": "GroupStages 使用 localStorage 提供网站基本功能。分析和广告 Cookie 仅在您同意时启用。",
+    "accept": "全部接受",
+    "reject": "仅必要",
+    "learnMore": "了解更多",
+    "resetTitle": "重置 Cookie 同意",
+    "resetDescription": "您可以随时重置 Cookie 偏好设置。",
+    "resetButton": "重置同意",
+    "currentStatus": {
+      "granted": "当前: 已接受全部",
+      "denied": "当前: 仅必要 Cookie",
+      "pending": "当前: 尚未选择"
+    }
   }
 }

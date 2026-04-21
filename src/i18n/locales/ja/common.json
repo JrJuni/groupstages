@@ -64,5 +64,20 @@
     "middleBanner": "中央バナー 728×90",
     "sideBanner": "サイド 160×600",
     "bottomBanner": "下部バナー 728×90"
+  },
+  "cookie": {
+    "title": "Cookie使用について",
+    "description": "GroupStagesはサイトの基本機能のためにlocalStorageを使用します。分析・広告Cookieはお客様の同意がある場合のみ有効になります。",
+    "accept": "すべて許可",
+    "reject": "必須のみ",
+    "learnMore": "詳細を見る",
+    "resetTitle": "Cookie同意をリセット",
+    "resetDescription": "いつでもCookieの設定を変更できます。",
+    "resetButton": "同意をリセット",
+    "currentStatus": {
+      "granted": "現在: すべて許可済み",
+      "denied": "現在: 必須のみ",
+      "pending": "現在: 未選択"
+    }
   }
 }

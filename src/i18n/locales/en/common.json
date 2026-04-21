@@ -64,5 +64,20 @@
     "middleBanner": "Middle banner 728×90",
     "sideBanner": "Side 160×600",
     "bottomBanner": "Bottom banner 728×90"
+  },
+  "cookie": {
+    "title": "Cookie notice",
+    "description": "GroupStages uses localStorage for core site functionality. Analytics and advertising cookies are enabled only with your consent.",
+    "accept": "Accept all",
+    "reject": "Essential only",
+    "learnMore": "Learn more",
+    "resetTitle": "Reset cookie consent",
+    "resetDescription": "You can reset your cookie preferences at any time.",
+    "resetButton": "Reset consent",
+    "currentStatus": {
+      "granted": "Current: all cookies accepted",
+      "denied": "Current: essential cookies only",
+      "pending": "Current: no choice made yet"
+    }
   }
 }
