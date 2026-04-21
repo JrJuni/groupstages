@@ -1,0 +1,63 @@
+{
+  "meta": {
+    "title": "GroupStages — 2026 World Cup Group Stage Scenario Calculator",
+    "description": "Explore every group-stage scenario for the 2026 FIFA World Cup: live standings for 48 teams across 12 groups, third-place ranking, draw simulator, and match win probability predictions."
+  },
+  "header": {
+    "openApp": "Open app"
+  },
+  "hero": {
+    "badge": "2026 FIFA World Cup",
+    "title": "Every group-stage scenario, at a glance",
+    "subtitle": "Live standings, third-place ranking, and match predictions for all 48 teams across 12 groups — updated as results come in.",
+    "cta": "Get started"
+  },
+  "features": {
+    "title": "What's included",
+    "subtitle": "From the group stage to the knockout rounds, every analysis tool you need.",
+    "items": {
+      "standings": {
+        "title": "Group-stage standings",
+        "desc": "Live standings for all 12 groups with points, goal difference, and goals scored — computed using the official FIFA tiebreaker order."
+      },
+      "thirdPlace": {
+        "title": "Third-place ranking",
+        "desc": "Eight of the twelve third-place teams advance to the Round of 32. We classify each team as qualified, in contention, or eliminated based on remaining fixtures."
+      },
+      "drawSim": {
+        "title": "Knockout draw simulator",
+        "desc": "Simulate the official FIFA knockout draw with pot composition and same-confederation constraints to preview possible bracket paths."
+      },
+      "predictor": {
+        "title": "Win probability engine",
+        "desc": "A Poisson model combining eloratings.net ELO and each team's last 10 matches of form produces win / draw / loss probabilities for every fixture."
+      }
+    }
+  },
+  "howItWorks": {
+    "title": "How it works",
+    "subtitle": "How are group-stage scenarios computed?",
+    "step1": {
+      "title": "1. Collect match results",
+      "desc": "Scores, cards, and injury data sync from API-Football every five minutes. Completed matches are treated as final; in-progress matches reflect the live score."
+    },
+    "step2": {
+      "title": "2. Simulate remaining fixtures",
+      "desc": "For each unfinished match we enumerate all 9×9 = 81 plausible scorelines (0:0 through 4:4) weighted by a Poisson distribution, then brute-force 6,561 outcome combinations per group."
+    },
+    "step3": {
+      "title": "3. Rank and classify",
+      "desc": "The official FIFA tiebreakers (points → goal difference → goals scored → head-to-head → fair-play → FIFA ranking) are applied in order to determine qualified, in-contention, and eliminated status."
+    }
+  },
+  "footer": {
+    "copyright": "© {{year}} GroupStages",
+    "links": {
+      "privacy": "Privacy Policy",
+      "terms": "Terms of Service",
+      "about": "About",
+      "contact": "Contact"
+    },
+    "disclaimer": "GroupStages is an unofficial project and is not affiliated with FIFA or the World Cup organizing committee. Match data is sourced from public providers including API-Football and eloratings.net."
+  }
+}

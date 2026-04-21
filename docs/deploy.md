@@ -10,10 +10,10 @@ Cloudflare Pages (프론트엔드) + Workers (API) + D1 (DB) 풀스택 구조.
 [Cloudflare CDN (엣지)]
    ↓
 ┌──────────────────────────────────────┐
-│ groupstages.com/wc2026/              │
+│ groupstages.com/                     │
 │ Cloudflare Pages                     │
 │  - Vite 빌드 결과 (dist/)            │
-│  - React SPA                         │
+│  - React SPA (랜딩 / 앱 /:lang/wc2026) │
 └──────────────────────────────────────┘
    ↓ /api/*
 ┌──────────────────────────────────────┐
@@ -32,7 +32,7 @@ Cloudflare Pages (프론트엔드) + Workers (API) + D1 (DB) 풀스택 구조.
 └──────────────────────────────────────┘
 ```
 
-- **Pages URL**: https://groupstages.com/wc2026/
+- **Pages URL**: https://groupstages.com/ (랜딩) / https://groupstages.com/:lang/wc2026 (메인 앱)
 - **Workers API**: https://groupstages-api.behomely0409.workers.dev
 - **라우팅**: `public/_routes.json`이 `/api/*`를 제외한 모든 요청을 Pages로 보냄
 - Git push ≠ 자동배포 (수동 wrangler 배포)
@@ -99,7 +99,7 @@ npx wrangler secret put SYNC_SECRET        # 수동 sync 인증용
 
 ## Vite 빌드 설정
 
-- **base path**: `/wc2026/` (vite.config.js)
+- **base path**: `/` (vite.config.js) — Phase 0에서 `/wc2026/`에서 이전. 구 URL은 `LegacyWc2026Redirect`가 `/:lang/wc2026`로 SPA 내부 redirect.
 - **output**: `dist/`
 - **경고 0건 기대** — 경고 있으면 배포 전 수정
 
@@ -109,7 +109,7 @@ npx wrangler secret put SYNC_SECRET        # 수동 sync 인증용
 ```
 /index.html
   Cache-Control: no-cache
-/wc2026/
+/
   Cache-Control: no-cache
 ```
 

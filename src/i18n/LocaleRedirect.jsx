@@ -3,8 +3,9 @@ import { Navigate, useLocation } from 'react-router-dom';
 import { SUPPORTED_LANGS, FALLBACK_LANG } from './index.js';
 
 /**
- * 언어 코드 없는 경로(`/`, `/wctest` 등) 진입 시
- * 브라우저 언어를 감지하여 /{detected}/... 로 redirect
+ * 언어 코드 없는 경로 진입 시 브라우저 언어 감지 후 /{detected}/... 로 redirect.
+ * 이미 첫 세그먼트가 유효 언어인 경우(= 존재하지 않는 페이지) 무한 루프를 막기 위해
+ * 해당 언어 홈으로 보냄.
  */
 function detectBrowserLang() {
   if (typeof navigator === 'undefined') return FALLBACK_LANG;
@@ -19,9 +20,14 @@ function detectBrowserLang() {
 
 export default function LocaleRedirect() {
   const location = useLocation();
+  const segments = location.pathname.split('/').filter(Boolean);
+
+  if (segments.length > 0 && SUPPORTED_LANGS.includes(segments[0])) {
+    return <Navigate to={`/${segments[0]}${location.search}${location.hash}`} replace />;
+  }
+
   const lang = detectBrowserLang();
-  // 현재 경로 앞에 lang 추가
-  const cleanPath = location.pathname.startsWith('/') ? location.pathname.slice(1) : location.pathname;
-  const target = `/${lang}/${cleanPath}${location.search}${location.hash}`;
+  const tail = segments.join('/');
+  const target = `/${lang}${tail ? '/' + tail : ''}${location.search}${location.hash}`;
   return <Navigate to={target} replace />;
 }

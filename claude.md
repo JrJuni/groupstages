@@ -16,7 +16,7 @@ npx wrangler pages deploy dist --project-name groupstages --branch main
 # Workers API
 npx wrangler deploy
 ```
-- **프로덕션**: https://groupstages.com/wc2026/
+- **프로덕션**: https://groupstages.com/ (랜딩 Phase 1) / https://groupstages.com/:lang/wc2026 (메인 앱)
 - **Workers API**: https://groupstages-api.behomely0409.workers.dev
 - Git push ≠ 자동배포 (수동 wrangler 배포)
 

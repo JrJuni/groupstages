@@ -1,7 +1,4 @@
-# Cloudflare Pages Redirects
-# Vite base: '/wc2026/' → dist 파일은 /assets/ 에 있으므로
-# /wc2026/* 요청을 /* 로 rewrite 해야 정적 파일이 서빙됨
+# Cloudflare Pages SPA fallback — 모든 경로를 index.html로 rewrite
+# React Router가 /wc2026 구 URL redirect를 포함한 모든 라우팅 처리
 
-/wc2026/ /index.html 200
-/wc2026/* /:splat 200
-/wc2026 /index.html 200
+/*  /index.html  200

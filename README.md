@@ -1,6 +1,6 @@
 # GroupStages - 2026 FIFA World Cup Calculator
 
-> Live: [groupstages.com/wc2026](https://groupstages.com/wc2026/)
+> Live: [groupstages.com](https://groupstages.com/)
 
 2026 FIFA 월드컵 조별리그 순위 계산기. 48팀 12개 조의 경우의 수를 포아송 가중 브루트포스로 분석하고, 실시간 경기 결과를 반영합니다.
 

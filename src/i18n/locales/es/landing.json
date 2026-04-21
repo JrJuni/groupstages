@@ -1,0 +1,63 @@
+{
+  "meta": {
+    "title": "GroupStages — Calculadora de escenarios de la fase de grupos del Mundial 2026",
+    "description": "Explora todos los escenarios posibles de la fase de grupos del Mundial 2026: clasificaciones en vivo de 48 equipos en 12 grupos, ranking de terceros, simulador del sorteo y probabilidades de victoria."
+  },
+  "header": {
+    "openApp": "Abrir app"
+  },
+  "hero": {
+    "badge": "Mundial FIFA 2026",
+    "title": "Todos los escenarios de la fase de grupos, de un vistazo",
+    "subtitle": "Clasificaciones en vivo, ranking de terceros y predicciones de partidos para los 48 equipos en 12 grupos, actualizadas a medida que llegan los resultados.",
+    "cta": "Empezar"
+  },
+  "features": {
+    "title": "Qué incluye",
+    "subtitle": "De la fase de grupos a la eliminatoria, todas las herramientas de análisis que necesitas.",
+    "items": {
+      "standings": {
+        "title": "Clasificación por grupos",
+        "desc": "Clasificaciones en vivo de los 12 grupos con puntos, diferencia de goles y goles a favor, calculadas con el orden oficial de desempate de la FIFA."
+      },
+      "thirdPlace": {
+        "title": "Ranking de terceros",
+        "desc": "Ocho de los doce terceros avanzan a la ronda de 32. Clasificamos a cada equipo como clasificado, en disputa o eliminado según los partidos restantes."
+      },
+      "drawSim": {
+        "title": "Simulador del sorteo",
+        "desc": "Simula el sorteo oficial de eliminatorias con la composición de bombos y las restricciones de misma confederación para anticipar los posibles caminos del cuadro."
+      },
+      "predictor": {
+        "title": "Motor de probabilidad",
+        "desc": "Un modelo de Poisson que combina el ELO de eloratings.net con la forma de los últimos 10 partidos genera probabilidades de victoria / empate / derrota para cada encuentro."
+      }
+    }
+  },
+  "howItWorks": {
+    "title": "Cómo funciona",
+    "subtitle": "¿Cómo se calculan los escenarios de grupos?",
+    "step1": {
+      "title": "1. Recoger resultados",
+      "desc": "Los marcadores, tarjetas y lesiones se sincronizan desde API-Football cada cinco minutos. Los partidos finalizados se tratan como definitivos; los que están en juego reflejan el marcador en vivo."
+    },
+    "step2": {
+      "title": "2. Simular partidos restantes",
+      "desc": "Para cada partido pendiente enumeramos los 9×9 = 81 marcadores plausibles (0:0 a 4:4) ponderados por una distribución de Poisson, y luego calculamos por fuerza bruta las 6.561 combinaciones por grupo."
+    },
+    "step3": {
+      "title": "3. Clasificar y categorizar",
+      "desc": "Los desempates oficiales de la FIFA (puntos → diferencia de goles → goles a favor → enfrentamientos directos → fair-play → ranking FIFA) se aplican en orden para determinar el estado de clasificado, en disputa o eliminado."
+    }
+  },
+  "footer": {
+    "copyright": "© {{year}} GroupStages",
+    "links": {
+      "privacy": "Política de privacidad",
+      "terms": "Términos de uso",
+      "about": "Acerca de",
+      "contact": "Contacto"
+    },
+    "disclaimer": "GroupStages es un proyecto no oficial y no está afiliado a la FIFA ni al comité organizador del Mundial. Los datos de los partidos provienen de fuentes públicas como API-Football y eloratings.net."
+  }
+}

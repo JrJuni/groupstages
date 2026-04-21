@@ -1,25 +1,43 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import App from './App.jsx';
-import TestApp from './TestApp.jsx';
 import './i18n';
 import LocaleGate from './i18n/LocaleGate.jsx';
 import LocaleRedirect from './i18n/LocaleRedirect.jsx';
+import LegacyWc2026Redirect from './i18n/LegacyWc2026Redirect.jsx';
 import './index.css';
+
+const LandingPage = lazy(() => import('./landing/LandingPage.jsx'));
+const App = lazy(() => import('./App.jsx'));
+const TestApp = lazy(() => import('./TestApp.jsx'));
+
+function RouteFallback() {
+  return (
+    <div className="min-h-screen bg-fifa-dark flex items-center justify-center text-fifa-muted text-sm">
+      Loading…
+    </div>
+  );
+}
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <BrowserRouter basename="/wc2026">
-      <Routes>
-        {/* 언어 코드가 있는 경로 */}
-        <Route path="/:lang" element={<LocaleGate><App /></LocaleGate>} />
-        <Route path="/:lang/wctest" element={<LocaleGate><TestApp /></LocaleGate>} />
-        {/* 언어 코드 없는 경로 → 자동 감지 후 redirect */}
-        <Route path="/" element={<LocaleRedirect />} />
-        <Route path="/wctest" element={<LocaleRedirect />} />
-        <Route path="*" element={<LocaleRedirect />} />
-      </Routes>
+    <BrowserRouter>
+      <Suspense fallback={<RouteFallback />}>
+        <Routes>
+          {/* 구 URL 호환: /wc2026/* → /:lang/wc2026/* */}
+          <Route path="/wc2026" element={<LegacyWc2026Redirect />} />
+          <Route path="/wc2026/*" element={<LegacyWc2026Redirect />} />
+
+          {/* 랜딩 및 메인 라우트 */}
+          <Route path="/:lang" element={<LocaleGate><LandingPage /></LocaleGate>} />
+          <Route path="/:lang/wc2026" element={<LocaleGate><App /></LocaleGate>} />
+          <Route path="/:lang/wc2026/wctest" element={<LocaleGate><TestApp /></LocaleGate>} />
+
+          {/* 루트 및 언어코드 없는 경로 → 언어 감지 후 redirect */}
+          <Route path="/" element={<LocaleRedirect />} />
+          <Route path="*" element={<LocaleRedirect />} />
+        </Routes>
+      </Suspense>
     </BrowserRouter>
   </React.StrictMode>
 );
