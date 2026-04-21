@@ -1,0 +1,151 @@
+{
+  "nav": {
+    "backToHome": "Volver al inicio"
+  },
+  "privacy": {
+    "meta": {
+      "title": "Política de privacidad — GroupStages",
+      "description": "Política de privacidad de GroupStages: recolección de datos, cookies, servicios de terceros y derechos del usuario."
+    },
+    "title": "Política de privacidad",
+    "lastUpdated": "Última actualización: 2026-04-21",
+    "intro": "GroupStages (\"el Servicio\") es una herramienta de análisis no oficial para la fase de grupos del Mundial 2026. Esta Política de privacidad explica qué información recopilamos, cómo la usamos y qué opciones tienes. El Servicio funciona sin necesidad de crear cuenta ni enviar información personal identificable.",
+    "sections": {
+      "collection": {
+        "title": "1. Información que recopilamos",
+        "body": "Recopilamos solo la información mínima necesaria para operar el Servicio.\n\n• Preferencias locales: idioma, consentimiento de cookies y configuración de la interfaz se almacenan en el localStorage de tu navegador. Nunca salen de tu dispositivo.\n\n• Formulario de contacto: si envías el formulario de contacto, almacenamos temporalmente tu nombre, correo electrónico y mensaje para responder a tu consulta.\n\n• Registros del servidor: nuestros proveedores (Cloudflare Pages y Cloudflare Workers) registran entradas estándar — dirección IP, user agent, ruta, marca de tiempo — para prevenir abusos. Se conservan hasta 30 días.\n\n• Analítica: actualmente no utilizamos scripts de analítica ni seguimiento. Si esto cambia, esta política se actualizará y se mostrará un banner de consentimiento."
+      },
+      "purpose": {
+        "title": "2. Finalidad del tratamiento",
+        "body": "• Prestar el Servicio principal (clasificaciones, escenarios y predicciones).\n• Responder a las consultas del formulario de contacto.\n• Prevenir abusos, spam y ataques contra el Servicio.\n• Cumplir obligaciones legales aplicables."
+      },
+      "retention": {
+        "title": "3. Plazo de conservación",
+        "body": "• Las preferencias locales permanecen en tu navegador hasta que las elimines.\n• Los mensajes del formulario se conservan hasta 12 meses desde la resolución de la consulta.\n• Los registros del servidor se rotan y eliminan en un máximo de 30 días."
+      },
+      "thirdParties": {
+        "title": "4. Terceros",
+        "body": "El Servicio utiliza los siguientes proveedores:\n\n• Cloudflare (Pages, Workers, D1): hospedaje de recursos, ejecución de la API y almacenamiento de datos.\n• API-Football (api-football.com): calendario, marcadores y tarjetas. Las peticiones parten del backend, no de tu navegador.\n• eloratings.net: fuente pública de ratings ELO consultada desde el backend.\n\nNo compartimos tus datos del formulario con estos proveedores para marketing.\n\nEn el futuro se podría habilitar Google AdSense para mostrar publicidad. En ese caso, esta política se actualizará y un banner solicitará tu consentimiento antes de instalar cookies publicitarias."
+      },
+      "cookies": {
+        "title": "5. Cookies y almacenamiento local",
+        "body": "Actualmente no instalamos cookies publicitarias, de seguimiento o de perfilado entre sitios. El Servicio utiliza localStorage del navegador únicamente para preferencias funcionales. Puedes borrar estos datos en cualquier momento desde los ajustes del navegador."
+      },
+      "rights": {
+        "title": "6. Tus derechos",
+        "body": "Según tu jurisdicción (incluidas UE/EEE, Reino Unido, California y República de Corea), puedes tener derecho a acceder, rectificar, suprimir, limitar o retirar el consentimiento sobre el tratamiento de tus datos personales. Para ejercer estos derechos, utiliza el formulario de contacto. Responderemos en un plazo razonable, habitualmente 30 días."
+      },
+      "children": {
+        "title": "7. Privacidad de menores",
+        "body": "El Servicio no está dirigido a menores de 13 años (o la edad equivalente en tu jurisdicción). No recopilamos información personal de menores conscientemente. Si crees que un menor nos ha enviado datos personales, contáctanos y los eliminaremos."
+      },
+      "changes": {
+        "title": "8. Cambios en la política",
+        "body": "Podemos actualizar esta Política de privacidad ocasionalmente. Los cambios relevantes se anunciarán en el Servicio. La fecha de \"Última actualización\" refleja la revisión más reciente."
+      },
+      "contact": {
+        "title": "9. Contacto",
+        "body": "Para consultas o solicitudes relacionadas con privacidad, utiliza el formulario de contacto de este sitio."
+      }
+    }
+  },
+  "terms": {
+    "meta": {
+      "title": "Términos de uso — GroupStages",
+      "description": "Términos de uso del calculador de escenarios GroupStages para el Mundial 2026."
+    },
+    "title": "Términos de uso",
+    "lastUpdated": "Última actualización: 2026-04-21",
+    "intro": "Al acceder o utilizar GroupStages (\"el Servicio\"), aceptas quedar vinculado por estos Términos de uso. Si no estás de acuerdo, no utilices el Servicio.",
+    "sections": {
+      "service": {
+        "title": "1. El Servicio",
+        "body": "GroupStages proporciona clasificaciones, simulaciones de escenarios y predicciones de partidos para la fase de grupos del Mundial 2026. El Servicio es gratuito y constituye un proyecto independiente no oficial. No está afiliado, patrocinado ni respaldado por la FIFA, el comité organizador del Mundial 2026 ni ninguna federación miembro."
+      },
+      "dataAccuracy": {
+        "title": "2. Exactitud y limitaciones de los datos",
+        "body": "Los datos de partidos, ratings ELO y predicciones se proporcionan \"tal cual\". Utilizamos proveedores públicos como API-Football y eloratings.net. Aunque nos esforzamos por mantener los datos actualizados, no garantizamos integridad, exactitud ni puntualidad. No utilices el Servicio como base de apuestas, juegos de azar o decisiones con implicaciones legales o financieras."
+      },
+      "acceptableUse": {
+        "title": "3. Uso aceptable",
+        "body": "Te comprometes a no:\n• Utilizar el Servicio con fines ilícitos o infringiendo la ley aplicable.\n• Interrumpir, sobrecargar o interferir con el Servicio o su infraestructura.\n• Realizar scraping, rastreo o réplicas que impongan una carga desproporcionada.\n• Enviar contenido falso, engañoso o malicioso mediante el formulario de contacto.\n• Eludir mecanismos de seguridad, límites de tasa o controles de acceso."
+      },
+      "intellectualProperty": {
+        "title": "4. Propiedad intelectual",
+        "body": "El código fuente, la interfaz, los contenidos originales y las marcas del Servicio pertenecen al autor del Servicio. Los nombres, escudos y competiciones mencionados son propiedad de sus respectivos titulares y se utilizan únicamente con fines identificativos."
+      },
+      "disclaimer": {
+        "title": "5. Exclusión de garantías",
+        "body": "EL SERVICIO SE PROPORCIONA \"TAL CUAL\" Y \"SEGÚN DISPONIBILIDAD\", SIN GARANTÍAS DE NINGÚN TIPO, EXPRESAS O IMPLÍCITAS, INCLUIDAS LAS DE COMERCIABILIDAD, IDONEIDAD PARA UN FIN CONCRETO Y NO INFRACCIÓN. NO GARANTIZAMOS QUE EL SERVICIO SEA ININTERRUMPIDO, SEGURO O LIBRE DE ERRORES."
+      },
+      "liability": {
+        "title": "6. Limitación de responsabilidad",
+        "body": "EN LA MEDIDA MÁXIMA PERMITIDA POR LA LEY, EL AUTOR DEL SERVICIO NO SERÁ RESPONSABLE DE DAÑOS INDIRECTOS, INCIDENTALES, CONSECUENTES O PUNITIVOS DERIVADOS DEL USO O LA IMPOSIBILIDAD DE USO DEL SERVICIO, INCLUSO SI FUE ADVERTIDO DE SU POSIBILIDAD."
+      },
+      "changes": {
+        "title": "7. Modificaciones de los Términos",
+        "body": "Podemos revisar estos Términos en cualquier momento. El uso continuado del Servicio tras la publicación de los cambios constituye aceptación de los Términos revisados."
+      },
+      "governing": {
+        "title": "8. Ley aplicable",
+        "body": "Estos Términos se rigen por las leyes de la República de Corea, sin considerar normas de conflicto de leyes. Cualquier disputa se someterá a los tribunales competentes de la República de Corea."
+      }
+    }
+  },
+  "about": {
+    "meta": {
+      "title": "Acerca de — GroupStages",
+      "description": "Acerca de GroupStages: misión, fuentes de datos y cómo se construye este calculador de escenarios del Mundial 2026."
+    },
+    "title": "Acerca de GroupStages",
+    "intro": "GroupStages es una herramienta de análisis independiente y de código abierto que facilita seguir la fase de grupos del Mundial 2026. Con la ampliación del torneo a 48 equipos y 12 grupos, la interacción entre resultados, diferencia de goles y los ocho mejores terceros resulta difícil de seguir a simple vista. Construimos este sitio para cubrir esa necesidad.",
+    "sections": {
+      "mission": {
+        "title": "Nuestra misión",
+        "body": "Ofrecer una herramienta transparente, precisa y gratuita para que la afición explore todos los escenarios posibles de la fase de grupos, desde la proyección de clasificaciones hasta el ranking de terceros y las probabilidades de victoria. Sin muro de pago, sin anuncios en el lanzamiento y sin necesidad de cuenta."
+      },
+      "howBuilt": {
+        "title": "Cómo está construido",
+        "body": "El sitio utiliza un frontend en React alojado en Cloudflare Pages y una API en Cloudflare Workers respaldada por una base de datos D1 (SQLite). El calendario y los marcadores se sincronizan con API-Football cada cinco minutos; los ratings ELO y las estadísticas de forma reciente se actualizan cada seis horas. Las simulaciones de escenarios se calculan en el navegador enumerando 6.561 combinaciones por grupo ponderadas por una distribución de Poisson."
+      },
+      "dataSources": {
+        "title": "Fuentes de datos",
+        "body": "• API-Football (api-football.com): calendario, resultados en vivo, tarjetas y lesiones.\n• eloratings.net: ratings ELO públicos utilizados como prior de fuerza en la predicción de probabilidad de victoria.\n• Reglas oficiales de desempate de la FIFA: se aplica fielmente el orden puntos → diferencia de goles → goles a favor → enfrentamientos directos → fair-play → ranking FIFA."
+      },
+      "unofficial": {
+        "title": "No es un producto oficial de la FIFA",
+        "body": "GroupStages no está afiliado, patrocinado ni respaldado por la FIFA, el comité organizador del Mundial 2026, U.S. Soccer, la Asociación Canadiense de Fútbol ni la Federación Mexicana de Fútbol. Todos los nombres, escudos y referencias al torneo son propiedad de sus respectivos titulares y se utilizan únicamente con fines identificativos."
+      },
+      "feedback": {
+        "title": "Comentarios y consultas",
+        "body": "¿Encontraste un error? ¿Tienes una sugerencia? ¿Quieres usar nuestros datos en un proyecto? Nos encantará leerte: utiliza el formulario de contacto del sitio."
+      }
+    }
+  },
+  "contact": {
+    "meta": {
+      "title": "Contacto — GroupStages",
+      "description": "Ponte en contacto con el equipo de GroupStages. Envía informes de errores, sugerencias o consultas generales."
+    },
+    "title": "Contáctanos",
+    "intro": "¿Tienes una pregunta, un informe de error o comentarios? Envíanos un mensaje y te responderemos lo antes posible. No envíes información personal sensible a través de este formulario.",
+    "form": {
+      "name": "Tu nombre",
+      "namePlaceholder": "Juan Pérez",
+      "email": "Tu correo electrónico",
+      "emailPlaceholder": "tu@ejemplo.com",
+      "subject": "Asunto",
+      "subjectPlaceholder": "¿Sobre qué trata tu mensaje?",
+      "message": "Mensaje",
+      "messagePlaceholder": "Escribe tu mensaje aquí...",
+      "submit": "Enviar mensaje",
+      "sending": "Enviando...",
+      "success": "¡Gracias! Hemos recibido tu mensaje. Te responderemos al correo indicado.",
+      "errorGeneric": "Algo salió mal. Vuelve a intentarlo en un momento.",
+      "errorValidation": "Rellena todos los campos obligatorios con valores válidos.",
+      "errorRateLimit": "Estás enviando mensajes demasiado rápido. Espera unos minutos e inténtalo de nuevo.",
+      "required": "Obligatorio"
+    },
+    "privacyNote": "Al enviar este formulario, aceptas nuestra Política de privacidad. Usaremos tu correo únicamente para responder a tu consulta."
+  }
+}

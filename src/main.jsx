@@ -10,6 +10,10 @@ import './index.css';
 const LandingPage = lazy(() => import('./landing/LandingPage.jsx'));
 const App = lazy(() => import('./App.jsx'));
 const TestApp = lazy(() => import('./TestApp.jsx'));
+const PrivacyPolicy = lazy(() => import('./landing/pages/PrivacyPolicy.jsx'));
+const TermsOfService = lazy(() => import('./landing/pages/TermsOfService.jsx'));
+const About = lazy(() => import('./landing/pages/About.jsx'));
+const Contact = lazy(() => import('./landing/pages/Contact.jsx'));
 
 function RouteFallback() {
   return (
@@ -32,6 +36,12 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Route path="/:lang" element={<LocaleGate><LandingPage /></LocaleGate>} />
           <Route path="/:lang/wc2026" element={<LocaleGate><App /></LocaleGate>} />
           <Route path="/:lang/wc2026/wctest" element={<LocaleGate><TestApp /></LocaleGate>} />
+
+          {/* 법적 페이지 (AdSense 승인 필수) */}
+          <Route path="/:lang/privacy" element={<LocaleGate><PrivacyPolicy /></LocaleGate>} />
+          <Route path="/:lang/terms" element={<LocaleGate><TermsOfService /></LocaleGate>} />
+          <Route path="/:lang/about" element={<LocaleGate><About /></LocaleGate>} />
+          <Route path="/:lang/contact" element={<LocaleGate><Contact /></LocaleGate>} />
 
           {/* 루트 및 언어코드 없는 경로 → 언어 감지 후 redirect */}
           <Route path="/" element={<LocaleRedirect />} />

@@ -5,6 +5,7 @@
 import { syncFixturesToD1, syncCardEvents } from './sync.js';
 import { syncElo } from './elo.js';
 import { syncForm } from './form.js';
+import { handleContact } from './contact.js';
 
 export default {
   // Cron Triggers
@@ -258,6 +259,11 @@ export default {
         }
         const result = await syncForm(env);
         return Response.json(result, { headers: corsHeaders });
+      }
+
+      // POST /api/contact — 문의 폼 (honeypot + rate limit, D1 저장)
+      if (path === '/api/contact' && method === 'POST') {
+        return await handleContact(request, env, corsHeaders);
       }
 
       // 404 Not Found

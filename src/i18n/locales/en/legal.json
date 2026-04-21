@@ -1,0 +1,151 @@
+{
+  "nav": {
+    "backToHome": "Back to home"
+  },
+  "privacy": {
+    "meta": {
+      "title": "Privacy Policy — GroupStages",
+      "description": "GroupStages privacy policy covering data collection, cookies, third-party services, and user rights."
+    },
+    "title": "Privacy Policy",
+    "lastUpdated": "Last updated: 2026-04-21",
+    "intro": "GroupStages (\"the Service\") is an unofficial analysis tool for the 2026 FIFA World Cup group stage. This Privacy Policy explains what information we collect, how we use it, and the choices you have. We designed the Service to work without requiring you to create an account or submit personally identifiable information.",
+    "sections": {
+      "collection": {
+        "title": "1. Information we collect",
+        "body": "We collect only the minimum data required to operate the Service.\n\n• Local preferences: Language choice, cookie-consent state, and UI settings are stored in your browser's localStorage. They never leave your device.\n\n• Contact form data: If you submit the contact form, we temporarily store your name, email address, and message to respond to your inquiry.\n\n• Server logs: Our hosting providers (Cloudflare Pages and Cloudflare Workers) record standard request logs — IP address, user agent, request path, and timestamp — for abuse prevention and service operation. These are retained for up to 30 days.\n\n• Analytics: We do not run any analytics or tracking scripts at this time. If that changes, this policy will be updated and a consent banner will be presented."
+      },
+      "purpose": {
+        "title": "2. Why we use your information",
+        "body": "• To deliver the core Service — standings, scenario calculations, and predictions.\n• To respond to contact-form inquiries.\n• To prevent abuse, spam, and attacks against the Service.\n• To comply with legal obligations, if any apply."
+      },
+      "retention": {
+        "title": "3. How long we keep your data",
+        "body": "• Local preferences remain in your browser until you clear them.\n• Contact-form messages are kept for up to 12 months after the inquiry is resolved, after which they are deleted.\n• Server logs are rotated and deleted within 30 days."
+      },
+      "thirdParties": {
+        "title": "4. Third-party services",
+        "body": "The Service relies on the following third parties:\n\n• Cloudflare (Pages, Workers, D1): Hosts static assets, runs the API, and stores match data. Cloudflare's privacy practices apply to server-side processing.\n• API-Football (api-football.com): Match fixtures, scores, and card data. Requests originate from our Workers backend, not your browser.\n• eloratings.net: Public ELO rating source, fetched from our backend.\n\nWe do not share your contact-form data with any of these providers for marketing purposes.\n\nIn the future, Google AdSense may be enabled to display advertisements. If and when that happens, this policy will be updated and a cookie-consent banner will ask for your permission before any advertising cookie is set."
+      },
+      "cookies": {
+        "title": "5. Cookies and local storage",
+        "body": "We currently do not set any cookies for advertising, tracking, or cross-site profiling. The Service uses browser localStorage for functional preferences only. You can clear this data at any time through your browser settings."
+      },
+      "rights": {
+        "title": "6. Your rights",
+        "body": "Depending on your jurisdiction (including the EU/EEA, UK, California, and Republic of Korea), you may have the right to access, correct, delete, or restrict the processing of your personal data, and to withdraw consent at any time. To exercise these rights, please use the contact form. We will respond within a reasonable time frame, typically 30 days."
+      },
+      "children": {
+        "title": "7. Children's privacy",
+        "body": "The Service is not directed at children under 13 (or the equivalent age in your jurisdiction). We do not knowingly collect personal information from children. If you believe a child has provided us with personal data, please contact us and we will delete it."
+      },
+      "changes": {
+        "title": "8. Changes to this policy",
+        "body": "We may update this Privacy Policy from time to time. Material changes will be announced via the Service. The \"Last updated\" date at the top of this page reflects the most recent revision."
+      },
+      "contact": {
+        "title": "9. Contact",
+        "body": "For privacy-related questions or requests, please use the contact form on this site."
+      }
+    }
+  },
+  "terms": {
+    "meta": {
+      "title": "Terms of Service — GroupStages",
+      "description": "Terms of Service governing use of the GroupStages 2026 World Cup scenario calculator."
+    },
+    "title": "Terms of Service",
+    "lastUpdated": "Last updated: 2026-04-21",
+    "intro": "By accessing or using GroupStages (\"the Service\"), you agree to be bound by these Terms of Service. If you do not agree, please do not use the Service.",
+    "sections": {
+      "service": {
+        "title": "1. The Service",
+        "body": "GroupStages provides group-stage standings, scenario simulations, and match predictions for the 2026 FIFA World Cup. The Service is offered free of charge and is an unofficial, independent project. It is not affiliated with, endorsed by, or sponsored by FIFA, the 2026 World Cup organizing committee, or any member association."
+      },
+      "dataAccuracy": {
+        "title": "2. Data accuracy and limitations",
+        "body": "Match data, ELO ratings, and predictions are provided on an \"as is\" basis. We source data from public providers including API-Football and eloratings.net. Despite our best efforts to keep data current, we cannot guarantee completeness, accuracy, or timeliness. Do not rely on the Service for betting, gambling, or any decision with legal or financial consequences."
+      },
+      "acceptableUse": {
+        "title": "3. Acceptable use",
+        "body": "You agree not to:\n• Use the Service for any unlawful purpose or in violation of any applicable laws.\n• Attempt to disrupt, overload, or interfere with the Service or its infrastructure.\n• Scrape, crawl, or mirror the Service in a way that imposes unreasonable load.\n• Submit false, misleading, or malicious content through the contact form.\n• Circumvent security mechanisms, rate limits, or access controls."
+      },
+      "intellectualProperty": {
+        "title": "4. Intellectual property",
+        "body": "The Service's source code, UI, original content, and trademarks are the property of the Service's author. Team names, flags, and tournament names referenced on the Service remain the property of their respective owners and are used for identification purposes only."
+      },
+      "disclaimer": {
+        "title": "5. Disclaimer of warranties",
+        "body": "THE SERVICE IS PROVIDED \"AS IS\" AND \"AS AVAILABLE\" WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT. WE DO NOT WARRANT THAT THE SERVICE WILL BE UNINTERRUPTED, SECURE, OR ERROR-FREE."
+      },
+      "liability": {
+        "title": "6. Limitation of liability",
+        "body": "TO THE MAXIMUM EXTENT PERMITTED BY LAW, THE AUTHOR OF THE SERVICE SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES ARISING OUT OF YOUR USE OF OR INABILITY TO USE THE SERVICE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES."
+      },
+      "changes": {
+        "title": "7. Changes to these Terms",
+        "body": "We may revise these Terms at any time. Continued use of the Service after changes are posted constitutes acceptance of the revised Terms."
+      },
+      "governing": {
+        "title": "8. Governing law",
+        "body": "These Terms are governed by the laws of the Republic of Korea, without regard to conflict-of-laws principles. Disputes shall be resolved by the competent courts of the Republic of Korea."
+      }
+    }
+  },
+  "about": {
+    "meta": {
+      "title": "About — GroupStages",
+      "description": "About GroupStages: mission, data sources, and how this 2026 World Cup scenario calculator is built."
+    },
+    "title": "About GroupStages",
+    "intro": "GroupStages is an independent, open-source analysis tool that makes the 2026 FIFA World Cup group stage easier to follow. As the tournament expands to 48 teams across 12 groups, the interaction between match results, goal difference, and the eight best third-place finishers becomes genuinely hard to track by eye. We built this site to close that gap.",
+    "sections": {
+      "mission": {
+        "title": "Our mission",
+        "body": "To provide a transparent, accurate, and free tool for fans to explore every possible group-stage scenario — from standings projections to third-place ranking and prediction probabilities. No paywall, no ads at launch, no accounts required."
+      },
+      "howBuilt": {
+        "title": "How it's built",
+        "body": "The site runs on a React frontend hosted on Cloudflare Pages, with a Cloudflare Workers API backed by a D1 (SQLite) database. Match fixtures and scores are synchronized from API-Football every five minutes, and ELO ratings plus recent-form statistics are refreshed every six hours. Scenario simulations are computed in the browser using a Poisson-weighted enumeration of 6,561 outcomes per group."
+      },
+      "dataSources": {
+        "title": "Data sources",
+        "body": "• API-Football (api-football.com) — Fixtures, live scores, cards, and injuries.\n• eloratings.net — Public ELO ratings used as the strength prior for win-probability predictions.\n• FIFA tiebreaker rules — The official order (points → goal difference → goals scored → head-to-head → fair-play → FIFA ranking) is faithfully applied."
+      },
+      "unofficial": {
+        "title": "Not an official FIFA product",
+        "body": "GroupStages is not affiliated with, endorsed by, or sponsored by FIFA, the 2026 FIFA World Cup organizing committee, U.S. Soccer, the Canadian Soccer Association, or the Mexican Football Federation. All team names, crests, and tournament references are property of their respective owners and are used for identification purposes only."
+      },
+      "feedback": {
+        "title": "Feedback & inquiries",
+        "body": "Found a bug? Have a suggestion? Want to use our data in a project? We'd love to hear from you — please use the contact form on this site."
+      }
+    }
+  },
+  "contact": {
+    "meta": {
+      "title": "Contact — GroupStages",
+      "description": "Get in touch with the GroupStages team. Send bug reports, feedback, or general inquiries."
+    },
+    "title": "Contact us",
+    "intro": "Have a question, bug report, or feedback? Send us a message and we'll get back to you as soon as we can. Please do not submit personally sensitive information through this form.",
+    "form": {
+      "name": "Your name",
+      "namePlaceholder": "Jane Doe",
+      "email": "Your email",
+      "emailPlaceholder": "you@example.com",
+      "subject": "Subject",
+      "subjectPlaceholder": "What is your message about?",
+      "message": "Message",
+      "messagePlaceholder": "Write your message here...",
+      "submit": "Send message",
+      "sending": "Sending...",
+      "success": "Thanks! Your message has been received. We'll reply to the email address you provided.",
+      "errorGeneric": "Something went wrong. Please try again in a moment.",
+      "errorValidation": "Please fill in all required fields with valid values.",
+      "errorRateLimit": "You're sending messages too quickly. Please wait a few minutes and try again.",
+      "required": "Required"
+    },
+    "privacyNote": "By submitting this form, you agree to our Privacy Policy. We will use your email address only to respond to your inquiry."
+  }
+}

@@ -17,6 +17,7 @@ import koShare from './locales/ko/share.json';
 import koMeta from './locales/ko/meta.json';
 import koTeams from './locales/ko/teams.json';
 import koLanding from './locales/ko/landing.json';
+import koLegal from './locales/ko/legal.json';
 
 // ── en 네임스페이스 ──────────────────────────────────────
 import enCommon from './locales/en/common.json';
@@ -28,6 +29,7 @@ import enShare from './locales/en/share.json';
 import enMeta from './locales/en/meta.json';
 import enTeams from './locales/en/teams.json';
 import enLanding from './locales/en/landing.json';
+import enLegal from './locales/en/legal.json';
 
 // ── es 네임스페이스 ──────────────────────────────────────
 import esCommon from './locales/es/common.json';
@@ -39,6 +41,7 @@ import esShare from './locales/es/share.json';
 import esMeta from './locales/es/meta.json';
 import esTeams from './locales/es/teams.json';
 import esLanding from './locales/es/landing.json';
+import esLegal from './locales/es/legal.json';
 
 // ── ja 네임스페이스 ──────────────────────────────────────
 import jaCommon from './locales/ja/common.json';
@@ -50,6 +53,7 @@ import jaShare from './locales/ja/share.json';
 import jaMeta from './locales/ja/meta.json';
 import jaTeams from './locales/ja/teams.json';
 import jaLanding from './locales/ja/landing.json';
+import jaLegal from './locales/ja/legal.json';
 
 // ── zh 네임스페이스 ──────────────────────────────────────
 import zhCommon from './locales/zh/common.json';
@@ -61,18 +65,19 @@ import zhShare from './locales/zh/share.json';
 import zhMeta from './locales/zh/meta.json';
 import zhTeams from './locales/zh/teams.json';
 import zhLanding from './locales/zh/landing.json';
+import zhLegal from './locales/zh/legal.json';
 
 export const SUPPORTED_LANGS = ['ko', 'en', 'es', 'ja', 'zh'];
 export const FALLBACK_LANG = 'en';
 export const DEFAULT_NS = 'common';
-export const NAMESPACES = ['common', 'tables', 'scenario', 'bracket', 'rules', 'share', 'meta', 'teams', 'landing'];
+export const NAMESPACES = ['common', 'tables', 'scenario', 'bracket', 'rules', 'share', 'meta', 'teams', 'landing', 'legal'];
 
 const resources = {
-  ko: { common: koCommon, tables: koTables, scenario: koScenario, bracket: koBracket, rules: koRules, share: koShare, meta: koMeta, teams: koTeams, landing: koLanding },
-  en: { common: enCommon, tables: enTables, scenario: enScenario, bracket: enBracket, rules: enRules, share: enShare, meta: enMeta, teams: enTeams, landing: enLanding },
-  es: { common: esCommon, tables: esTables, scenario: esScenario, bracket: esBracket, rules: esRules, share: esShare, meta: esMeta, teams: esTeams, landing: esLanding },
-  ja: { common: jaCommon, tables: jaTables, scenario: jaScenario, bracket: jaBracket, rules: jaRules, share: jaShare, meta: jaMeta, teams: jaTeams, landing: jaLanding },
-  zh: { common: zhCommon, tables: zhTables, scenario: zhScenario, bracket: zhBracket, rules: zhRules, share: zhShare, meta: zhMeta, teams: zhTeams, landing: zhLanding },
+  ko: { common: koCommon, tables: koTables, scenario: koScenario, bracket: koBracket, rules: koRules, share: koShare, meta: koMeta, teams: koTeams, landing: koLanding, legal: koLegal },
+  en: { common: enCommon, tables: enTables, scenario: enScenario, bracket: enBracket, rules: enRules, share: enShare, meta: enMeta, teams: enTeams, landing: enLanding, legal: enLegal },
+  es: { common: esCommon, tables: esTables, scenario: esScenario, bracket: esBracket, rules: esRules, share: esShare, meta: esMeta, teams: esTeams, landing: esLanding, legal: esLegal },
+  ja: { common: jaCommon, tables: jaTables, scenario: jaScenario, bracket: jaBracket, rules: jaRules, share: jaShare, meta: jaMeta, teams: jaTeams, landing: jaLanding, legal: jaLegal },
+  zh: { common: zhCommon, tables: zhTables, scenario: zhScenario, bracket: zhBracket, rules: zhRules, share: zhShare, meta: zhMeta, teams: zhTeams, landing: zhLanding, legal: zhLegal },
 };
 
 i18n

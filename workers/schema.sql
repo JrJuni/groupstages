@@ -81,3 +81,26 @@ CREATE TABLE IF NOT EXISTS team_form (
   last_n       INTEGER NOT NULL,            -- 요청한 윈도우 (보통 10)
   updated_at   TEXT DEFAULT (datetime('now'))
 );
+
+-- 문의 폼 메시지 (Phase 2)
+CREATE TABLE IF NOT EXISTS contact_messages (
+  id          INTEGER PRIMARY KEY AUTOINCREMENT,
+  name        TEXT NOT NULL,
+  email       TEXT NOT NULL,
+  subject     TEXT,
+  message     TEXT NOT NULL,
+  lang        TEXT,
+  ip_hash     TEXT,                         -- SHA-256(IP + daily-salt), 식별 불가
+  user_agent  TEXT,
+  status      TEXT DEFAULT 'new',           -- new/read/replied
+  created_at  TEXT DEFAULT (datetime('now'))
+);
+
+CREATE INDEX IF NOT EXISTS idx_contact_created ON contact_messages(created_at);
+
+-- IP 기반 rate limit (10분 창, IP당 5건 상한)
+CREATE TABLE IF NOT EXISTS contact_rate_limit (
+  ip_hash     TEXT PRIMARY KEY,
+  request_count INTEGER DEFAULT 1,
+  window_start TEXT DEFAULT (datetime('now'))
+);
