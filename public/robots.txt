@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+
+# AI 크롤러도 특별히 제한하지 않음 (AdSense 승인을 위해 Googlebot 등은 당연히 허용)
+
+Sitemap: https://groupstages.com/sitemap.xml

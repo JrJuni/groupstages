@@ -6,7 +6,7 @@
     "dev": "concurrently -n API,VITE -c cyan,magenta \"dotenvx run -- node server/index.js\" \"vite --port 5000 --host 0.0.0.0\"",
     "dev:vite": "vite --port 5000 --host 0.0.0.0",
     "dev:api": "dotenvx run -- node server/index.js",
-    "build": "vite build",
+    "build": "node scripts/generate-sitemap.js && vite build",
     "preview": "vite preview"
   },
   "dependencies": {

@@ -218,3 +218,6 @@ cache/
 
 # Node
 node_modules/
+
+# Build-time generated assets
+public/sitemap.xml

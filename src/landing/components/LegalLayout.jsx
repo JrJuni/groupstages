@@ -3,15 +3,21 @@ import { Link, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import LandingHeader from './LandingHeader.jsx';
 import Footer from './Footer.jsx';
+import { useSeoMeta } from '../../i18n/useSeoMeta.js';
 
 export default function LegalLayout({ metaTitleKey, metaDescKey, title, lastUpdated, children }) {
   const { t } = useTranslation('legal');
   const { lang } = useParams();
+  useSeoMeta();
 
   useEffect(() => {
     if (metaTitleKey) document.title = t(metaTitleKey);
     const descTag = document.querySelector('meta[name="description"]');
     if (descTag && metaDescKey) descTag.setAttribute('content', t(metaDescKey));
+    const ogTitle = document.querySelector('meta[property="og:title"]');
+    if (ogTitle && metaTitleKey) ogTitle.setAttribute('content', t(metaTitleKey));
+    const ogDesc = document.querySelector('meta[property="og:description"]');
+    if (ogDesc && metaDescKey) ogDesc.setAttribute('content', t(metaDescKey));
   }, [t, metaTitleKey, metaDescKey]);
 
   return (

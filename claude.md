@@ -9,7 +9,7 @@ npm run build        # 프로덕션 빌드 (0 warnings expected)
 
 ## 배포
 ```bash
-# 프론트엔드 (Cloudflare Pages)
+# 프론트엔드 (Cloudflare Pages) — build가 sitemap.xml 자동 생성
 VITE_API_URL=https://groupstages-api.behomely0409.workers.dev npm run build
 npx wrangler pages deploy dist --project-name groupstages --branch main
 
@@ -48,6 +48,7 @@ npx wrangler secret put SYNC_SECRET        # 수동 sync 인증용
 - ~~카드 데이터 영속성~~ → Workers Cron Sync로 해결
 - DrawSimulator가 leagues/ 직접 import (props 패턴으로 전환 예정)
 - App.jsx UI 문자열 일부 FIFA 하드코딩
+- og:image: generated-icon.png 임시 사용 → 1200×630 전용 OG 이미지 필요 (AdSense 승인 무관, 소셜 미리보기용)
 - ~~D1 구형 플레이오프 placeholder ID~~ → 확정 팀 기반으로 교체 완료
 
 ## docs/ 인덱스
