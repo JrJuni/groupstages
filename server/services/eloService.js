@@ -50,7 +50,10 @@ const ELO_CODE_TO_TEAM_ID = {
   'NO': 'NOR',   // Norway
   'DK': 'DEN',   // Denmark — 우리 ID: NOR/DEN 확인 필요
   'SQ': 'SCO',   // Scotland (eloratings: SQ)
-  // UEFA PO 슬롯은 미확정이므로 제외
+  'TR': 'TUR',   // Türkiye
+  'CZ': 'CZE',   // Czechia
+  'SE': 'SWE',   // Sweden
+  'BA': 'BIH',   // Bosnia and Herzegovina
 
   // CONMEBOL (6팀)
   'AR': 'ARG',   // Argentina
@@ -78,6 +81,7 @@ const ELO_CODE_TO_TEAM_ID = {
   'TN': 'TUN',   // Tunisia
   'GH': 'GHA',   // Ghana
   'ZA': 'RSA',   // South Africa
+  'CD': 'COD',   // DR Congo
 
   // AFC (8팀)
   'JP': 'JPN',   // Japan
@@ -88,6 +92,7 @@ const ELO_CODE_TO_TEAM_ID = {
   'JO': 'JOR',   // Jordan
   'UZ': 'UZB',   // Uzbekistan
   'QA': 'QAT',   // Qatar
+  'IQ': 'IRQ',   // Iraq
 
   // OFC (1팀)
   'NZ': 'NZL',   // New Zealand

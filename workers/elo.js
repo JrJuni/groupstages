@@ -14,16 +14,17 @@ const ELO_CODE_TO_TEAM_ID = {
   ES: 'ESP', EN: 'ENG', FR: 'FRA', DE: 'GER', PT: 'POR',
   NL: 'NED', HR: 'CRO', CH: 'CHE', AT: 'AUT', BE: 'BEL',
   NO: 'NOR', DK: 'DEN', SQ: 'SCO',
+  TR: 'TUR', CZ: 'CZE', SE: 'SWE', BA: 'BIH',
   // CONMEBOL
   AR: 'ARG', BR: 'BRA', UY: 'URU', CO: 'COL', EC: 'ECU', PY: 'PAR',
   // CONCACAF
   US: 'USA', MX: 'MEX', CA: 'CAN', PA: 'PAN', CW: 'CUW', HT: 'HTI',
   // CAF
   MA: 'MAR', SN: 'SEN', NG: 'NGA', EG: 'EGY', DZ: 'ALG',
-  CI: 'CIV', TN: 'TUN', GH: 'GHA', ZA: 'RSA',
+  CI: 'CIV', TN: 'TUN', GH: 'GHA', ZA: 'RSA', CD: 'COD',
   // AFC
   JP: 'JPN', KR: 'KOR', IR: 'IRN', SA: 'SAU', AU: 'AUS',
-  JO: 'JOR', UZ: 'UZB', QA: 'QAT',
+  JO: 'JOR', UZ: 'UZB', QA: 'QAT', IQ: 'IRQ',
   // OFC
   NZ: 'NZL',
   // 기타
